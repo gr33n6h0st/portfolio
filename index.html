@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Brandon Smart | Cyber Terminal Portfolio</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap');
+
+    body {
+      margin: 0;
+      background: black;
+      color: #00f0ff;
+      font-family: 'Share Tech Mono', monospace;
+      overflow: hidden;
+    }
+
+    .scanlines {
+      pointer-events: none;
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: repeating-linear-gradient(
+        to bottom,
+        rgba(0,0,0,0.2) 0px,
+        rgba(0,0,0,0.2) 2px,
+        transparent 3px,
+        transparent 4px
+      );
+      opacity: 0.1;
+      z-index: 99;
+    }
+
+    .hud {
+      position: fixed;
+      top: 10px; left: 15px;
+      font-size: 14px;
+      color: #00f0ff;
+      z-index: 5;
+      line-height: 1.4em;
+    }
+
+    .hud span {
+      display: block;
+    }
+
+    .center {
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      text-align: center;
+    }
+
+    h1 {
+      color: #00f0ff;
+      margin-bottom: 20px;
+      font-size: 22px;
+    }
+
+    .categories {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    .cat {
+      color: #00f0ff;
+      text-decoration: none;
+      font-size: 18px;
+      padding: 10px 20px;
+      border: 1px solid #00f0ff;
+      border-radius: 20px;
+      transition: 0.2s;
+    }
+
+    .cat:hover {
+      background: #00f0ff;
+      color: black;
+      box-shadow: 0 0 10px #00f0ff;
+    }
+
+    .quote {
+      margin-top: 30px;
+      font-size: 14px;
+      opacity: 0;
+      animation: fadeIn 3s forwards;
+      animation-delay: 1s;
+    }
+
+    @keyframes fadeIn {
+      to { opacity: 1; }
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    .section {
+      padding: 40px;
+      text-align: left;
+      max-width: 800px;
+      margin: 100px auto 0 auto;
+      font-size: 16px;
+    }
+
+    .back-btn {
+      margin-top: 30px;
+      display: inline-block;
+      padding: 6px 15px;
+      border: 1px solid #00f0ff;
+      border-radius: 15px;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    .back-btn:hover {
+      background: #00f0ff;
+      color: black;
+      box-shadow: 0 0 10px #00f0ff;
+    }
+
+    .typing {
+      border-right: 2px solid #00f0ff;
+      white-space: pre-wrap;
+      overflow: hidden;
+    }
+
+    /* Login screen */
+    #login-screen {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: black;
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    #login-screen input {
+      background: black;
+      border: 1px solid #00f0ff;
+      border-radius: 20px;
+      padding: 10px;
+      color: #00f0ff;
+      text-align: center;
+      outline: none;
+    }
+
+    #login-screen button {
+      background: black;
+      border: 1px solid #00f0ff;
+      border-radius: 20px;
+      padding: 8px 20px;
+      color: #00f0ff;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    #login-screen button:hover {
+      background: #00f0ff;
+      color: black;
+      box-shadow: 0 0 10px #00f0ff;
+    }
+  </style>
+</head>
+<body>
+  <div class="scanlines"></div>
+
+  <!-- HUD -->
+  <div class="hud">
+    <span id="datetime"></span>
+    <span id="coords"></span>
+    <span id="city"></span>
+    <span id="weather"></span>
+  </div>
+
+  <!-- Login Screen -->
+  <div id="login-screen">
+    <h1>Login</h1>
+    <input type="password" id="password" placeholder="Enter password">
+    <button onclick="checkPassword()">Enter</button>
+    <p id="login-error" style="color:red; font-size:13px;"></p>
+  </div>
+
+  <!-- Home Screen -->
+  <div id="home" class="center hidden">
+    <h1>Welcome to Brandon Smart's Cyber Terminal Portfolio</h1>
+    <div class="categories">
+      <a class="cat" onclick="showSection('whoami')">> Whoami</a>
+      <a class="cat" onclick="showSection('reflection')">> Reflection</a>
+      <a class="cat" onclick="showSection('productions')">> Productions</a>
+      <a class="cat" onclick="showSection('contact')">> Contact</a>
+    </div>
+    <div class="quote">"Sometimes it is the people who no one imagines anything of, who do the things that no one can imagine" — Alan Turing</div>
+  </div>
+
+  <!-- Sections -->
+  <div id="whoami" class="section hidden">
+    <h2>> Whoami</h2>
+    <p>Name: Brandon Smart<br>Teachable: Computer Technology</p>
+    <div class="back-btn" onclick="goHome()">Return</div>
+  </div>
+
+  <div id="reflection" class="section hidden">
+    <h2>> Reflection</h2>
+    <p id="reflection-text" class="typing"></p>
+    <div class="back-btn" onclick="goHome()">Return</div>
+  </div>
+
+  <div id="productions" class="section hidden">
+    <h2>> Productions</h2>
+    <ul>
+      <li>Production 1: Power up</li>
+      <li>Production 2: New Literacies Reflection</li>
+      <li>Production 3: Critical Algorithmic Literacies and AI</li>
+      <li>Production 4: Graphic Novel</li>
+      <li>Production 5: On the Way to Video Inquiry</li>
+      <li>Production 6: Video Works</li>
+      <li>Production 7: Learning Principles</li>
+      <li>Production 8: World Building</li>
+      <li>Production 9: Twine</li>
+    </ul>
+    <div class="back-btn" onclick="goHome()">Return</div>
+  </div>
+
+  <div id="contact" class="section hidden">
+    <h2>> Contact</h2>
+    <p><span style="color:#00ffaa;">✉</span> bsmart@my.yorku.ca</p>
+    <div class="back-btn" onclick="goHome()">Return</div>
+  </div>
+
+  <script>
+    const correctPassword = "1234"; // Change this
+
+    function checkPassword() {
+      const input = document.getElementById("password").value;
+      if (input === correctPassword) {
+        document.getElementById("login-screen").classList.add("hidden");
+        document.getElementById("home").classList.remove("hidden");
+      } else {
+        document.getElementById("login-error").textContent = "Access Denied";
+      }
+    }
+
+    function showSection(sectionId) {
+      document.getElementById("home").classList.add("hidden");
+      document.querySelectorAll(".section").forEach(sec => sec.classList.add("hidden"));
+      const section = document.getElementById(sectionId);
+      section.classList.remove("hidden");
+
+      if (sectionId === "reflection") {
+        typeReflection();
+      }
+    }
+
+    function goHome() {
+      document.querySelectorAll(".section").forEach(sec => sec.classList.add("hidden"));
+      document.getElementById("home").classList.remove("hidden");
+    }
+
+    function typeReflection() {
+      const text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.";
+      const element = document.getElementById("reflection-text");
+      element.textContent = "";
+      let i = 0;
+      const interval = setInterval(() => {
+        element.textContent += text.charAt(i);
+        i++;
+        if (i >= text.length) clearInterval(interval);
+      }, 40);
+    }
+
+    // Date & Time
+    function updateDateTime() {
+      const now = new Date();
+      const date = now.toLocaleDateString("en-US", { weekday: 'long', month: 'long', day: 'numeric' });
+      const time = now.toLocaleTimeString();
+      document.getElementById("datetime").textContent = date + " " + time;
+    }
+    setInterval(updateDateTime, 1000);
+    updateDateTime();
+
+    // Coordinates
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(pos => {
+        document.getElementById("coords").textContent =
+          `Lat: ${pos.coords.latitude.toFixed(2)} | Lon: ${pos.coords.longitude.toFixed(2)}`;
+      });
+    }
+
+    // Weather
+    const apiKey = "5043108521e5dc1feccf33701c3221bf";
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(async pos => {
+        const lat = pos.coords.latitude;
+        const lon = pos.coords.longitude;
+        const res = await fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${apiKey}&units=metric`);
+        const data = await res.json();
+        document.getElementById("weather").textContent =
+          `${data.name} | ${data.weather[0].main}, ${data.main.temp}°C`;
+        document.getElementById("city").textContent = `City: ${data.name}`;
+      });
+    }
+  </script>
+</body>
+</html>
