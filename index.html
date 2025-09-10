@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Brandon Smart - Cyber Terminal Portfolio</title>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+<style>
+/* Global */
+body, html {
+    margin: 0;
+    padding: 0;
+    font-family: 'Courier New', Courier, monospace;
+    background: #0b0c10;
+    color: #00e5ff;
+    display: flex;
+    scroll-behavior: smooth;
+}
+
+/* Password Page */
+#loginContainer {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    width: 100vw;
+    background: #0b0c10;
+}
+#loginContainer h1 {
+    color: #00e5ff;
+    font-size: 2.5em;
+    margin-bottom: 25px;
+    text-shadow: 0 0 10px #00e5ff;
+}
+#loginContainer input {
+    background: #1a1a1a;
+    border: none;
+    border-radius: 4px;
+    padding: 14px 18px;
+    margin-bottom: 20px;
+    width: 280px;
+    color: #00e5ff;
+    font-family: 'Courier New', monospace;
+    font-size: 1em;
+}
+#loginContainer input::placeholder { color: #00e5ff70; }
+#loginContainer button {
+    background: #00e5ff;
+    color: #0b0c10;
+    font-weight: bold;
+    border: none;
+    padding: 14px 35px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-family: 'Courier New', monospace;
+    font-size: 1em;
+    transition: 0.3s;
+}
+#loginContainer button:hover {
+    background: #00e5ff80;
+    transform: translateY(-2px);
+}
+
+/* Main Layout */
+#mainContent { display: flex; width: 100%; opacity: 0; }
+
+/* Sidebar */
+nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: 220px;
+    background: #111214;
+    padding: 40px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    border-right: 1px solid #00e5ff40;
+}
+nav a {
+    color: #00e5ff;
+    font-family: 'Courier New', monospace;
+    font-size: 1.05em;
+    padding: 10px 15px;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    transition: 0.3s;
+    position: relative;
+}
+nav a::before { content: "> "; opacity: 0.7; }
+nav a:hover {
+    background: #00e5ff10;
+    text-shadow: 0 0 8px #00e5ff;
+    transform: scale(1.05);
+}
+
+/* Sidebar Time */
+#time {
+    color: #00e5ff;
+    font-size: 0.85em;
+    margin-top: 20px;
+    padding: 4px 8px;
+    border-radius: 3px;
+    box-shadow: 0 0 2px #00e5ff;
+    text-align: center;
+}
+
+/* Content with gutter */
+.content {
+    margin-left: 220px;
+    padding: 50px 60px;
+    width: calc(100% - 220px);
+}
+
+/* Sections */
+section {
+    margin-bottom: 120px;
+    opacity: 0;
+    transform: translateY(40px);
+    transition: all 0.8s ease-out;
+}
+section.visible { opacity: 1; transform: translateY(0); }
+section h2 {
+    color: #00e5ff;
+    margin-bottom: 20px;
+    font-size: 2em;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+section h2::before { content: "root@portfolio:~$ "; font-size: 0.9em; color: #00ffd5; font-weight: normal; }
+
+/* Reflection Glitch/Typing */
+.word { display: inline-block; opacity: 0; transform: translateY(10px); }
+#reflection-text::after {
+    content: '|';
+    display: inline-block;
+    animation: blink 1s infinite;
+    color: #00e5ff;
+    margin-left: 2px;
+}
+@keyframes blink { 0%, 50%, 100% { opacity: 1; } 25%, 75% { opacity: 0; } }
+
+/* Cards */
+.card {
+    background: #111214;
+    padding: 25px;
+    border-left: 3px solid #00e5ff;
+    margin-bottom: 25px;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+.card:hover {
+    background: #1a1a1a;
+    box-shadow: 0 0 12px #00e5ff;
+    transform: translateX(3px);
+}
+.card h3::before { content: "> "; opacity: 0.7; }
+
+/* Expanded content */
+.card-content { max-height: 0; overflow: hidden; transition: max-height 0.5s ease, padding 0.5s ease; padding-left: 10px; }
+.card-content.open { max-height: 500px; padding-top: 12px; }
+
+/* Email Link */
+a.email-link { color: #00ffd5; text-decoration: none; font-weight: bold; }
+a.email-link:hover { color: #ffb86c; }
+
+/* Bold Section Titles */
+#home h2, #productions h2 { font-weight: 900; }
+</style>
+</head>
+<body>
+
+<!-- Password Page -->
+<div id="loginContainer">
+    <h1>Terminal Login</h1>
+    <input type="password" id="passwordBox" placeholder="Enter password">
+    <br>
+    <button onclick="checkPassword()">Enter</button>
+</div>
+
+<!-- Main Content -->
+<div id="mainContent">
+    <!-- Sidebar -->
+    <nav>
+        <a href="#reflection"><i class="fas fa-terminal"></i> Reflection</a>
+        <a href="#home"><i class="fas fa-home"></i> Home</a>
+        <a href="#productions"><i class="fas fa-th-large"></i> Productions</a>
+        <div id="time">--:--:--</div>
+    </nav>
+
+    <div class="content">
+
+        <!-- Reflection -->
+        <section id="reflection">
+            <h2><i class="fas fa-pen"></i> Reflection / Process</h2>
+            <div class="card" id="reflection-text">
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+            </div>
+        </section>
+
+        <!-- Home -->
+        <section id="home">
+            <h2>Welcome to Brandon Smart's Cyber Terminal Portfolio</h2>
+            <p>Course: Computer Technology</p>
+            <p>Contact: <a href="mailto:bsmart@my.yorku.ca" class="email-link">bsmart@my.yorku.ca</a></p>
+        </section>
+
+        <!-- Productions -->
+        <section id="productions">
+            <h2><i class="fas fa-th-large"></i> Productions</h2>
+            <div class="card">
+                <h3><i class="fas fa-lightbulb"></i> Production 1: Power Up</h3>
+                <div class="card-content"><p>Placeholder content for Production 1.</p></div>
+            </div>
+            <div class="card">
+                <h3><i class="fas fa-book"></i> Production 2: New Literacies Reflection</h3>
+                <div class="card-content"><p>Placeholder content for Production 2.</p></div>
+            </div>
+            <div class="card">
+                <h3><i class="fas fa-robot"></i> Production 3: Critical Algorithmic Literacies and AI</h3>
+                <div class="card-content"><p>Placeholder content for Production 3.</p></div>
+            </div>
+            <div class="card">
+                <h3><i class="fas fa-paint-brush"></i> Production 4: Graphic Novel</h3>
+                <div class="card-content"><p>Placeholder content for Production 4.</p></div>
+            </div>
+            <div class="card">
+                <h3><i class="fas fa-video"></i> Production 5: On the Way to Video Inquiry</h3>
+                <div class="card-content"><p>Placeholder content for Production 5.</p></div>
+            </div>
+            <div class="card">
+                <h3><i class="fas fa-film"></i> Production 6: Video Works</h3>
+                <div class="card-content"><p>Placeholder content for Production 6.</p></div>
+            </div>
+            <div class="card">
+                <h3><i class="fas fa-chalkboard-teacher"></i> Production 7: Learning Principles</h3>
+                <div class="card-content"><p>Placeholder content for Production 7.</p></div>
+            </div>
+            <div class="card">
+                <h3><i class="fas fa-globe"></i> Production 8: World Building</h3>
+                <div class="card-content"><p>Placeholder content for Production 8.</p></div>
+            </div>
+            <div class="card">
+                <h3><i class="fas fa-gamepad"></i> Production 9: Twine</h3>
+                <div class="card-content"><p>Placeholder content for Production 9.</p></div>
+            </div>
+        </section>
+    </div>
+</div>
+
+<script>
+// Password check
+function checkPassword() {
+    const password = document.getElementById('passwordBox').value;
+    const correctPassword = "1234";
+    if(password===correctPassword){
+        document.getElementById('loginContainer').style.display='none';
+        document.getElementById('mainContent').style.opacity=1;
+        startClock();
+        revealSections();
+        setupSmoothScroll();
+        animateReflection();
+        setupExpandableCards();
+    } else { alert("Incorrect password!"); }
+}
+
+// Clock
+function startClock() {
+    function updateClock(){
+        const now = new Date();
+        document.getElementById('time').innerText = now.toLocaleTimeString();
+    }
+    updateClock();
+    setInterval(updateClock,1000);
+}
+
+// Reveal sections on scroll
+function revealSections() {
+    const sections = document.querySelectorAll('section');
+    const observer = new IntersectionObserver(entries=>{
+        entries.forEach(entry=>{
+            if(entry.isIntersecting){ entry.target.classList.add('visible'); observer.unobserve(entry.target); }
+        });
+    }, { threshold:0.2 });
+    sections.forEach(section=>observer.observe(section));
+}
+
+// Smooth scroll for sidebar links
+function setupSmoothScroll() {
+    document.querySelectorAll('nav a').forEach(link=>{
+        link.addEventListener('click', e=>{
+            e.preventDefault();
+            const target=document.querySelector(link.getAttribute('href'));
+            target.scrollIntoView({ behavior:'smooth' });
+        });
+    });
+}
+
+// Reflection typing animation
+function animateReflection(){
+    const container=document.getElementById('reflection-text');
+    const text=container.innerText.trim();
+    container.innerHTML='';
+    const words=text.split(' ');
+    words.forEach(word=>{
+        const span=document.createElement('span');
+        span.classList.add('word');
+        span.textContent=word+' ';
+        container.appendChild(span);
+    });
+    let i=0;
+    const interval=setInterval(()=>{
+        if(i<words.length){
+            const span=container.children[i];
+            span.style.opacity=1;
+            span.style.transform='translateY(0)';
+            span.style.animation='glitch 0.2s alternate';
+            i++;
+        } else clearInterval(interval);
+    }, 200);
+}
+
+// Glitch keyframes
+const style=document.createElement('style');
+style.innerHTML=`
+@keyframes glitch {
+    0%{text-shadow: 2px 0 #00ffd5, -2px 0 #00e5ff;}
+    25%{text-shadow: -2px 1px #00ffd5, 2px -1px #00e5ff;}
+    50%{text-shadow: 1px 1px #00ffd5, -1px -1px #00e5ff;}
+    75%{text-shadow: -1px 2px #00ffd5, 1px -2px #00e5ff;}
+    100%{text-shadow: 2px -1px #00ffd5, -2px 1px #00e5ff;}
+}`;
+document.head.appendChild(style);
+
+// Expandable cards
+function setupExpandableCards() {
+    document.querySelectorAll('.card').forEach(card=>{
+        const content = card.querySelector('.card-content');
+        if(content) card.addEventListener('click', ()=>{ content.classList.toggle('open'); });
+    });
+}
+</script>
+</body>
+</html>
