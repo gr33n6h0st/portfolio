@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Brandon Smart - Cyber Terminal Portfolio</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+/* Global */
+body, html {
+  margin:0; padding:0; font-family:'Courier New', monospace;
+  background:#0b0c10; color:#00e5ff; scroll-behavior:smooth; overflow-x:hidden;
+}
+
+/* Password Page */
+#loginContainer {
+  display:flex; flex-direction:column; justify-content:center; align-items:center;
+  height:100vh; width:100vw; background:#0b0c10;
+}
+#loginContainer h1 {
+  color:#00e5ff; font-size:2.5em; margin-bottom:25px; text-shadow:0 0 10px #00e5ff;
+}
+#loginContainer input {
+  background:#111214; border:none; border-radius:8px; padding:14px 20px; margin-bottom:20px;
+  width:300px; color:#00e5ff; font-size:1em;
+}
+#loginContainer input::placeholder { color:#00e5ff70; }
+#loginContainer button {
+  background: linear-gradient(145deg,#00e5ff,#00bfff);
+  color:#0b0c10; font-weight:bold; border:none; padding:14px 40px;
+  border-radius:50px; cursor:pointer; font-size:1em; transition:0.3s, box-shadow 0.3s;
+  box-shadow: 0 5px 15px rgba(0,229,255,0.4);
+}
+#loginContainer button:hover { 
+  background: linear-gradient(145deg,#00bfff,#00e5ff); 
+  box-shadow: 0 10px 25px rgba(0,229,255,0.6);
+  transform:translateY(-2px);
+}
+
+/* Dashboard */
+#dashboard { 
+  display:none; flex-wrap:wrap; justify-content:center; gap:60px; padding:80px; position:relative; z-index:1; 
+}
+.tile {
+  background: linear-gradient(145deg,#111214,#1a1a1a);
+  padding:50px 70px; font-size:1.3em; border-radius:50px;
+  cursor:pointer; text-align:center; position:relative; overflow:hidden; transition:transform 0.3s, box-shadow 0.3s;
+  box-shadow: 0 8px 20px rgba(0,229,255,0.3);
+}
+.tile:hover { 
+  transform:scale(1.05); 
+  box-shadow: 0 12px 30px rgba(0,229,255,0.5), 0 0 20px #00e5ff80 inset;
+  color:#00ffd5; 
+  text-shadow:0 0 10px #00e5ff;
+}
+
+/* Terminal symbols background */
+#dashboard::after {
+  content: '>> >> >> >> >> >> >>';
+  position:absolute; top:0; left:0; width:100%; height:100%; color:#00e5ff05;
+  font-size:3em; z-index:0; pointer-events:none; overflow:hidden;
+  white-space:nowrap; animation: moveSymbols 12s linear infinite;
+}
+@keyframes moveSymbols { 0%{transform:translateX(0);}100%{transform:translateX(-50%);} }
+
+/* Sections */
+#sections-container { display:none; padding:50px 80px; }
+section { display:none; margin-bottom:100px; }
+section h2 { font-size:1.6em; font-weight:900; margin-bottom:20px; display:flex; align-items:center; gap:10px; }
+section h2::before { content:"root@portfolio:~$ "; font-size:0.95em; color:#00ffd5; font-weight:normal; }
+
+/* Reflection typing */
+.word { display:inline-block; opacity:0; transform:translateY(10px); }
+#reflection-text::after { content:'|'; display:inline-block; animation:blink 1s infinite; color:#00e5ff; margin-left:2px; }
+@keyframes blink { 0%,50%,100% { opacity:1; } 25%,75% { opacity:0; } }
+
+/* Cards */
+.card {
+  background:#111214; padding:20px; border-radius:12px; margin-bottom:25px;
+  border-left:3px solid #00e5ff; transition:all 0.3s; cursor:pointer;
+}
+.card:hover { background:#1a1a1a; box-shadow:0 0 12px #00e5ff; transform:translateX(3px); }
+.card h3::before { content:"> "; opacity:0.7; }
+.card-content { max-height:0; overflow:hidden; transition:max-height 0.5s ease, padding 0.5s ease; padding-left:10px; }
+.card-content.open { max-height:500px; padding-top:10px; }
+
+/* Back Button */
+.back-btn {
+  background: linear-gradient(145deg,#00e5ff,#00bfff);
+  color:#0b0c10; border:none; padding:10px 20px; margin-bottom:20px;
+  border-radius:50px; cursor:pointer; font-weight:bold; box-shadow:0 5px 15px rgba(0,229,255,0.3);
+}
+.back-btn:hover { 
+  background: linear-gradient(145deg,#00bfff,#00e5ff); 
+  box-shadow:0 10px 25px rgba(0,229,255,0.5); transform:translateY(-2px); 
+}
+
+/* Email */
+a.email-link { color:#00ffd5; text-decoration:none; font-weight:bold; }
+a.email-link:hover { color:#ffb86c; }
+
+/* Terminal scanlines */
+body::before {
+  content:''; position:fixed; top:0; left:0; width:100%; height:100%;
+  background: repeating-linear-gradient(to bottom, rgba(0,229,255,0.02) 0px, rgba(0,229,255,0.02) 1px, transparent 1px, transparent 3px);
+  pointer-events:none; z-index:0; animation:scanlines 1s infinite linear;
+}
+@keyframes scanlines { 0%{background-position:0 0;}100%{background-position:0 4px;} }
+@keyframes flicker { 0%,19%,21%,23%,25%,54%,56%,100%{opacity:1;} 20%,22%,24%,55%{opacity:0.85;} }
+body { animation:flicker 3s infinite; }
+</style>
+</head>
+<body>
+
+<!-- Password -->
+<div id="loginContainer">
+  <h1>Terminal Login</h1>
+  <input type="password" id="passwordBox" placeholder="Enter password">
+  <br>
+  <button onclick="checkPassword()">Enter</button>
+</div>
+
+<!-- Dashboard -->
+<div id="dashboard">
+  <div class="tile" onclick="openSection('reflection')"><i class="fas fa-pen"></i> Reflection</div>
+  <div class="tile" onclick="openSection('home')"><i class="fas fa-home"></i> Home</div>
+  <div class="tile" onclick="openSection('productions')"><i class="fas fa-layer-group"></i> Productions</div>
+  <div class="tile" onclick="openSection('resources')"><i class="fas fa-link"></i> Resources</div>
+  <div id="time" style="position:absolute;top:20px;left:20px;font-size:0.9em;color:#00e5ff;"></div>
+  <div id="weather" style="position:absolute;top:50px;left:20px;font-size:0.9em;color:#00e5ff;">Weather: --°C</div>
+</div>
+
+<!-- Sections -->
+<div id="sections-container">
+  <!-- Reflection -->
+  <section id="reflection-section">
+    <button class="back-btn" onclick="goBack()">← Back</button>
+    <h2><i class="fas fa-pen"></i> Reflection / Process</h2>
+    <div class="card" id="reflection-text"><p>Lorem ipsum dolor sit amet...</p></div>
+  </section>
+
+  <!-- Home -->
+  <section id="home-section">
+    <button class="back-btn" onclick="goBack()">← Back</button>
+    <h2>Home</h2>
+    <p>Mr. Smart's Portfolio</p>
+    <p>Teachable: Computer Technology</p>
+    <p>Contact: <a href="mailto:bsmart@my.yorku.ca" class="email-link">bsmart@my.yorku.ca</a></p>
+  </section>
+
+  <!-- Productions -->
+  <section id="productions-section">
+    <button class="back-btn" onclick="goBack()">← Back</button>
+    <h2><i class="fas fa-layer-group"></i> Productions</h2>
+    <div class="card"><h3>Production 1: Power Up</h3><div class="card-content"><p>Placeholder content.</p></div></div>
+    <div class="card"><h3>Production 2: New Literacies Reflection</h3><div class="card-content"><p>Placeholder content.</p></div></div>
+    <div class="card"><h3>Production 3: Critical Algorithmic Literacies and AI</h3><div class="card-content"><p>Placeholder content.</p></div></div>
+    <div class="card"><h3>Production 4: Graphic Novel</h3><div class="card-content"><p>Placeholder content.</p></div></div>
+    <div class="card"><h3>Production 5: On the Way to Video Inquiry</h3><div class="card-content"><p>Placeholder content.</p></div></div>
+    <div class="card"><h3>Production 6: Video Works</h3><div class="card-content"><p>Placeholder content.</p></div></div>
+    <div class="card"><h3>Production 7: Learning Principles</h3><div class="card-content"><p>Placeholder content.</p></div></div>
+    <div class="card"><h3>Production 8: World Building</h3><div class="card-content"><p>Placeholder content.</p></div></div>
+    <div class="card"><h3>Production 9: Twine</h3><div class="card-content"><p>Placeholder content.</p></div></div>
+  </section>
+
+  <!-- Resources -->
+  <section id="resources-section">
+    <button class="back-btn" onclick="goBack()">← Back</button>
+    <h2><i class="fas fa-link"></i> Resources</h2>
+    <div class="card">
+      <p><a href="#">Example Link 1</a></p>
+      <p><a href="#">Example Link 2</a></p>
+      <p><a href="#">Example Link 3</a></p>
+    </div>
+  </section>
+</div>
+
+<script>
+// Password
+function checkPassword(){
+  const password=document.getElementById('passwordBox').value;
+  if(password==='1234'){
+    document.getElementById('loginContainer').style.display='none';
+    document.getElementById('dashboard').style.display='flex';
+    startDashboard();
+  } else { alert('Incorrect password'); }
+}
+
+// Sections
+function openSection(id){
+  document.getElementById('dashboard').style.display='none';
+  document.getElementById('sections-container').style.display='block';
+  document.querySelectorAll('#sections-container section').forEach(sec=>sec.style.display='none');
+  document.getElementById(id+'-section').style.display='block';
+}
+function goBack(){
+  document.getElementById('sections-container').style.display='none';
+  document.getElementById('dashboard').style.display='flex';
+}
+
+// Clock
+function startClock(){
+  const timeEl=document.getElementById('time');
+  function updateClock(){
+    const now=new Date();
+    timeEl.textContent=now.toLocaleTimeString();
+  }
+  updateClock(); setInterval(updateClock,1000);
+}
+
+// Weather
+async function fetchWeather() {
+    const apiKey = '5043108521e5dc1feccf33701c3221bf';
+    const city = 'Toronto';
+    const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`;
+
+    try {
+        const response = await fetch(url);
+        const data = await response.json();
+        if(data.main && data.weather){
+            document.getElementById('weather').innerText = 
+              `Weather: ${data.main.temp.toFixed(1)}°C, ${data.weather[0].main}`;
+        } else {
+            document.getElementById('weather').innerText = 'Weather info unavailable';
+        }
+    } catch (err) {
+        document.getElementById('weather').innerText = 'Weather info unavailable';
+        console.error(err);
+    }
+}
+
+// Dashboard init
+function startDashboard(){
+  startClock();
+  fetchWeather();
+  startReflectionTyping();
+}
+
+// Reflection typing animation
+function startReflectionTyping(){
+  const textEl=document.getElementById('reflection-text');
+  const words=textEl.innerText.split(' ');
+  textEl.innerText='';
+  words.forEach((w,i)=>{
+    setTimeout(()=>{
+      const span=document.createElement('span');
+      span.className='word'; span.textContent=w+' ';
+      textEl.appendChild(span);
+      setTimeout(()=>{ span.style.opacity=1; span.style.transform='translateY(0)'; },50);
+    }, i*300);
+  });
+}
+
+// Card toggle
+document.querySelectorAll('.card').forEach(card=>{
+  card.addEventListener('click',()=>{
+    const content=card.querySelector('.card-content');
+    if(content) content.classList.toggle('open');
+  });
+});
+</script>
+</body>
+</html>
