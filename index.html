@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Secure Modern Website</title>
+    <style>
+        /* === Global Styles === */
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #121212; /* dark background */
+            color: #ffffff; /* text color */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        /* === Password Page === */
+        #loginContainer {
+            text-align: center;
+            background-color: #1e1e1e; /* card background */
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.5);
+        }
+
+        #loginContainer h1 {
+            margin-bottom: 20px;
+            color: #00bfff; /* accent color */
+        }
+
+        input[type="password"] {
+            padding: 12px;
+            width: 200px;
+            border: none;
+            border-radius: 6px;
+            margin-bottom: 15px;
+            font-size: 16px;
+            background-color: #121212;
+            color: #ffffff;
+        }
+
+        input::placeholder {
+            color: #aaaaaa;
+        }
+
+        button {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 6px;
+            background-color: #00bfff; /* button accent */
+            color: #121212;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background 0.3s, color 0.3s;
+        }
+
+        button:hover {
+            background-color: #ffffff;
+            color: #1e1e1e;
+        }
+
+        /* === Main Content === */
+        #mainContent {
+            display: none; /* hidden until password correct */
+            flex-direction: column;
+            align-items: center;
+            padding: 40px;
+            width: 100%;
+            min-height: 100vh;
+            background: linear-gradient(180deg, #121212, #1e1e1e);
+        }
+
+        #mainContent h2 {
+            color: #00bfff;
+            margin-bottom: 20px;
+        }
+
+        #mainContent p {
+            margin: 10px 0;
+        }
+
+        .section {
+            max-width: 800px;
+            margin-bottom: 30px;
+            padding: 20px;
+            background-color: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- === Password Page === -->
+    <div id="loginContainer">
+        <h1>Enter Password</h1>
+        <input type="password" id="passwordBox" placeholder="Password">
+        <br>
+        <button onclick="checkPassword()">Submit</button>
+    </div>
+
+    <!-- === Main Content === -->
+    <div id="mainContent">
+        <h2>Welcome to the Website</h2>
+        <div class="section">
+            <p id="time">Time will appear here.</p>
+            <p id="weather">Weather information will appear here.</p>
+        </div>
+        <div class="section">
+            <p>Additional content can go here: images, text, links, etc.</p>
+        </div>
+    </div>
+
+    <script>
+        function checkPassword() {
+            const password = document.getElementById('passwordBox').value;
+            const correctPassword = "1234"; // Change to your password
+
+            if(password === correctPassword) {
+                // Hide login, show main content
+                document.getElementById('loginContainer').style.display = "none";
+                document.getElementById('mainContent').style.display = "flex";
+                showTime();
+            } else {
+                alert("Incorrect password!");
+            }
+        }
+
+        function showTime() {
+            const now = new Date();
+            document.getElementById('time').innerText = "Current time: " + now.toLocaleTimeString();
+        }
+    </script>
+
+</body>
+</html>
