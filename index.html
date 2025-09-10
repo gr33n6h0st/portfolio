@@ -76,6 +76,20 @@ a:hover{color:var(--hoverLink);}
 #prod1-gallery{display:none; margin-top:12px; display:flex; flex-wrap:wrap; gap:8px;}
 #prod1-gallery img{width:180px; border-radius:6px; cursor:pointer; transition:transform .2s ease;}
 #prod1-gallery img:hover{transform:scale(1.08);}
+.prod h3 {
+  transition: background 0.25s ease, color 0.25s ease, text-shadow 0.25s ease;
+  display: inline-block;
+  padding: 2px 4px;
+  border-radius: 2px;
+}
+
+.prod h3:hover {
+  background: rgba(0, 229, 255, 0.3);
+  color: #00111b;
+  text-shadow: 0 0 6px #00e5ff;
+  cursor: pointer;
+}
+
 </style>
 </head>
 <body>
@@ -257,13 +271,18 @@ function startQuoteTyping(){
 
 // Production glow
 function startProductionGlow(){
-  const prodEls=document.querySelectorAll('.prod');
+  const prodEls=document.querySelectorAll('.prod h3');
   prodEls.forEach((el,i)=>{
-    const delay=i*300;
-    const t=setTimeout(()=>{ el.classList.add('glow-title') }, delay);
+    const delay=i*200;
+    const t=setTimeout(()=>{
+      el.style.transform='scale(1.05)';
+      el.style.transition='transform 0.25s ease';
+      setTimeout(()=>{ el.style.transform='scale(1)' }, 400);
+    }, delay);
     productionGlowTimeouts.push(t);
   });
 }
+
 function clearProductionGlow(){ productionGlowTimeouts.forEach(t=>clearTimeout(t)); productionGlowTimeouts=[]; document.querySelectorAll('.prod').forEach(el=>el.classList.remove('glow-title')); startProductionGlow(); }
 
 // Gallery logic
@@ -278,3 +297,4 @@ function initGallery(){
 </script>
 </body>
 </html>
+
