@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Brandon Smart - Digital Portfolio</title>
+
+<!-- Font Awesome -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: #0d1117;
+    color: #ffffff;
+    scroll-behavior: smooth;
+    display: flex;
+}
+
+/* Password Page */
+#loginContainer {
+    display: flex; flex-direction: column; justify-content: center; align-items: center;
+    height: 100vh; width: 100vw;
+    background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+}
+#loginContainer h1 { color: #00e5ff; margin-bottom: 20px; font-size: 2em; }
+#loginContainer input {
+    padding: 12px; width: 250px; border-radius: 8px; border: none; margin-bottom: 15px;
+    background-color: #1e1e1e; color: #ffffff; font-size: 1em;
+}
+#loginContainer input::placeholder { color: #aaaaaa; }
+#loginContainer button {
+    padding: 12px 30px; border: none; border-radius: 8px; background: #00e5ff;
+    color: #0d1117; font-weight: bold; cursor: pointer; font-size: 16px;
+    box-shadow: 0 4px 12px rgba(0,229,255,0.5);
+    transition: 0.3s;
+}
+#loginContainer button:hover {
+    background: #ffffff; color: #0d1117; transform: translateY(-2px);
+    box-shadow: 0 6px 18px rgba(0,229,255,0.6);
+}
+
+/* Main Content Layout */
+#mainContent {
+    display: flex; width: 100%;
+}
+
+/* Sidebar / Banner */
+nav {
+    position: fixed; top: 0; left: 0; height: 100vh;
+    background: rgba(15,15,15,0.95);
+    display: flex; flex-direction: column; align-items: flex-start;
+    padding: 30px 15px; gap: 20px; width: 200px;
+}
+nav a {
+    padding: 8px 12px; border-radius: 4px; display: flex; align-items: center; gap: 8px;
+    transition: 0.3s; color: #00e5ff;
+}
+nav a:hover { background: #00e5ff10; color: #00e5ff; }
+
+/* Content area */
+.content {
+    margin-left: 220px; padding: 40px 30px; width: calc(100% - 220px);
+}
+
+/* Sections */
+section {
+    margin-bottom: 80px;
+    opacity: 0; transform: translateY(40px);
+    transition: all 0.8s ease-out;
+}
+section.visible { opacity: 1; transform: translateY(0); }
+section h2 { color: #00e5ff; margin-bottom: 15px; font-size: 1.6em; display: flex; align-items: center; gap: 10px; }
+section p { margin-bottom: 12px; line-height: 1.6; }
+
+/* Cards */
+.card {
+    background: #1b1b1b; padding: 20px; border-radius: 12px;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.5);
+}
+
+/* Time Widget */
+#time {
+    background: #000000; color: #00e5ff; font-weight: bold;
+    padding: 8px 15px; border-radius: 4px; font-size: 0.9em;
+    box-shadow: 0 0 10px #00e5ff;
+    display: inline-block; margin-top: 15px;
+}
+
+/* Reflection Animation */
+.word {
+    display: inline-block;
+    opacity: 0;
+    transform: translateY(10px);
+}
+</style>
+</head>
+<body>
+
+<!-- Password Page -->
+<div id="loginContainer">
+    <h1>Enter Password</h1>
+    <input type="password" id="passwordBox" placeholder="Password">
+    <br>
+    <button onclick="checkPassword()">Submit</button>
+</div>
+
+<!-- Main Content -->
+<div id="mainContent">
+
+    <!-- Sidebar -->
+    <nav>
+        <a href="#reflection"><i class="fas fa-pen"></i> Reflection</a>
+        <a href="#production1"><i class="fas fa-lightbulb"></i> Production 1</a>
+        <a href="#production2"><i class="fas fa-book"></i> Production 2</a>
+        <a href="#production3"><i class="fas fa-robot"></i> Production 3</a>
+        <a href="#production4"><i class="fas fa-paint-brush"></i> Production 4</a>
+        <a href="#production5"><i class="fas fa-video"></i> Production 5</a>
+        <a href="#production6"><i class="fas fa-film"></i> Production 6</a>
+        <a href="#production7"><i class="fas fa-chalkboard-teacher"></i> Production 7</a>
+        <a href="#production8"><i class="fas fa-globe"></i> Production 8</a>
+        <a href="#production9"><i class="fas fa-gamepad"></i> Production 9</a>
+    </nav>
+
+    <!-- Content -->
+    <div class="content">
+
+        <!-- Reflection Section -->
+        <section id="reflection">
+            <h2><i class="fas fa-pen"></i> Reflection / Process</h2>
+            <div class="card" id="reflection-text">
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+            </div>
+        </section>
+
+        <!-- Home Section -->
+        <section id="home">
+            <h2>Welcome to Brandon Smart's Portfolio</h2>
+            <p>Course: Computer Technology</p>
+            <p>Contact: <a href="mailto:bsmart@my.yorku.ca">bsmart@my.yorku.ca</a></p>
+            <div id="time">--:--:--</div>
+        </section>
+
+        <!-- Productions -->
+        <section id="production1"><h2><i class="fas fa-lightbulb"></i> Production 1: Power Up</h2>
+            <div class="card"><p>Placeholder content for Production 1.</p></div></section>
+
+        <section id="production2"><h2><i class="fas fa-book"></i> Production 2: New Literacies Reflection</h2>
+            <div class="card"><p>Placeholder content for Production 2.</p></div></section>
+
+        <section id="production3"><h2><i class="fas fa-robot"></i> Production 3: Critical Algorithmic Literacies and AI</h2>
+            <div class="card"><p>Placeholder content for Production 3.</p></div></section>
+
+        <section id="production4"><h2><i class="fas fa-paint-brush"></i> Production 4: Graphic Novel</h2>
+            <div class="card"><p>Placeholder content for Production 4.</p></div></section>
+
+        <section id="production5"><h2><i class="fas fa-video"></i> Production 5: On the Way to Video Inquiry</h2>
+            <div class="card"><p>Placeholder content for Production 5.</p></div></section>
+
+        <section id="production6"><h2><i class="fas fa-film"></i> Production 6: Video Works</h2>
+            <div class="card"><p>Placeholder content for Production 6.</p></div></section>
+
+        <section id="production7"><h2><i class="fas fa-chalkboard-teacher"></i> Production 7: Learning Principles</h2>
+            <div class="card"><p>Placeholder content for Production 7.</p></div></section>
+
+        <section id="production8"><h2><i class="fas fa-globe"></i> Production 8: World Building</h2>
+            <div class="card"><p>Placeholder content for Production 8.</p></div></section>
+
+        <section id="production9"><h2><i class="fas fa-gamepad"></i> Production 9: Twine</h2>
+            <div class="card"><p>Placeholder content for Production 9.</p></div></section>
+    </div>
+</div>
+
+<script>
+function checkPassword() {
+    const password = document.getElementById('passwordBox').value;
+    const correctPassword = "mrsmart";
+    if(password === correctPassword) {
+        document.getElementById('loginContainer').style.display = "none";
+        document.getElementById('mainContent').style.display = "flex";
+        startClock();
+        revealSections();
+        setupSmoothScroll();
+        animateReflection();
+    } else { alert("Incorrect password!"); }
+}
+
+function startClock() {
+    function updateClock() {
+        const now = new Date();
+        document.getElementById('time').innerText = now.toLocaleTimeString();
+    }
+    updateClock();
+    setInterval(updateClock, 1000);
+}
+
+function revealSections() {
+    const sections = document.querySelectorAll('section');
+    const observer = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+            if(entry.isIntersecting) { entry.target.classList.add('visible'); observer.unobserve(entry.target); }
+        });
+    }, { threshold: 0.2 });
+    sections.forEach(section => observer.observe(section));
+}
+
+function setupSmoothScroll() {
+    document.querySelectorAll('nav a').forEach(link => {
+        link.addEventListener('click', e => {
+            e.preventDefault();
+            const target = document.querySelector(link.getAttribute('href'));
+            target.scrollIntoView({ behavior: 'smooth' });
+        });
+    });
+}
+
+function animateReflection() {
+    const textContainer = document.getElementById('reflection-text');
+    const text = textContainer.innerText.trim();
+    textContainer.innerHTML = '';
+    const words = text.split(' ');
+    words.forEach(word => {
+        const span = document.createElement('span');
+        span.classList.add('word');
+        span.textContent = word + ' ';
+        textContainer.appendChild(span);
+    });
+    let i = 0;
+    const interval = setInterval(() => {
+        if(i < words.length) {
+            textContainer.children[i].style.opacity = 1;
+            textContainer.children[i].style.transform = 'translateY(0)';
+            i++;
+        } else clearInterval(interval);
+    }, 200);
+}
+</script>
+
+</body>
+</html>
