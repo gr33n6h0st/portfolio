@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>BBT Computer Tech — Portfolio</title>
+
+  <!--
+    HOW TO EDIT:
+    - Change the PASSWORD value inside the <script> (near the bottom) to set the gate password.
+    - Replace "Your Name" and the About/Projects/Contact content in the HTML below.
+    - This file is self-contained (no external assets needed).
+  -->
+
+  <style>
+    /* ---------- BASIC LAYOUT ---------- */
+    :root{
+      --bg1:#04070a;
+      --bg2:#071122;
+      --neon1:#00ffd5; /* cyan */
+      --neon2:#6eff6e; /* green */
+      --muted:#8fb0b0;
+      --glass: rgba(255,255,255,0.03);
+      --card: rgba(255,255,255,0.02);
+      --accent: linear-gradient(90deg,var(--neon1),var(--neon2));
+    }
+    html,body{height:100%;margin:0;font-family: "IBM Plex Mono", "Courier New", monospace;background:
+      radial-gradient(1200px 600px at 10% 10%, rgba(0,80,120,0.04), transparent 10%),
+      linear-gradient(180deg,var(--bg1),var(--bg2)); color:#c7fff0; -webkit-font-smoothing:antialiased;}
+    a{color:var(--neon1); text-decoration:none;}
+
+    /* ---------- TERMINAL OVERLAY ---------- */
+    .terminal-overlay{
+      position:fixed; inset:0; display:flex; align-items:center; justify-content:center;
+      background:linear-gradient(180deg, rgba(0,0,0,0.55), rgba(0,0,0,0.65));
+      z-index:9999; transition:opacity .6s ease, transform .6s ease; will-change:opacity,transform;
+    }
+    .terminal {
+      width:min(900px,92%);
+      max-width:1100px;
+      padding:28px;
+      border-radius:12px;
+      background:linear-gradient(180deg, rgba(5,10,14,0.95), rgba(10,16,22,0.95));
+      box-shadow: 0 10px 40px rgba(0,0,0,0.7), 0 0 40px rgba(0,255,210,0.04);
+      border:1px solid rgba(0,255,210,0.06);
+      display:grid; grid-template-columns:1fr 340px; gap:18px; align-items:stretch;
+      color:var(--neon1);
+    }
+    .term-left{padding:10px 18px;}
+    .term-brand{font-size:18px; font-weight:700; letter-spacing:1px; color:var(--neon1); margin-bottom:6px;}
+    .term-msg{font-size:14px; color:var(--muted); line-height:1.55;}
+    .boot-typing{margin-top:18px; font-family:monospace; font-size:13px; color:var(--neon1); white-space:pre-wrap;}
+    .term-right{
+      background:linear-gradient(180deg, rgba(0,255,210,0.02), rgba(110,255,120,0.01));
+      padding:14px; border-radius:8px; display:flex; flex-direction:column; gap:12px;
+      border:1px solid rgba(0,255,210,0.03);
+    }
+
+    .passrow{display:flex; gap:8px; align-items:center;}
+    .passrow input[type="password"]{
+      flex:1; padding:10px 12px; background:transparent; border:1px solid rgba(255,255,255,0.06);
+      color:var(--neon1); outline:none; border-radius:6px; font-family:monospace; font-size:14px;
+      box-shadow: 0 0 8px rgba(0,255,210,0.02) inset;
+    }
+    .btn{
+      background:var(--accent); padding:10px 12px; border-radius:8px; font-weight:700; color:#001414; border:none;
+      cursor:pointer; box-shadow: 0 8px 20px rgba(0,255,210,0.06);
+    }
+    .hint{font-size:12px; color:var(--muted); opacity:0.9;}
+
+    .small-info{font-size:12px; color:var(--muted);}
+
+    /* ---------- FADE OUT STATE ---------- */
+    .terminal-overlay.hidden{opacity:0; pointer-events:none; transform:scale(.99);}
+
+    /* ---------- MAIN SITE ---------- */
+    main {opacity:0; transform:translateY(10px); transition:opacity .7s ease, transform .7s ease; padding:28px;}
+    main.revealed{opacity:1; transform:none;}
+    header.site-head{display:flex; justify-content:space-between; align-items:center; gap:12px; max-width:1200px; margin:0 auto;}
+    .title-block{display:flex; flex-direction:column;}
+    .title-block h1{margin:0; font-size:28px; letter-spacing:0.6px; color:var(--neon1); text-shadow:0 0 8px rgba(0,255,210,0.06);}
+    .title-block p{margin:4px 0 0 0; font-size:14px; color:var(--muted);}
+
+    /* widgets */
+    .widgets{display:flex; gap:10px; align-items:center;}
+    .widget{background:var(--card); padding:10px 12px; border-radius:8px; min-width:140px; text-align:center; border:1px solid rgba(0,255,210,0.03);}
+    .widget h3{margin:0; font-size:12px; color:var(--muted); font-weight:600;}
+    .widget p{margin:6px 0 0 0; font-size:14px; font-family:monospace; color:var(--neon1);}
+
+    /* content sections */
+    section{max-width:1200px; margin:22px auto; padding:18px; background:linear-gradient(180deg, rgba(10,16,22,0.6), rgba(6,10,14,0.4)); border-radius:12px; border:1px solid rgba(0,255,210,0.02);}
+    h2{margin:0 0 12px 0; color:var(--neon2); font-size:18px;}
+    .grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:12px;}
+    .card{background:linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.02)); padding:14px; border-radius:10px; border:1px solid rgba(0,255,210,0.03);}
+    .card h3{margin:0; color:var(--neon1); font-size:15px;}
+    .card p{margin:8px 0 0 0; color:var(--muted); font-size:13px; line-height:1.4;}
+
+    footer{max-width:1200px;margin:26px auto;text-align:center;color:var(--muted); font-size:13px;}
+    /* small screens */
+    @media (max-width:900px){
+      .terminal{grid-template-columns:1fr; padding:16px;}
+      .term-right{order:2;}
+      .term-left{order:1;}
+    }
+  </style>
+</head>
+<body>
+
+  <!-- TERMINAL OVERLAY (landing gate) -->
+  <div id="terminalOverlay" class="terminal-overlay" aria-hidden="false">
+    <div class="terminal" role="dialog" aria-label="Portfolio access terminal">
+      <div class="term-left">
+        <div class="term-brand">[BBT Portfolio — Access Terminal]</div>
+        <div class="term-msg">Welcome. This portfolio is configured to present a short "challenge" before accessing the site. <br>
+          Enter the password to proceed.<br>
+          (Tip: the password is part of my class puzzle — check the About text if you want a hint.)
+        </div>
+
+        <div class="boot-typing" id="bootTyping" aria-live="polite"></div>
+
+        <div style="margin-top:14px;" class="small-info">If you don't want the gate, change <code>UNLOCK_PASSWORD</code> in the HTML to an empty string</div>
+      </div>
+
+      <div class="term-right">
+        <div style="display:flex;flex-direction:column;gap:6px;">
+          <div class="passrow">
+            <input id="pwInput" type="password" aria-label="Password input" placeholder="enter password..." />
+            <button id="enterBtn" class="btn" aria-label="Enter">ENTER</button>
+          </div>
+          <div class="hint">Need a hint? Press the <strong>HINT</strong> button.</div>
+          <div style="display:flex;gap:8px;">
+            <button id="hintBtn" class="btn" style="background:transparent;color:var(--neon1);border:1px solid rgba(0,255,210,0.06);">HINT</button>
+            <button id="skipBtn" class="btn" style="background:transparent;color:var(--neon1);border:1px solid rgba(0,255,210,0.06);">SKIP (demo)</button>
+          </div>
+        </div>
+
+        <div style="margin-top:auto">
+          <div class="small-info">Live info</div>
+          <div style="display:flex;gap:10px;margin-top:8px;">
+            <div class="widget"><h3>Clock</h3><p id="miniClock">--:--:--</p></div>
+            <div class="widget"><h3>Weather</h3><p id="miniWeather">Checking...</p></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MAIN website content (hidden until unlocked) -->
+  <main id="mainContent" aria-hidden="true">
+    <header class="site-head">
+      <div class="title-block">
+        <h1>Your Name — BBT Computer Tech</h1>
+        <p>Cybersecurity-minded student building projects, experiments, and reflections.</p>
+      </div>
+
+      <div class="widgets">
+        <div class="widget" aria-hidden="false"><h3>Local time</h3><p id="mainClock">--:--:--</p></div>
+        <div class="widget"><h3>Local date</h3><p id="mainDate">--</p></div>
+        <div class="widget"><h3>Weather</h3><p id="mainWeather">--</p></div>
+      </div>
+    </header>
+
+    <section id="about">
+      <h2>About Me</h2>
+      <p>Hi — I'm <strong>Your Name</strong>, a student in the BBT Computer Tech program. I'm the only student taking this module in my cohort and I specialize in cybersecurity, scripting, and systems. This portfolio documents my projects, reflections, and a few interactive puzzles designed to demonstrate web and security concepts in a playful way.</p>
+      <p><em>For the assignment reflection (350 words), create a new page called "Reflection" and upload screenshots showing your process. See professor instructions for details.</em></p>
+    </section>
+
+    <section id="projects">
+      <h2>Projects</h2>
+      <div class="grid">
+        <div class="card">
+          <h3>Project: Secure Config Tool</h3>
+          <p>A configuration auditing script that flags insecure settings (example output and notes here).</p>
+        </div>
+        <div class="card">
+          <h3>Project: Mini Web Puzzle</h3>
+          <p>A small JS puzzle that demonstrates DOM manipulation and basic crypto puzzles for learning.</p>
+        </div>
+        <div class="card">
+          <h3>Project: Network Log Analyzer</h3>
+          <p>Log parsing experiments and visualization (CSV → dashboard prototype).</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="contact">
+      <h2>Contact</h2>
+      <div class="grid">
+        <div class="card">
+          <h3>Email</h3>
+          <p>yourname@example.com</p>
+        </div>
+        <div class="card">
+          <h3>GitHub</h3>
+          <p><a href="https://github.com/yourusername" target="_blank" rel="noopener">github.com/yourusername</a></p>
+        </div>
+        <div class="card">
+          <h3>Reflection (assignment)</h3>
+          <p>Add your 350-word reflection as a page called "Reflection" and upload at least one screenshot documenting progress.</p>
+        </div>
+      </div>
+    </section>
+
+    <footer>
+      &copy; <span id="year"></span> Your Name — Built for BBT Computer Tech. Password gate is client-side only.
+    </footer>
+  </main>
+
+  <script>
+    /* ========== CONFIG ========== */
+    // Change this to pick any password for your professor's puzzle.
+    // If you want the gate removed, set UNLOCK_PASSWORD = "" (empty string).
+    const UNLOCK_PASSWORD = "openSesame2025"; // <-- change me
+
+    /* ========== TERMINAL TYPING EFFECT ========== */
+    const bootText = [
+      "Initializing secure portfolio...",
+      "Verifying integrity checks...",
+      "Welcome to the interactive BBT portfolio.",
+      "Please enter the access password to continue."
+    ];
+    let bIdx = 0, chIdx = 0;
+    const bootEl = document.getElementById('bootTyping');
+    (function bootType(){
+      if(bIdx >= bootText.length) return;
+      const line = bootText[bIdx];
+      if(chIdx <= line.length){
+        bootEl.textContent = bootText.slice(0,bIdx).join("\n") + (bIdx>0? "\n":"") + line.slice(0,chIdx);
+        chIdx++;
+        setTimeout(bootType, 28 + Math.random()*40);
+      } else {
+        bIdx++; chIdx = 0;
+        setTimeout(bootType, 400);
+      }
+    })();
+
+    /* ========== CLOCKS ========== */
+    function pad(n){ return String(n).padStart(2,'0'); }
+    function tickClock() {
+      const now = new Date();
+      const h = pad(now.getHours()), m = pad(now.getMinutes()), s = pad(now.getSeconds());
+      const dateStr = now.toLocaleDateString();
+      document.getElementById('miniClock').textContent = `${h}:${m}:${s}`;
+      document.getElementById('mainClock').textContent = `${h}:${m}:${s}`;
+      document.getElementById('mainDate').textContent = dateStr;
+    }
+    setInterval(tickClock, 1000); tickClock();
+
+    /* ========== WEATHER (Open-Meteo, no API key) ========== */
+    async function fetchWeather(lat, lon) {
+      try {
+        const res = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current_weather=true`);
+        if(!res.ok) throw new Error('Weather fetch failed');
+        const j = await res.json();
+        const c = j.current_weather;
+        const txt = `${c.temperature}°C, wind ${c.windspeed} km/h`;
+        document.getElementById('miniWeather').textContent = txt;
+        document.getElementById('mainWeather').textContent = txt;
+      } catch(e){
+        document.getElementById('miniWeather').textContent = 'N/A';
+        document.getElementById('mainWeather').textContent = 'N/A';
+      }
+    }
+    // try to get geolocation
+    if(navigator.geolocation){
+      navigator.geolocation.getCurrentPosition(pos=>{
+        fetchWeather(pos.coords.latitude, pos.coords.longitude);
+      }, err=>{
+        document.getElementById('miniWeather').textContent = 'Location denied';
+        document.getElementById('mainWeather').textContent = 'Location denied';
+      }, {timeout:7000});
+    } else {
+      document.getElementById('miniWeather').textContent = 'No geolocation';
+      document.getElementById('mainWeather').textContent = 'No geolocation';
+    }
+
+    /* ========== PASSWORD / UNLOCK LOGIC ========== */
+    const overlay = document.getElementById('terminalOverlay');
+    const main = document.getElementById('mainContent');
+    const pwInput = document.getElementById('pwInput');
+    const enterBtn = document.getElementById('enterBtn');
+    const hintBtn = document.getElementById('hintBtn');
+    const skipBtn = document.getElementById('skipBtn');
+
+    // If the password is empty, auto-unlock (handy while developing)
+    if(typeof UNLOCK_PASSWORD === 'string' && UNLOCK_PASSWORD.trim() === ""){
+      unlock(true);
+    } else {
+      // check localStorage: if previously unlocked, skip gate for this browser
+      if(localStorage.getItem('portfolio_unlocked') === '1'){
+        unlock(false);
+      }
+    }
+
+    enterBtn.addEventListener('click',tryUnlock);
+    pwInput.addEventListener('keydown', e=> { if(e.key === 'Enter') tryUnlock(); });
+
+    // Provide hint behavior (keeps it safe/harmless)
+    hintBtn.addEventListener('click', ()=>{
+      // simple hint — personalize this to be a riddle for your professor
+      alert("HINT: It's two words often used in fairy tales (first word 'open') + year. Example: openSesame2025");
+    });
+
+    // demo skip: removes the terminal for grading/demo. You can remove this if you want real puzzle.
+    skipBtn.addEventListener('click', ()=>{
+      if(confirm("Remove gate for demo? This will mark the site as unlocked in your browser.")){
+        localStorage.setItem('portfolio_unlocked','1');
+        unlock(true);
+      }
+    });
+
+    function tryUnlock(){
+      const attempt = pwInput.value || "";
+      if(attempt === UNLOCK_PASSWORD){
+        localStorage.setItem('portfolio_unlocked','1');
+        unlock(true);
+      } else {
+        // flash red border / small shake
+        pwInput.style.border = '1px solid rgba(255,60,60,0.9)';
+        setTimeout(()=> pwInput.style.border = '', 900);
+        // increment a local counter for fun
+        let fails = Number(localStorage.getItem('pw_fails') || 0) + 1;
+        localStorage.setItem('pw_fails', fails);
+        if(fails >= 3){
+          alert("Multiple wrong attempts. Try the HINT or check instructions in About.");
+        }
+      }
+    }
+
+    function unlock(animate){
+      // hide overlay
+      overlay.classList.add('hidden');
+      overlay.setAttribute('aria-hidden','true');
+      // reveal main
+      main.classList.add('revealed');
+      main.setAttribute('aria-hidden','false');
+      document.getElementById('year').textContent = new Date().getFullYear();
+      // optional: focus top element
+      document.querySelector('main').scrollTop = 0;
+      if(animate){
+        setTimeout(()=> overlay.style.display='none', 800);
+      } else {
+        overlay.style.display='none';
+      }
+    }
+
+    // Accessibility: press ESC to clear and show overlay again (for testing)
+    document.addEventListener('keydown', e=>{
+      if(e.key === 'Escape'){
+        overlay.style.display = 'flex';
+        overlay.classList.remove('hidden');
+        overlay.setAttribute('aria-hidden','false');
+        main.classList.remove('revealed');
+      }
+    });
+
+  </script>
+</body>
+</html>
