@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Hello World - Brandon Smart's Portfolio</title>
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+:root {
+  --neon: #00e5ff;
+  --hoverLink: #00ffb3;
+  --bg: #050507;
+  --panel: rgba(10,12,15,0.8);
+}
+*{box-sizing:border-box;}
+html, body {height:100%;margin:0;font-family:'Share Tech Mono',monospace;background: linear-gradient(180deg,#020203,#07080a);color:var(--neon);}
+a{color:var(--neon);text-decoration:none;transition:color .2s ease;}
+a:hover{color:var(--hoverLink);}
+
+/* Login overlay */
+#login {position:fixed; inset:0; display:flex; align-items:center; justify-content:center; z-index:50; background:#000;}
+.login-card { width:360px; padding:28px; border-radius:18px; background:linear-gradient(135deg, rgba(0,229,255,0.06), rgba(0,102,153,0.04)); border:1px solid rgba(0,229,255,0.14); box-shadow:0 8px 40px rgba(0,0,0,0.7),0 0 18px rgba(0,229,255,0.06) inset; text-align:center;}
+.login-card h1{margin:0 0 12px;font-size:20px;}
+.login-input{ width:100%; padding:12px 14px; border-radius:999px; border:1px solid rgba(0,229,255,0.14); background: rgba(0,0,0,0.45); color:var(--neon); outline:none; font-size:14px; box-shadow:0 4px 14px rgba(0,0,0,0.6) inset;}
+.login-actions{display:flex; gap:14px; justify-content:center; margin-top:16px; align-items:center;}
+.btn-primary{ padding:10px 20px; border-radius:999px; border:none; cursor:pointer; background:linear-gradient(135deg,var(--neon), #00bfff); color:#081018; font-weight:700;}
+.login-note{font-size:12px; color:rgba(0,229,255,0.65); margin-top:10px;}
+
+/* HUD */
+#hud {position:fixed; left:18px; top:12px; z-index:45; background:linear-gradient(180deg, rgba(0,0,0,0.55), rgba(0,0,0,0.35)); border:1px solid rgba(0,229,255,0.07); padding:10px 14px; border-radius:10px; box-shadow:0 6px 20px rgba(0,0,0,0.6); font-size:13px;}
+#hud .small{font-size:12px;color:rgba(0,229,255,0.85);}
+
+/* Center home */
+#home { position:relative; z-index:30; min-height:100vh; display:flex; align-items:center; justify-content:center;}
+.home-inner{max-width:960px;width:100%;padding:120px 30px;text-align:center; display:flex; flex-direction:column; align-items:center;}
+.title{font-size:20px;margin-bottom:18px;}
+.categories{ display:flex; gap:18px; justify-content:center; flex-wrap:wrap; margin:16px 0 24px;}
+.category{ padding:18px 26px; border-radius:14px; cursor:pointer; font-weight:700; background: linear-gradient(180deg, rgba(10,12,14,0.6), rgba(18,20,22,0.55)); border:1px solid rgba(0,229,255,0.06); box-shadow: 0 8px 20px rgba(0,0,0,0.6); transition: transform .25s ease, box-shadow .25s ease, color .2s ease, background .2s ease; color:var(--neon);}
+.category:hover{ transform:translateY(-6px); box-shadow:0 20px 40px rgba(0,229,255,0.06); background:linear-gradient(180deg,var(--neon),#00bfff); color:#00111b;}
+.quote { margin-top:36px; font-size:15px; color:rgba(0,229,255,0.95); max-width:820px; margin-left:auto; margin-right:auto; opacity:0; transform:translateY(6px); transition:all .6s cubic-bezier(.2,.9,.2,1);}
+.quote.visible{opacity:1; transform:translateY(0);}
+
+/* Panels */
+.panel { position:fixed; inset:80px 60px 60px 60px; background:var(--panel); border-radius:14px; z-index:35; padding:28px; display:none; flex-direction:column; gap:12px; overflow:auto; border:1px solid rgba(0,229,255,0.04); box-shadow: 0 15px 60px rgba(0,0,0,0.7); transition:opacity .28s ease, transform .28s ease;}
+.panel.show{display:flex; opacity:1; transform:translateY(0);}
+.panel.hide { opacity:0; transform:translateY(8px);}
+.panel h2{margin:0 0 8px;color:var(--neon);}
+.panel p{line-height:1.6; color:rgba(0,229,255,0.96);}
+#reflection-text{white-space:pre-wrap; font-size:14px; color:rgba(0,229,255,0.95);}
+.cursor { display:inline-block; width:10px; margin-left:6px; background:var(--neon); animation:blink 1s steps(2) infinite; vertical-align:middle; }
+@keyframes blink{0%,50%{opacity:1}51%,100%{opacity:0}}
+.productions-list{display:flex; flex-wrap:wrap; gap:12px;}
+.prod{ flex:1 1 300px; min-width:220px; background:linear-gradient(180deg, rgba(0,0,0,0.6), rgba(10,10,12,0.55)); border-radius:12px; padding:16px; border-left:4px solid rgba(0,229,255,0.06); transition:transform .25s;}
+.prod:hover{ transform:scale(1.05); background:rgba(0,229,255,0.06);}
+.prod h3{margin:0 0 6px;font-size:16px;}
+.prod p{margin:0;font-size:13px;color:rgba(0,229,255,0.9);}
+.prod.glow-title h3{ text-shadow:0 0 12px var(--neon); color:#fff;}
+
+/* Contact */
+.contact-row{display:flex;gap:12px;align-items:center;justify-content:flex-start;}
+.mail { display:inline-flex; align-items:center; gap:8px; padding:8px 12px; border-radius:10px; background:rgba(0,229,255,0.03); border:1px solid rgba(0,229,255,0.04);}
+.mail a{color:var(--neon); text-decoration:none;}
+.mail a:hover{color:var(--hoverLink);}
+.back { margin-top:18px; align-self:flex-start; padding:8px 14px; border-radius:10px; cursor:pointer; background:transparent; border:1px solid rgba(0,229,255,0.06); color:var(--neon);}
+.back:hover{ background:rgba(0,229,255,0.06); color:#00161b;}
+@media (max-width:700px){ .panel{inset:60px 18px 60px 18px} .home-inner{padding:40px 18px} .categories{gap:12px} }
+</style>
+</head>
+<body>
+
+<!-- Login -->
+<div id="login">
+  <div class="login-card">
+    <h1>Hello World - Brandon Smart's Portfolio</h1>
+    <input type="password" class="login-input" id="password" placeholder="Enter password">
+    <div class="login-actions">
+      <button class="btn-primary" id="loginBtn">Enter</button>
+    </div>
+    <div class="login-note">Use your portfolio password.</div>
+  </div>
+</div>
+
+<!-- HUD -->
+<div id="hud"></div>
+
+<!-- Home -->
+<div id="home">
+  <div class="home-inner">
+    <div class="title">Welcome to my Portfolio</div>
+    <div class="categories">
+      <div class="category" id="whoamiBtn">Whoami</div>
+      <div class="category" id="productionsBtn">Productions</div>
+      <div class="category" id="reflectionBtn">Reflection</div>
+      <div class="category" id="resourcesBtn">Resources</div>
+      <div class="category" id="contactBtn">Contact</div>
+    </div>
+    <div class="quote" id="quote"></div>
+  </div>
+</div>
+
+<!-- Whoami Panel -->
+<div class="panel" id="whoami">
+  <h2>Whoami</h2>
+  <p>Brandon Smart<br>Teachable: Computer Technology</p>
+  <div class="back" onclick="closePanel('whoami')">← Back</div>
+</div>
+
+<!-- Reflection Panel -->
+<div class="panel" id="reflection">
+  <h2>Reflection</h2>
+  <div id="reflection-text"></div><span class="cursor"></span>
+  <div class="back" onclick="closePanel('reflection')">← Back</div>
+</div>
+
+<!-- Resources Panel -->
+<div class="panel" id="resources">
+  <h2>Resources</h2>
+  <p><a href="https://youtube.com" target="_blank">YouTube</a></p>
+  <p><a href="https://google.ca" target="_blank">Google</a></p>
+  <p><a href="https://github.com" target="_blank">GitHub</a></p>
+  <div class="back" onclick="closePanel('resources')">← Back</div>
+</div>
+
+<!-- Contact Panel -->
+<div class="panel" id="contact">
+  <h2>Contact</h2>
+  <div class="mail"><i class="fa fa-envelope"></i> <a href="mailto:bsmart@my.yorku.ca">bsmart@my.yorku.ca</a></div>
+  <div class="back" onclick="closePanel('contact')">← Back</div>
+</div>
+
+<!-- Productions Panel -->
+<div class="panel" id="productions">
+  <h2>Productions</h2>
+  <div class="productions-list" id="prodList">
+    <div class="prod glow-title">Production 1<p>View Content</p></div>
+    <div class="prod glow-title">Production 2<p>View Content</p></div>
+    <div class="prod glow-title">Production 3<p>View Content</p></div>
+    <div class="prod glow-title">Production 4<p>View Content</p></div>
+    <div class="prod glow-title">Production 5<p>View Content</p></div>
+    <div class="prod glow-title">Production 6<p>View Content</p></div>
+    <div class="prod glow-title">Production 7<p>View Content</p></div>
+    <div class="prod glow-title">Production 8<p>View Content</p></div>
+    <div class="prod glow-title">Production 9<p>View Content</p></div>
+  </div>
+  <div class="back" onclick="closePanel('productions')">← Back</div>
+</div>
+
+<script>
+// Password login
+document.getElementById("loginBtn").addEventListener("click",function(){
+  const pass=document.getElementById("password").value;
+  if(pass==="mrsmart"){ document.getElementById("login").style.display="none"; startHUD(); startQuotes();}
+  else {alert("Incorrect password.");}
+});
+
+// HUD
+function startHUD(){
+  const hud=document.getElementById("hud");
+  function updateHUD(){
+    const now=new Date();
+    const d=now.toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric',year:'numeric'});
+    const t=now.toLocaleTimeString();
+    hud.innerHTML=`${d}<br>${t}<br>Toronto, Ontario, Canada<br>43.7°N, 79.4°W<br>Weather: 18°C Clear`;
+  }
+  updateHUD();
+  setInterval(updateHUD,1000);
+}
+
+// Quotes
+const quotes=[`"Sometimes it is the people who no one imagines anything of, who do the things that no one can imagine." — Alan Turing`,`"First, solve the problem. Then, write the code." — John Johnson`,`"Talk is cheap. Show me the code." — Linus Torvalds`];
+let qIndex=0;
+function startQuotes(){
+  const quoteEl=document.getElementById("quote");
+  quoteEl.textContent=quotes[qIndex];
+  quoteEl.classList.add('visible');
+  setInterval(()=>{
+    quoteEl.classList.remove('visible');
+    setTimeout(()=>{
+      qIndex=(qIndex+1)%quotes.length;
+      quoteEl.textContent=quotes[qIndex];
+      quoteEl.classList.add('visible');
+    },800);
+  },6000);
+}
+
+// Panel navigation
+function openPanel(id){ document.getElementById(id).classList.add('show'); }
+function closePanel(id){ document.getElementById(id).classList.remove('show'); }
+
+// Category clicks
+document.getElementById("whoamiBtn").addEventListener("click",()=>{openPanel('whoami');});
+document.getElementById("productionsBtn").addEventListener("click",()=>{openPanel('productions');});
+document.getElementById("reflectionBtn").addEventListener("click",()=>{openPanel('reflection'); startReflection();});
+document.getElementById("resourcesBtn").addEventListener("click",()=>{openPanel('resources');});
+document.getElementById("contactBtn").addEventListener("click",()=>{openPanel('contact');});
+
+// Reflection typing
+const reflectionText=`This is my Reflection Panel.\nIt types out text letter by letter, giving a terminal feel.\nYou can customize this however you like.`;
+function startReflection(){
+  const el=document.getElementById("reflection-text");
+  el.textContent='';
+  let i=0;
+  function type(){if(i<reflectionText.length){el.textContent+=reflectionText[i]; i++; setTimeout(type,30);}}
+  type();
+}
+</script>
+
+</body>
+</html>
