@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Hello World - Brandon Smart's Portfolio</title>
+
+<!-- Font + icons -->
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+<style>
+:root{
+  --neon: #00e5ff;
+  --bg-dark: #030305;
+  --panel: rgba(10,12,15,0.9);
+  --hover: #00ffb3;
+  --hud-w: 260px;
+}
+
+/* base */
+*{box-sizing:border-box}
+html,body{height:100%;margin:0;font-family:'Share Tech Mono',monospace;background:linear-gradient(180deg,#020203,#07080a); color:var(--neon); -webkit-font-smoothing:antialiased;}
+a{color:var(--neon); text-decoration:none; transition: color .18s ease;}
+a:hover{color:var(--hover);}
+
+/* subtle scanlines */
+.scanlines{pointer-events:none; position:fixed; inset:0; z-index:40;
+  background:repeating-linear-gradient(to bottom, rgba(0,229,255,0.03) 0px, rgba(0,229,255,0.03) 1px, transparent 1px, transparent 3px);
+  opacity:0.12;
+}
+
+/* -------- LOGIN (opaque overlay) -------- */
+#loginOverlay {
+  position:fixed; inset:0; z-index:1200; display:flex; align-items:center; justify-content:center;
+  background: linear-gradient(180deg, rgba(0,0,0,0.98), rgba(0,0,0,0.98));
+}
+.login-card {
+  width:380px; padding:28px; border-radius:14px;
+  background: linear-gradient(135deg, rgba(0,229,255,0.04), rgba(0,102,153,0.03));
+  border:1px solid rgba(0,229,255,0.12);
+  box-shadow: 0 18px 60px rgba(0,0,0,0.7), inset 0 0 14px rgba(0,229,255,0.02);
+  text-align:center;
+}
+.login-card h1 { margin:0 0 12px; font-size:20px; color:var(--neon); }
+.login-input {
+  width:100%; padding:12px 14px; border-radius:999px; border:1px solid rgba(0,229,255,0.12);
+  background: rgba(0,0,0,0.45); color:var(--neon); outline:none; font-size:14px;
+}
+.login-actions { margin-top:14px; display:flex; justify-content:center; gap:12px; }
+.btn-primary {
+  padding:10px 20px; border-radius:999px; border:none; cursor:pointer; background:linear-gradient(135deg,var(--neon),#00bfff);
+  color:#081018; font-weight:700;
+}
+.login-sub { margin-top:10px; font-size:13px; color:rgba(0,229,255,0.7); }
+
+/* -------- HUD (top-left) -------- */
+#hud {
+  position:fixed; left:18px; top:12px; z-index:1100;
+  width:var(--hud-w);
+  background:linear-gradient(180deg, rgba(0,0,0,0.55), rgba(0,0,0,0.35));
+  border-radius:10px; padding:10px 12px; border:1px solid rgba(0,229,255,0.06);
+  box-shadow: 0 8px 40px rgba(0,0,0,0.6); color:var(--neon); font-size:13px;
+}
+.hud-row { display:flex; gap:8px; align-items:center; }
+
+/* -------- MAIN (center) -------- */
+#main {
+  min-height:100vh; display:flex; align-items:center; justify-content:center; padding:40px 28px;
+  z-index:500;
+}
+.container { max-width:1100px; width:100%; display:flex; gap:28px; align-items:flex-start; }
+
+/* Left column (nav / categories) - keep it compact */
+.leftCol {
+  width:320px; display:flex; flex-direction:column; gap:18px; align-items:flex-start;
+}
+.headerTitle { font-size:18px; margin-bottom:8px; color:var(--neon); }
+.navItem {
+  width:100%; padding:16px 14px; border-radius:12px; cursor:pointer;
+  background: linear-gradient(180deg, rgba(10,12,14,0.6), rgba(18,20,22,0.55));
+  border:1px solid rgba(0,229,255,0.04); color:var(--neon); font-weight:700;
+  transition: all .18s ease;
+}
+.navItem:hover {
+  background: linear-gradient(180deg, var(--neon), #00bfff);
+  color:#00111b;
+  transform:translateY(-4px);
+  box-shadow:0 16px 40px rgba(0,229,255,0.06);
+}
+
+/* rightCol: panels area */
+.rightCol { flex:1; min-height:400px; }
+
+/* Panel cards (smaller so HUD won't overlap) */
+.panel {
+  display:none; background:var(--panel); border-radius:12px; padding:20px; border:1px solid rgba(0,229,255,0.04);
+  box-shadow: 0 20px 60px rgba(0,0,0,0.7);
+  position:relative; z-index:1150; /* > hud so panels render above HUD */
+  max-height:70vh; overflow:auto;
+}
+.panel.show { display:block; }
+
+/* reflection */
+#reflectionText{white-space:pre-wrap; font-size:14px; color:rgba(0,229,255,0.95); }
+.cursor { display:inline-block; width:10px; margin-left:6px; background:var(--neon); animation:blink 1s steps(2) infinite; vertical-align:middle; }
+@keyframes blink{0%,50%{opacity:1}51%,100%{opacity:0}}
+
+/* productions grid inside panel */
+.productionsGrid { display:grid; grid-template-columns:repeat(3,1fr); gap:14px; }
+.prodCard {
+  padding:16px; border-radius:10px; border:1px solid rgba(0,229,255,0.05);
+  background: linear-gradient(180deg, rgba(0,0,0,0.5), rgba(12,12,14,0.35));
+  cursor:pointer; transition: all .18s ease;
+}
+.prodCard h3 { margin:0 0 6px; font-size:15px; }
+.prodCard p { margin:0; color:rgba(0,229,255,0.9); font-size:13px; }
+/* highlight-on-hover (terminal highlighter) */
+.prodCard:hover { background: linear-gradient(180deg, var(--neon), #00bfff); color:#001018; transform:translateY(-6px); box-shadow:0 22px 50px rgba(0,229,255,0.06); }
+.prodCard:hover h3{ color:#001018; text-shadow:none; }
+
+/* lightbox (modern) */
+#lightbox {
+  display:none; position:fixed; inset:0; z-index:1300;
+  background: rgba(0,0,0,0.96); align-items:center; justify-content:center; flex-direction:column;
+}
+#lightbox img { max-width:86%; max-height:82%; border:3px solid var(--neon); border-radius:8px; }
+.lbControls { margin-top:12px; display:flex; gap:12px; }
+.lbControls button { padding:8px 12px; border-radius:8px; border:none; cursor:pointer; background:var(--neon); color:#001018; font-weight:700; }
+
+/* small back button inside panels */
+.backBtn { margin-top:12px; padding:8px 12px; border-radius:8px; background:transparent; border:1px solid rgba(0,229,255,0.06); color:var(--neon); cursor:pointer; }
+.backBtn:hover { background:rgba(0,229,255,0.06); color:#001018; }
+
+/* responsive */
+@media (max-width:980px){ .container{flex-direction:column;} .leftCol{width:100%; order:2;} .rightCol{order:1;} #hud{left:10px; top:8px; } }
+</style>
+</head>
+<body>
+  <div class="scanlines" aria-hidden="true"></div>
+
+  <!-- LOGIN -->
+  <div id="loginOverlay" role="dialog" aria-label="Login">
+    <div class="login-card" role="document">
+      <h1>Login</h1>
+      <input id="loginPass" class="login-input" type="password" placeholder="Enter password" aria-label="Password">
+      <div class="login-actions">
+        <button id="loginBtn" class="btn-primary" aria-label="Enter">Enter</button>
+      </div>
+      <div class="login-sub">Enter the terminal</div>
+    </div>
+  </div>
+
+  <!-- HUD (top-left) -->
+  <div id="hud" aria-live="polite">
+    <div class="hud-row" id="hud-date">Loading date…</div>
+    <div class="hud-row" id="hud-time">--:--:--</div>
+    <div class="hud-row" id="hud-loc"><i class="fa-solid fa-location-dot"></i> <span id="hud-city">Toronto</span></div>
+    <div class="hud-row" id="hud-coords">Coords: <span id="hud-coords-text">—</span></div>
+    <div class="hud-row" id="hud-weather"><i class="fa-solid fa-cloud-sun"></i> <span id="hud-weather-text">—</span></div>
+  </div>
+
+  <!-- MAIN -->
+  <main id="main">
+    <div class="container">
+
+      <!-- LEFT: nav / categories -->
+      <div class="leftCol" aria-hidden="false">
+        <div class="headerTitle">Hello World - Brandon Smart's Portfolio</div>
+
+        <div id="navWho" class="navItem" role="button" tabindex="0" aria-controls="whoPanel">Whoami</div>
+        <div id="navRef" class="navItem" role="button" tabindex="0" aria-controls="refPanel">Reflection</div>
+        <div id="navProd" class="navItem" role="button" tabindex="0" aria-controls="prodPanel">Productions</div>
+        <div id="navRes" class="navItem" role="button" tabindex="0" aria-controls="resPanel">Resources</div>
+        <div id="navContact" class="navItem" role="button" tabindex="0" aria-controls="contactPanel">Contact</div>
+      </div>
+
+      <!-- RIGHT: panels -->
+      <div class="rightCol">
+
+        <!-- WHOAMI PANEL -->
+        <section id="whoPanel" class="panel" role="region" aria-labelledby="navWho">
+          <h2>Whoami</h2>
+          <p><strong>Brandon Smart</strong><br>Teachable: Computer Technology</p>
+          <button class="backBtn" onclick="closePanel('whoPanel')">← Back</button>
+        </section>
+
+        <!-- REFLECTION PANEL -->
+        <section id="refPanel" class="panel" role="region" aria-labelledby="navRef">
+          <h2>Reflection</h2>
+          <div id="reflectionText" aria-live="polite"></div><span class="cursor" id="reflectionCursor" aria-hidden="true"></span>
+          <button class="backBtn" onclick="closePanel('refPanel')">← Back</button>
+        </section>
+
+        <!-- PRODUCTIONS PANEL -->
+        <section id="prodPanel" class="panel" role="region" aria-labelledby="navProd">
+          <h2>Productions</h2>
+
+          <div class="productionsGrid" id="productionsGrid">
+            <div class="prodCard" data-index="0"><h3>Production 1: Power up</h3><p>View Content</p></div>
+            <div class="prodCard" data-index=""><h3>Production 2: New Literacies Reflection</h3><p>Placeholder</p></div>
+            <div class="prodCard" data-index=""><h3>Production 3: Critical Algorithmic Literacies and AI</h3><p>Placeholder</p></div>
+            <div class="prodCard" data-index=""><h3>Production 4: Graphic Novel</h3><p>Placeholder</p></div>
+            <div class="prodCard" data-index=""><h3>Production 5: On the Way to Video Inquiry</h3><p>Placeholder</p></div>
+            <div class="prodCard" data-index=""><h3>Production 6: Video Works</h3><p>Placeholder</p></div>
+            <div class="prodCard" data-index=""><h3>Production 7: Learning Principles</h3><p>Placeholder</p></div>
+            <div class="prodCard" data-index=""><h3>Production 8: World Building</h3><p>Placeholder</p></div>
+            <div class="prodCard" data-index=""><h3>Production 9: Twine</h3><p>Placeholder</p></div>
+          </div>
+
+          <button class="backBtn" onclick="closePanel('prodPanel')">← Back</button>
+        </section>
+
+        <!-- RESOURCES -->
+        <section id="resPanel" class="panel" role="region" aria-labelledby="navRes">
+          <h2>Resources</h2>
+          <p><a href="https://youtube.com" target="_blank" rel="noopener">YouTube</a></p>
+          <p><a href="https://google.ca" target="_blank" rel="noopener">Google</a></p>
+          <p><a href="https://github.com" target="_blank" rel="noopener">GitHub</a></p>
+          <button class="backBtn" onclick="closePanel('resPanel')">← Back</button>
+        </section>
+
+        <!-- CONTACT -->
+        <section id="contactPanel" class="panel" role="region" aria-labelledby="navContact">
+          <h2>Contact</h2>
+          <div class="contact-row">
+            <div class="mail"><i class="fa-solid fa-envelope"></i>&nbsp; <a href="mailto:bsmart@my.yorku.ca">bsmart@my.yorku.ca</a></div>
+          </div>
+          <button class="backBtn" onclick="closePanel('contactPanel')">← Back</button>
+        </section>
+
+      </div>
+    </div>
+  </main>
+
+  <!-- LIGHTBOX -->
+  <div id="lightbox" role="dialog" aria-hidden="true">
+    <img id="lbImage" src="" alt="Screenshot">
+    <div class="lbControls">
+      <button id="lbPrev">Prev</button>
+      <button id="lbNext">Next</button>
+      <button id="lbClose">Close</button>
+    </div>
+  </div>
+
+<script>
+/* ------------------ Configuration ------------------ */
+/* If you want to use a different OpenWeatherMap API key, replace below */
+const OWM_API_KEY = '5043108521e5dc1feccf33701c3221bf'; // <--- put your API key here if you want live weather
+
+/* Production 1 image list (hardcoded filenames in /images/) */
+const PROD1_IMAGES = [
+  "images/Screenshot 2025-09-10 130926.png",
+  "images/Screenshot 2025-09-10 123717.png",
+  "images/Screenshot 2025-09-10 115645.png",
+  "images/Screenshot 2025-09-10 114858.png",
+  "images/Screenshot 2025-09-10 114832.png"
+];
+
+/* ------------------ Login logic ------------------ */
+const loginOverlay = document.getElementById('loginOverlay');
+const loginBtn = document.getElementById('loginBtn');
+const loginPass = document.getElementById('loginPass');
+
+function unlockSite() {
+  loginOverlay.style.display = 'none';
+  // show HUD and default home state
+  document.getElementById('hud').style.opacity = '1';
+  document.getElementById('hud').style.visibility = 'visible';
+  // begin HUD updates
+  startHud();
+}
+
+loginBtn.addEventListener('click', ()=> {
+  const v = (loginPass.value || '').trim();
+  if (v === 'mrsmart') {
+    unlockSite();
+  } else {
+    loginPass.value = '';
+    loginPass.placeholder = 'Incorrect — try again';
+    loginPass.focus();
+    // small effect
+    loginOverlay.animate([{ transform: 'translateX(-2px)'},{ transform: 'translateX(2px)' },{ transform: 'translateX(0)' }], { duration: 320, iterations: 1 });
+  }
+});
+loginPass.addEventListener('keydown', (e)=>{ if(e.key === 'Enter') loginBtn.click(); });
+
+/* ------------------ HUD (date/time/coords/weather) ------------------ */
+const hudDate = document.getElementById('hud-date');
+const hudTime = document.getElementById('hud-time');
+const hudCity = document.getElementById('hud-city');
+const hudCoordsText = document.getElementById('hud-coords-text');
+const hudWeatherText = document.getElementById('hud-weather-text');
+
+let hudInterval = null;
+function startHud(){
+  // update date/time every second
+  function updateTime(){
+    const now = new Date();
+    hudDate.textContent = now.toLocaleDateString(undefined, { weekday:'long', month:'long', day:'numeric', year:'numeric' });
+    hudTime.textContent = now.toLocaleTimeString();
+  }
+  updateTime();
+  if (hudInterval) clearInterval(hudInterval);
+  hudInterval = setInterval(updateTime, 1000);
+
+  // try geolocation & weather
+  if ('geolocation' in navigator) {
+    navigator.geolocation.getCurrentPosition(async (pos) => {
+      const lat = pos.coords.latitude;
+      const lon = pos.coords.longitude;
+      hudCoordsText.textContent = `${lat.toFixed(2)}, ${lon.toFixed(2)}`;
+      // fetch weather if key present
+      if (OWM_API_KEY && OWM_API_KEY !== 'YOUR_API_KEY') {
+        try {
+          const res = await fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&units=metric&appid=${OWM_API_KEY}`);
+          if (res.ok) {
+            const j = await res.json();
+            hudCity.textContent = `${j.name || 'Toronto'}`;
+            hudWeatherText.textContent = `${Math.round(j.main.temp)}°C, ${j.weather[0].main}`;
+            return;
+          }
+        } catch(e) { /* ignore */ }
+      }
+      // fallback
+      hudCity.textContent = 'Toronto';
+      hudWeatherText.textContent = '—';
+    }, (err) => {
+      // permission denied / error: fallback
+      hudCoordsText.textContent = '—';
+      hudCity.textContent = 'Toronto';
+      hudWeatherText.textContent = '—';
+    }, { timeout:7000 });
+  } else {
+    hudCoordsText.textContent = '—';
+    hudCity.textContent = 'Toronto';
+    hudWeatherText.textContent = '—';
+  }
+}
+
+/* ------------------ Panels navigation ------------------ */
+function closeAllPanels() {
+  document.querySelectorAll('.panel').forEach(el=>el.classList.remove('show'));
+}
+function openPanel(id) {
+  closeAllPanels();
+  document.getElementById(id).classList.add('show');
+}
+/* nav bindings */
+document.getElementById('navWho').addEventListener('click', ()=> openPanel('whoPanel'));
+document.getElementById('navRef').addEventListener('click', ()=> { openPanel('refPanel'); startReflectionTyping(); });
+document.getElementById('navProd').addEventListener('click', ()=> openPanel('prodPanel'));
+document.getElementById('navRes').addEventListener('click', ()=> openPanel('resPanel'));
+document.getElementById('navContact').addEventListener('click', ()=> openPanel('contactPanel'));
+
+/* Close button handlers */
+document.querySelectorAll('.backBtn').forEach(b=>b.addEventListener('click', ()=> {
+  closeAllPanels();
+}));
+
+/* ------------------ Reflection typing (word-by-word) ------------------ */
+const reflectionText = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. This is a placeholder reflection. Replace with your 350-word reflection when you're ready.";
+const reflectionEl = document.getElementById('reflectionText');
+const reflectionCursor = document.getElementById('reflectionCursor');
+let reflectionTyping = null;
+
+function startReflectionTyping(){
+  // only type once per open; reset element
+  reflectionEl.textContent = '';
+  if (reflectionTyping) { clearTimeout(reflectionTyping); reflectionTyping = null; }
+  const words = reflectionText.split(' ');
+  let i = 0;
+  reflectionCursor.style.display = 'inline-block';
+  function typeNextWord(){
+    if (i >= words.length) {
+      reflectionCursor.style.display = 'none';
+      return;
+    }
+    reflectionEl.textContent += (i === 0 ? '' : ' ') + words[i];
+    i++;
+    reflectionTyping = setTimeout(typeNextWord, 150); // ~150ms per word
+  }
+  typeNextWord();
+}
+
+/* ------------------ Productions interactions ------------------ */
+const prodCards = document.querySelectorAll('.prodCard');
+prodCards.forEach(card => {
+  const idx = card.getAttribute('data-index');
+  card.addEventListener('click', (e)=>{
+    // If it's Production 1 (data-index === "0") open lightbox
+    if (idx === '0') {
+      openLightbox(0);
+    } else {
+      // placeholder: open panel detail or toast
+      // For now we'll show a tiny placeholder panel
+      // show a small temporary panel message
+      const title = card.querySelector('h3') ? card.querySelector('h3').textContent : 'Production';
+      alert(title + '\n\nContent coming soon.');
+    }
+  });
+});
+
+/* ensure Production 9 is same as others (it is; stylistic parity handled by CSS) */
+
+/* ------------------ Lightbox (modern) ------------------ */
+const lb = document.getElementById('lightbox');
+const lbImg = document.getElementById('lbImage');
+const lbPrev = document.getElementById('lbPrev');
+const lbNext = document.getElementById('lbNext');
+const lbClose = document.getElementById('lbClose');
+
+let lbIndex = 0;
+function openLightbox(i) {
+  if (!Array.isArray(PROD1_IMAGES) || PROD1_IMAGES.length === 0) {
+    alert('No images found for Production 1 (place your images in /images/).');
+    return;
+  }
+  lbIndex = i || 0;
+  lbImg.src = PROD1_IMAGES[lbIndex];
+  lb.style.display = 'flex';
+  lb.setAttribute('aria-hidden','false');
+}
+function closeLightbox() {
+  lb.style.display = 'none';
+  lb.setAttribute('aria-hidden','true');
+}
+function nextLightbox() { lbIndex = (lbIndex + 1) % PROD1_IMAGES.length; lbImg.src = PROD1_IMAGES[lbIndex]; }
+function prevLightbox() { lbIndex = (lbIndex - 1 + PROD1_IMAGES.length) % PROD1_IMAGES.length; lbImg.src = PROD1_IMAGES[lbIndex]; }
+
+lbNext.addEventListener('click', nextLightbox);
+lbPrev.addEventListener('click', prevLightbox);
+lbClose.addEventListener('click', closeLightbox);
+// click outside to close
+lb.addEventListener('click', (e)=> { if (e.target === lb) closeLightbox(); });
+// escape key closes
+document.addEventListener('keydown', (e)=> {
+  if (e.key === 'Escape') {
+    if (lb.style.display === 'flex') closeLightbox();
+  }
+});
+
+/* ------------------ Start quote rotation once site unlocked ------------------ */
+const quotes = [
+  `"Sometimes it is the people who no one imagines anything of, who do the things that no one can imagine" — Alan Turing`,
+  `"First, solve the problem. Then, write the code." — John Johnson`,
+  `"Talk is cheap. Show me the code." — Linus Torvalds`
+];
+let quoteIndex = 0;
+function rotateQuotes() {
+  const quoteEl = document.getElementById('quote');
+  quoteEl.textContent = quotes[quoteIndex];
+  quoteIndex = (quoteIndex + 1) % quotes.length;
+  setInterval(()=> {
+    quoteEl.style.opacity = 0;
+    setTimeout(()=> {
+      quoteEl.textContent = quotes[quoteIndex];
+      quoteEl.style.opacity = 1;
+      quoteIndex = (quoteIndex + 1) % quotes.length;
+    }, 600);
+  }, 6000);
+}
+
+/* Show main headings once unlocked */
+function showMainContent() {
+  // show nav and header in left column (they're always visible but main panels are behind overlay)
+  // start rotating quotes
+  rotateQuotes();
+}
+
+/* When login unlocked, call these */
+function afterUnlock() {
+  startHud();
+  showMainContent();
+}
+
+/* ensure unlocking triggers afterUnlock */
+const origUnlock = unlockSite;
+if (typeof origUnlock === 'function') {
+  // if unlockSite defined above, it's ok; (we call unlockSite() directly earlier)
+}
+
+/* For compatibility: call after unlock (we already call startHud on unlock). */
+
+/* ------------------ Initialize (keep site quiet until login) ------------------ */
+/* Nothing else runs until user logs in. The login handler calls unlockSite which starts HUD. */
+
+</script>
+</body>
+</html>
