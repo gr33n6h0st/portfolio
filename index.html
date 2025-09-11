@@ -176,20 +176,25 @@
   </div>
 
   <!-- Productions -->
-  <div id="productions-page" style="display:none; text-align:center; margin-top:50px;">
-    <h2>Productions</h2>
-    <div id="productions-grid">
-      <div class="production clickable" onclick="openLightbox(0)">Production 1<br><small>View Content</small></div>
-      <div class="production">Production 2</div>
-      <div class="production">Production 3</div>
-      <div class="production">Production 4</div>
-      <div class="production">Production 5</div>
-      <div class="production">Production 6</div>
-      <div class="production">Production 7</div>
-      <div class="production">Production 8</div>
-      <div class="production">Production 9</div>
-    </div>
+<div id="productions-page" style="display:none; text-align:center; margin-top:50px;">
+  <h2>Productions</h2>
+  <div id="productions-grid">
+    <div class="production clickable" onclick="openLightbox(0)">Production 1<br><small>View Content</small></div>
+    <div class="production">Production 2</div>
+    <div class="production">Production 3</div>
+    <div class="production">Production 4</div>
+    <div class="production">Production 5</div>
+    <div class="production">Production 6</div>
+    <div class="production">Production 7</div>
+    <div class="production">Production 8</div>
+    <div class="production">Production 9</div>
   </div>
+  <br>
+  <button onclick="goBack()" style="margin-top:20px; padding:10px 20px; border:none; border-radius:8px; background:#0ff; color:black; cursor:pointer;">
+    ← Back
+  </button>
+</div>
+
 
   <!-- Lightbox -->
   <div id="lightbox">
@@ -276,6 +281,12 @@
       currentImage = (currentImage - 1 + images.length) % images.length;
       document.getElementById("lightbox-img").src = images[currentImage];
     }
+    function goBack() {
+  document.getElementById("productions-page").style.display = "none";
+  document.getElementById("content").style.display = "block";
+}
+
   </script>
 </body>
 </html>
+
