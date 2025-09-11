@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Hello World - Brandon Smart's Portfolio</title>
+<style>
+  body {
+    margin: 0;
+    padding: 0;
+    background: black;
+    color: #0ff;
+    font-family: monospace;
+    overflow-x: hidden;
+  }
+
+  /* Login overlay */
+  #login-overlay {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: black;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+  }
+  #login-box {
+    background: linear-gradient(145deg, #000, #111);
+    border: 1px solid #0ff;
+    border-radius: 12px;
+    padding: 30px;
+    text-align: center;
+    width: 300px;
+  }
+  #password {
+    background: black;
+    border: 1px solid #0ff;
+    color: #0ff;
+    padding: 10px;
+    width: 80%;
+  }
+  #enter {
+    margin-top: 15px;
+    padding: 8px 16px;
+    background: #0ff;
+    color: black;
+    border: none;
+    cursor: pointer;
+    border-radius: 6px;
+  }
+  #enter-text {
+    margin-top: 8px;
+    font-size: 12px;
+    color: #0ff;
+  }
+
+  /* HUD */
+  #hud {
+    position: fixed;
+    top: 10px; left: 10px;
+    font-size: 14px;
+    color: #0ff;
+    z-index: 50;
+  }
+
+  /* Categories */
+  #content {
+    display: none;
+    text-align: center;
+    margin-top: 120px;
+  }
+  .category {
+    margin: 20px auto;
+    width: 300px;
+    border: 1px solid #0ff;
+    padding: 20px;
+    border-radius: 12px;
+    cursor: pointer;
+    position: relative;
+    transition: all 0.3s ease;
+  }
+  .category:hover {
+    background: rgba(0,255,255,0.1);
+    box-shadow: 0 0 15px #0ff;
+  }
+  .category h2 {
+    margin: 0;
+  }
+
+  /* Glitched header effect */
+  #header {
+    text-align: center;
+    font-size: 28px;
+    font-weight: bold;
+    color: #0ff;
+    margin-top: 20px;
+    position: relative;
+  }
+  #header::before, #header::after {
+    content: "Hello World - Brandon Smart's Portfolio";
+    position: absolute;
+    left: 0;
+    width: 100%;
+    overflow: hidden;
+    color: #0ff;
+    clip: rect(0,900px,0,0);
+  }
+  @keyframes glitch {
+    0% { clip: rect(2px, 9999px, 44px, 0); transform: translate(-2px, -2px); }
+    10% { clip: rect(12px, 9999px, 32px, 0); transform: translate(2px, 2px); }
+    20% { clip: rect(32px, 9999px, 44px, 0); transform: translate(-2px, 0); }
+    30% { clip: rect(22px, 9999px, 40px, 0); transform: translate(0, 2px); }
+    40% { clip: rect(12px, 9999px, 44px, 0); transform: translate(2px, -2px); }
+    50% { clip: rect(2px, 9999px, 32px, 0); transform: translate(-2px, 0); }
+    60% { clip: rect(22px, 9999px, 44px, 0); transform: translate(0, 2px); }
+    70% { clip: rect(12px, 9999px, 40px, 0); transform: translate(2px, -2px); }
+    80% { clip: rect(2px, 9999px, 32px, 0); transform: translate(-2px, 0); }
+    90% { clip: rect(12px, 9999px, 44px, 0); transform: translate(0, 2px); }
+    100% { clip: rect(22px, 9999px, 40px, 0); transform: translate(0,0); }
+  }
+  #header.glitch::before { animation: glitch 2s infinite linear alternate-reverse; color:#f0f; }
+  #header.glitch::after { animation: glitch 2s infinite linear alternate; color:#ff0; }
+
+  /* Productions grid */
+  #productions-page {
+    display:none;
+    text-align:center;
+    margin-top:50px;
+  }
+  #productions-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    margin-top: 40px;
+  }
+  .production {
+    padding: 20px;
+    border: 1px solid #0ff;
+    border-radius: 8px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+  .production:hover {
+    background: rgba(0,255,255,0.1);
+    box-shadow: 0 0 15px #0ff;
+  }
+
+  /* Lightbox */
+  #lightbox {
+    display: none;
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(0,0,0,0.95);
+    z-index: 2000;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+  }
+  #lightbox img {
+    max-width: 80%;
+    max-height: 80%;
+    border: 2px solid #0ff;
+    border-radius: 8px;
+  }
+  .lightbox-controls {
+    margin-top: 10px;
+  }
+  .lightbox-controls button {
+    margin: 0 10px;
+    padding: 8px 12px;
+    background: #0ff;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+  }
+
+  /* Quote */
+  #quote {
+    margin-top: 50px;
+    font-style: italic;
+    color: #0ff;
+    opacity: 0;
+    animation: fadeIn 4s forwards;
+  }
+  @keyframes fadeIn {
+    to { opacity: 1; }
+  }
+
+</style>
+</head>
+<body>
+  <div id="login-overlay">
+    <div id="login-box">
+      <h2>Login</h2>
+      <input type="password" id="password" placeholder="Enter password">
+      <br>
+      <button id="enter">Enter</button>
+      <div id="enter-text">Enter the terminal</div>
+    </div>
+  </div>
+
+  <div id="hud"></div>
+
+  <div id="header" class="glitch">Hello World - Brandon Smart's Portfolio</div>
+
+  <div id="content">
+    <div class="category" id="whoami">
+      <h2>Whoami</h2>
+      <p>Brandon Smart</p>
+      <p>Teachable: Computer Technology</p>
+    </div>
+    <div class="category" id="productions"><h2>Productions</h2></div>
+    <div class="category" id="resources"><h2>Resources</h2>
+      <p><a href="https://github.com" target="_blank" style="color:#0ff;">Github</a></p>
+      <p><a href="https://youtube.com" target="_blank" style="color:#0ff;">YouTube</a></p>
+      <p><a href="https://google.ca" target="_blank" style="color:#0ff;">Google</a></p>
+    </div>
+    <div class="category" id="contact"><h2>Contact</h2>
+      <p><a href="mailto:bsmart@my.yorku.ca" style="color:#0ff;">bsmart@my.yorku.ca</a></p>
+    </div>
+    <div id="quote"></div>
+  </div>
+
+  <div id="productions-page">
+    <h2>Productions</h2>
+    <div id="productions-grid">
+      <div class="production" onclick="openLightbox(0)">Production 1<br><small>View Content</small></div>
+      <div class="production">Production 2</div>
+      <div class="production">Production 3</div>
+      <div class="production">Production 4</div>
+      <div class="production">Production 5</div>
+      <div class="production">Production 6</div>
+      <div class="production">Production 7</div>
+      <div class="production">Production 8</div>
+      <div class="production">Production 9</div>
+    </div>
+    <br>
+    <button onclick="goBack()">← Back</button>
+  </div>
+
+  <div id="lightbox">
+    <img id="lightbox-img" src="" alt="">
+    <div class="lightbox-controls">
+      <button onclick="prevImage()">Prev</button>
+      <button onclick="nextImage()">Next</button>
+      <button onclick="closeLightbox()">Close</button>
+    </div>
+  </div>
+
+<script>
+  document.getElementById("enter").addEventListener("click", function() {
+    const pass = document.getElementById("password").value;
+    if (pass === "mrsmart") {
+      document.getElementById("login-overlay").style.display = "none";
+      document.getElementById("content").style.display = "block";
+      cycleQuotes();
+    } else {
+      alert("Incorrect password.");
+    }
+  });
+
+  /* HUD */
+  function updateHUD() {
+    const hud = document.getElementById("hud");
+    const now = new Date();
+    const date = now.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' });
+    const time = now.toLocaleTimeString();
+    hud.innerHTML = `${date}<br>${time}<br>Toronto, Ontario, Canada<br>43.7°N, 79.4°W<br>Weather: 22°C Clear`;
+  }
+  setInterval(updateHUD,1000);
+  updateHUD();
+
+  /* Quotes */
+  const quotes = [
+    `"Sometimes it is the people who no one imagines anything of, who do the things that no one can imagine." — Alan Turing`,
+    `"First, solve the problem. Then, write the code." — John Johnson`,
+    `"Talk is cheap. Show me the code." — Linus Torvalds"`
+  ];
+  let quoteIndex = 0;
+  function cycleQuotes() {
+    const quoteEl = document.getElementById("quote");
+    setInterval(() => {
+      quoteEl.style.opacity = 0;
+      setTimeout(() => {
+        quoteEl.textContent = quotes[quoteIndex];
+        quoteEl.style.opacity = 1;
+        quoteIndex = (quoteIndex + 1) % quotes.length;
+      }, 1000);
+    }, 6000);
+  }
+
+  /* Productions */
+  document.getElementById("productions").addEventListener("click", function() {
+    document.getElementById("content").style.display = "none";
+    document.getElementById("productions-page").style.display = "block";
+  });
+
+  function goBack() {
+    document.getElementById("productions-page").style.display = "none";
+    document.getElementById("content").style.display = "block";
+  }
+
+  /* Lightbox */
+  const images = [
+    "images/Screenshot 2025-09-10 130926.png",
+    "images/Screenshot 2025-09-10 123717.png",
+    "images/Screenshot 2025-09-10 115645.png",
+    "images/Screenshot 2025-09-10 114858.png",
+    "images/Screenshot 2025-09-10 114832.png"
+  ];
+  let currentImage = 0;
+  function openLightbox(index) {
+    currentImage = index;
+    document.getElementById("lightbox-img").src = images[currentImage];
+    document.getElementById("lightbox").style.display = "flex";
+  }
+  function closeLightbox() {
+    document.getElementById("lightbox").style.display = "none";
+  }
+  function nextImage() {
+    currentImage = (currentImage + 1) % images.length;
+    document.getElementById("lightbox-img").src = images[currentImage];
+  }
+  function prevImage() {
+    currentImage = (currentImage - 1 + images.length) % images.length;
+    document.getElementById("lightbox-img").src = images[currentImage];
+  }
+</script>
+</body>
+</html>
