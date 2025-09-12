@@ -69,8 +69,7 @@ a:hover{color:var(--hover);}
   min-height:100vh; display:flex; flex-direction:column; align-items:center; justify-content:flex-start; padding:120px 28px 40px;
   z-index:500; 
 }
-.container { max-width:1100px; width:100%; display:flex; gap:28px; align-items:flex-start;  margin: 0 auto;  /* ⬅️ this centers the container horizontally */
- }
+.container { max-width:1100px; width:100%; display:flex; gap:28px; align-items:flex-start; margin: 0 auto; }
 
 /* Left column (nav / categories) */
 .leftCol {
@@ -79,7 +78,6 @@ a:hover{color:var(--hover);}
   flex-direction:column;
   gap:18px;
   align-items:flex-start;
-  
 }
 
 .headerTitle { font-size:18px; margin-bottom:8px; color:var(--neon); }
@@ -150,7 +148,6 @@ a:hover{color:var(--hover);}
 
 /* responsive */
 @media (max-width:980px){ .container{flex-direction:column;} .leftCol{width:100%; order:2;} .rightCol{order:1;} #hud{left:10px; top:8px; } }
-
 </style>
 </head>
 <body>
@@ -180,11 +177,9 @@ a:hover{color:var(--hover);}
   <!-- MAIN -->
   <main id="main">
     <div class="container">
-
       <!-- LEFT -->
       <div class="leftCol" aria-hidden="false">
         <div class="headerTitle">Hello World - Brandon Smart's Portfolio</div>
-
         <div id="navWho" class="navItem" role="button" tabindex="0" aria-controls="whoPanel">Whoami</div>
         <div id="navRef" class="navItem" role="button" tabindex="0" aria-controls="refPanel">Reflection</div>
         <div id="navProd" class="navItem" role="button" tabindex="0" aria-controls="prodPanel">Productions</div>
@@ -211,14 +206,14 @@ a:hover{color:var(--hover);}
           <h2>Productions</h2>
           <div class="productionsGrid" id="productionsGrid">
             <div class="prodCard" data-index="0"><h3>Production 1: Power up</h3><p>View Content</p></div>
-            <div class="prodCard" data-index="1"><h3>Production 2: New Literacies Reflection</h3><p>Placeholder</p></div>
-            <div class="prodCard" data-index="2"><h3>Production 3: Critical Algorithmic Literacies and AI</h3><p>Placeholder</p></div>
-            <div class="prodCard" data-index="3"><h3>Production 4: Graphic Novel</h3><p>Placeholder</p></div>
-            <div class="prodCard" data-index="4"><h3>Production 5: On the Way to Video Inquiry</h3><p>Placeholder</p></div>
-            <div class="prodCard" data-index="5"><h3>Production 6: Video Works</h3><p>Placeholder</p></div>
-            <div class="prodCard" data-index="6"><h3>Production 7: Learning Principles</h3><p>Placeholder</p></div>
-            <div class="prodCard" data-index="7"><h3>Production 8: World Building</h3><p>Placeholder</p></div>
-            <div class="prodCard" data-index="8"><h3>Production 9: Twine</h3><p>Placeholder</p></div>
+            <div class="prodCard" data-index=""><h3>Production 2: New Literacies Reflection</h3><p>Placeholder</p></div>
+            <div class="prodCard" data-index=""><h3>Production 3: Critical Algorithmic Literacies and AI</h3><p>Placeholder</p></div>
+            <div class="prodCard" data-index=""><h3>Production 4: Graphic Novel</h3><p>Placeholder</p></div>
+            <div class="prodCard" data-index=""><h3>Production 5: On the Way to Video Inquiry</h3><p>Placeholder</p></div>
+            <div class="prodCard" data-index=""><h3>Production 6: Video Works</h3><p>Placeholder</p></div>
+            <div class="prodCard" data-index=""><h3>Production 7: Learning Principles</h3><p>Placeholder</p></div>
+            <div class="prodCard" data-index=""><h3>Production 8: World Building</h3><p>Placeholder</p></div>
+            <div class="prodCard" data-index=""><h3>Production 9: Twine</h3><p>Placeholder</p></div>
           </div>
           <button class="backBtn" onclick="closePanel('prodPanel')">← Back</button>
         </section>
@@ -256,10 +251,7 @@ a:hover{color:var(--hover);}
   </div>
 
 <script>
-/* ------------------ Configuration ------------------ */
 const OWM_API_KEY = '5043108521e5dc1feccf33701c3221bf';
-
-/* Production 1 image list */
 const PROD1_IMAGES = [
   "images/Screenshot 2025-09-10 130926.png",
   "images/Screenshot 2025-09-10 123717.png",
@@ -268,7 +260,7 @@ const PROD1_IMAGES = [
   "images/Screenshot 2025-09-10 114832.png"
 ];
 
-/* ------------------ Login logic ------------------ */
+/* ------------------ Login ------------------ */
 const loginOverlay = document.getElementById('loginOverlay');
 const loginBtn = document.getElementById('loginBtn');
 const loginPass = document.getElementById('loginPass');
@@ -278,7 +270,7 @@ function unlockSite() {
   document.getElementById('hud').style.opacity = '1';
   document.getElementById('hud').style.visibility = 'visible';
   startHud();
-  rotateQuotes(); // start quotes after login
+  rotateQuotes();
 }
 
 loginBtn.addEventListener('click', ()=> {
@@ -330,122 +322,47 @@ function startHud(){
 }
 
 /* ------------------ Panels ------------------ */
-function stopReflection(){
-  // stop any ongoing speech and set abort flag for the async typer
-  try{ speechSynthesis.cancel(); }catch(e){}
-  reflectionAbort = true;
-}
-function openPanel(id){
-  stopReflection();
-  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('show'));
-  document.getElementById(id).classList.add('show');
-}
-function closePanel(id){
-  document.getElementById(id).classList.remove('show');
-  stopReflection();
-}
+function openPanel(id){ document.querySelectorAll('.panel').forEach(p=>p.classList.remove('show')); document.getElementById(id).classList.add('show'); }
+function closePanel(id){ document.getElementById(id).classList.remove('show'); }
 
-document.getElementById('navWho').addEventListener('click', ()=>openPanel('whoPanel'));
-document.getElementById('navProd').addEventListener('click', ()=>openPanel('prodPanel'));
-document.getElementById('navRes').addEventListener('click', ()=>openPanel('resPanel'));
-document.getElementById('navContact').addEventListener('click', ()=>openPanel('contactPanel'));
-// navRef opens the panel AND starts the reflection
-document.getElementById('navRef').addEventListener('click', ()=>{
-  openPanel('refPanel');
-  startReflection();
-});
+document.getElementById('navWho').onclick=()=>openPanel('whoPanel');
+document.getElementById('navRef').onclick=()=>openPanel('refPanel');
+document.getElementById('navProd').onclick=()=>openPanel('prodPanel');
+document.getElementById('navRes').onclick=()=>openPanel('resPanel');
+document.getElementById('navContact').onclick=()=>openPanel('contactPanel');
 
-/* ------------------ Reflection Voice (robust, synced, stoppable) ------------------ */
-const refText = `Technology in the classroom is a dynamic force that can transform learning when used with intention and care.  \nIt should not overshadow human connection, but enhance it.  \n\nThis portfolio captures my evolving understanding as I explore new literacies and critical approaches to technology in education.`;
+/* ------------------ Reflection Typing ------------------ */
+const refText = `Technology in the classroom empowers students by making learning interactive,
+collaborative, and tailored to individual needs. It transforms education.`;
 
 const reflectionEl = document.getElementById('reflectionText');
-let reflectionAbort = false;
+let wordIndex = 0;
+let words = refText.split(" ");
+let typingTimer = null;
 
-function sleep(ms){ return new Promise(resolve=>setTimeout(resolve, ms)); }
+function typeReflection() {
+  reflectionEl.textContent = "";
+  wordIndex = 0;
+  clearInterval(typingTimer);
 
-function ensureVoices(timeout = 2000){
-  return new Promise((resolve)=>{
-    const pick = (voices)=>{
-      return (voices && voices.length) ? voices : null;
-    };
-    const direct = pick(speechSynthesis.getVoices());
-    if (direct) return resolve(direct);
-    let done = false;
-    const onChange = ()=>{
-      if (done) return;
-      const v = pick(speechSynthesis.getVoices());
-      if (v){ done = true; speechSynthesis.onvoiceschanged = null; resolve(v); }
-    };
-    speechSynthesis.onvoiceschanged = onChange;
-    setTimeout(()=>{ if(!done){ speechSynthesis.onvoiceschanged = null; resolve(speechSynthesis.getVoices()); } }, timeout);
-  });
-}
-
-function speakWord(word){
-  if (!('speechSynthesis' in window) || !word.trim()) return Promise.resolve();
-  return new Promise((resolve)=>{
-    const utt = new SpeechSynthesisUtterance(word);
-    utt.pitch = 0.6;
-    utt.rate = 0.9;
-    const voices = speechSynthesis.getVoices();
-    const sel = (voices && voices.length) ? (voices.find(v=>v.name.includes('Google UK English Male')) || voices[0]) : null;
-    if (sel) utt.voice = sel;
-    let settled = false;
-    utt.onend = ()=>{ if(settled) return; settled = true; resolve(); };
-    utt.onerror = ()=>{ if(settled) return; settled = true; resolve(); };
-    try{ speechSynthesis.speak(utt); }catch(e){ settled = true; resolve(); }
-    // safety fallback in case onend doesn't fire for some reason
-    setTimeout(()=>{ if(!settled){ settled = true; try{ speechSynthesis.cancel(); }catch(e){} resolve(); } }, 4000);
-  });
-}
-
-async function startReflection(){
-  stopReflection(); // ensure clean
-  reflectionAbort = false;
-  reflectionEl.textContent = '';
-
-  // wait for voices to be available (short timeout)
-  await ensureVoices(1800);
-
-  // split into tokens: words and whitespace
-  const tokens = refText.match(/(\S+|\s+)/g) || [refText];
-
-  for (let token of tokens){
-    if (reflectionAbort) break;
-    if (/^\s+$/.test(token)){
-      // whitespace token (spaces/newlines) — append quickly
-      reflectionEl.textContent += token;
-      // small delay so typing feels natural
-      await sleep(30);
-      continue;
+  typingTimer = setInterval(() => {
+    if (wordIndex < words.length) {
+      reflectionEl.textContent += words[wordIndex] + " ";
+      wordIndex++;
+    } else {
+      clearInterval(typingTimer);
     }
-
-    // type this word character-by-character
-    for (let i=0;i<token.length;i++){
-      if (reflectionAbort) break;
-      reflectionEl.textContent += token.charAt(i);
-      await sleep(28); // typing speed per character
-    }
-
-    if (reflectionAbort) break;
-
-    // speak the just-typed word and wait for it to finish
-    await speakWord(token);
-
-    // short pause between words
-    await sleep(80);
-  }
+  }, 200); // adjust typing speed here
 }
 
-// stop/start helpers
-function stopReflectionImmediate(){
-  reflectionAbort = true;
-  try{ speechSynthesis.cancel(); }catch(e){}
-}
-// keep an alias the panel code calls
-function stopReflection(){ stopReflectionImmediate(); }
+document.getElementById('navRef').addEventListener('click', typeReflection);
+document.querySelectorAll('.navItem').forEach(btn => {
+  btn.addEventListener('click', () => {
+    if (btn.id !== 'navRef') clearInterval(typingTimer);
+  });
+});
 
-/* ------------------ Productions Lightbox (smooth fade, all cards) ------------------ */
+/* ------------------ Productions Lightbox ------------------ */
 const lb = document.getElementById('lightbox');
 const lbImg = document.getElementById('lbImage');
 const lbPrev = document.getElementById('lbPrev');
@@ -468,15 +385,13 @@ const productionImagesMap = {
 };
 
 function showLightboxImage(index){
-  if (!currImages || !currImages.length) return;
   lbImg.style.opacity = 0;
   setTimeout(()=>{
     lbImg.src = currImages[index];
     lbImg.onload = ()=>{ lbImg.style.opacity = 1; };
-  }, 180);
+  }, 200);
 }
 
-// open lightbox
 document.querySelectorAll('.prodCard').forEach(card=>{
   card.addEventListener('click', ()=>{
     const prodIndex = card.dataset.index;
@@ -488,8 +403,8 @@ document.querySelectorAll('.prodCard').forEach(card=>{
   });
 });
 
-lbPrev.onclick = ()=>{ if(!currImages.length) return; currIndex=(currIndex-1+currImages.length)%currImages.length; showLightboxImage(currIndex); };
-lbNext.onclick = ()=>{ if(!currImages.length) return; currIndex=(currIndex+1)%currImages.length; showLightboxImage(currIndex); };
+lbPrev.onclick = ()=>{ currIndex=(currIndex-1+currImages.length)%currImages.length; showLightboxImage(currIndex); };
+lbNext.onclick = ()=>{ currIndex=(currIndex+1)%currImages.length; showLightboxImage(currIndex); };
 lbClose.onclick = ()=>{ lb.style.display='none'; };
 
 /* ------------------ Quotes rotation ------------------ */
@@ -514,7 +429,6 @@ function rotateQuotes(){
     },600);
   },6000);
 }
-
 </script>
 </body>
 </html>
