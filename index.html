@@ -348,6 +348,21 @@ document.getElementById('navProd').onclick=()=>openPanel('prodPanel');
 document.getElementById('navRes').onclick=()=>openPanel('resPanel');
 document.getElementById('navContact').onclick=()=>openPanel('contactPanel');
 
+/* ------------------ Reflection Voice ------------------ */
+function speakReflection(text){
+  if (!('speechSynthesis' in window)) return; // safety check
+  const utterance = new SpeechSynthesisUtterance(text);
+  utterance.pitch = 0.6;   // lower pitch for robotic feel
+  utterance.rate = 0.9;    // slower, deliberate pace
+  utterance.volume = 1.0;
+  // pick a voice if available
+  const voices = speechSynthesis.getVoices();
+  const roboVoice = voices.find(v => v.name.includes("Google UK English Male")) || voices[0];
+  if (roboVoice) utterance.voice = roboVoice;
+  speechSynthesis.speak(utterance);
+}
+
+
 /* Reflection typing */
 const refText = `Technology in the classroom is a dynamic force that can transform learning when used with intention and care.  
 It should not overshadow human connection, but enhance it.  
@@ -359,6 +374,10 @@ function typeReflection(){
   reflectionEl.textContent='';
   idx=0;
   clearInterval(typer);
+
+  // start speaking the whole text at the same time
+  speakReflection(refText);
+
   typer=setInterval(()=>{
     if (idx<refText.length){
       reflectionEl.textContent+=refText.charAt(idx);
@@ -368,6 +387,7 @@ function typeReflection(){
     }
   },30);
 }
+
 document.getElementById('navRef').addEventListener('click',typeReflection);
 
 /* ------------------ Productions Lightbox (smooth fade, all cards) ------------------ */
@@ -447,6 +467,7 @@ function rotateQuotes(){
 </script>
 </body>
 </html>
+
 
 
 
