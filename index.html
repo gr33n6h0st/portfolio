@@ -332,50 +332,42 @@ document.getElementById('navRes').onclick=()=>openPanel('resPanel');
 document.getElementById('navContact').onclick=()=>openPanel('contactPanel');
 
 const reflectionEl = document.getElementById('reflectionText');
-const reflectionText = `Here is your reflection text. You can type anything you want here. It will be typed out and spoken word by word.`;
-let typingTimer = null;
+const reflectionText = `Here is your reflection text. You can type anything you want here. It will be typed out smoothly without awkward pauses.`;
 
 function typeAndSpeakReflection() {
   reflectionEl.textContent = "";
-  clearInterval(typingTimer);
   window.speechSynthesis.cancel();
 
-  let words = reflectionText.split(" ");
+  // type out full text at once (letter by letter)
   let index = 0;
+  const typingSpeed = 25; // ms per character
 
-  function speakNext() {
-    if (index < words.length) {
-      let word = words[index];
-
-      // type it
-      reflectionEl.textContent += word + " ";
-
-      // speak it
-      if ('speechSynthesis' in window) {
-        let utter = new SpeechSynthesisUtterance(word);
-        utter.lang = "en-US";
-        utter.rate = 1.0;
-        utter.pitch = 1.0;
-        utter.onend = () => {
-          index++;
-          speakNext(); // wait until voice finishes, then continue
-        };
-        speechSynthesis.speak(utter);
-      } else {
-        index++;
-        speakNext();
-      }
+  function typeNextChar() {
+    if (index < reflectionText.length) {
+      reflectionEl.textContent += reflectionText.charAt(index);
+      index++;
+      setTimeout(typeNextChar, typingSpeed);
     }
   }
 
-  speakNext();
+  typeNextChar();
+
+  // speak full text smoothly
+  if ('speechSynthesis' in window) {
+    const utter = new SpeechSynthesisUtterance(reflectionText);
+    utter.lang = "en-US";
+    utter.rate = 1; // adjust speed here if needed
+    utter.pitch = 1;
+    speechSynthesis.speak(utter);
+  }
 }
 
 document.getElementById('navRef').addEventListener('click', typeAndSpeakReflection);
+
+// stop speech when navigating away
 document.querySelectorAll('.navItem').forEach(btn => {
   btn.addEventListener('click', () => {
     if (btn.id !== 'navRef') {
-      clearInterval(typingTimer);
       window.speechSynthesis.cancel();
     }
   });
@@ -453,6 +445,7 @@ function rotateQuotes(){
 </script>
 </body>
 </html>
+
 
 
 
