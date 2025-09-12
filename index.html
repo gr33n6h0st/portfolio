@@ -79,7 +79,7 @@ a:hover{color:var(--hover);}
   flex-direction:column;
   gap:18px;
   align-items:flex-start;
-  margin: 0 auto;  /* ⬅️ add this line */
+  
 }
 
 .headerTitle { font-size:18px; margin-bottom:8px; color:var(--neon); }
@@ -329,8 +329,17 @@ function startHud(){
 }
 
 /* ------------------ Panels ------------------ */
-function closePanel(id){ document.getElementById(id).classList.remove('show'); }
-function openPanel(id){ document.querySelectorAll('.panel').forEach(p=>p.classList.remove('show')); document.getElementById(id).classList.add('show'); }
+function openPanel(id){
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('show'));
+  document.getElementById(id).classList.add('show');
+  document.getElementById('main').classList.remove('centerNav'); // un-center nav when panel opens
+}
+
+function closePanel(id){
+  document.getElementById(id).classList.remove('show');
+  document.getElementById('main').classList.add('centerNav'); // re-center nav when panel closes
+}
+
 
 document.getElementById('navWho').onclick=()=>openPanel('whoPanel');
 document.getElementById('navRef').onclick=()=>openPanel('refPanel');
@@ -400,9 +409,12 @@ function rotateQuotes(){
     },600);
   },6000);
 }
+document.getElementById('main').classList.add('centerNav');
+
 </script>
 </body>
 </html>
+
 
 
 
