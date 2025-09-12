@@ -104,47 +104,47 @@ If the password is wrong, a GIF overlay will appear.`;
     }
 
     /* ---------------- Reflection Typing + Voice ---------------- */
-    function typeAndSpeakReflection() {
-      reflectionEl.textContent = "";
-      window.speechSynthesis.cancel();
+function typeAndSpeakReflection() {
+  reflectionEl.textContent = "";
+  window.speechSynthesis.cancel();
 
-      const words = reflectionText.split(" ");
-      let index = 0;
+  // ------------------ Type effect ------------------
+  let index = 0;
+  const typingSpeed = 25; // ms per character
 
-      function speakNext() {
-        if (index < words.length) {
-          const word = words[index];
-
-          // type it
-          reflectionEl.textContent += word + " ";
-
-          // speak it
-          if ('speechSynthesis' in window) {
-            const utter = new SpeechSynthesisUtterance(word);
-            utter.lang = "en-US";
-            utter.rate = 1.0;
-            utter.pitch = 1.0;
-
-            // prefer female voice if available
-            const voices = speechSynthesis.getVoices();
-            const female = voices.find(v => v.name.toLowerCase().includes("female") || v.name.toLowerCase().includes("samantha"));
-            if (female) utter.voice = female;
-
-            utter.onend = () => {
-              index++;
-              speakNext();
-            };
-            speechSynthesis.speak(utter);
-          } else {
-            index++;
-            setTimeout(speakNext, 200);
-          }
-        }
-      }
-
-      // delay then start
-      setTimeout(speakNext, 500);
+  function typeNextChar() {
+    if (index < reflectionText.length) {
+      reflectionEl.textContent += reflectionText.charAt(index);
+      index++;
+      setTimeout(typeNextChar, typingSpeed);
     }
+  }
+  typeNextChar();
+
+  // ------------------ Speech ------------------
+  if ('speechSynthesis' in window) {
+    const utter = new SpeechSynthesisUtterance(reflectionText);
+    utter.lang = "en-US";
+    utter.rate = 1.0;
+    utter.pitch = 1.0;
+
+    function selectFemaleVoice() {
+      const voices = speechSynthesis.getVoices();
+      let female = voices.find(v => v.name.toLowerCase().includes("female") || v.name.toLowerCase().includes("samantha"));
+      if (!female && voices.length > 0) female = voices[0]; // fallback
+      if (female) utter.voice = female;
+    }
+
+    if (speechSynthesis.getVoices().length === 0) {
+      speechSynthesis.onvoiceschanged = selectFemaleVoice;
+    } else {
+      selectFemaleVoice();
+    }
+
+    speechSynthesis.speak(utter);
+  }
+}
+
 
     /* ---------------- Login Check ---------------- */
     loginBtn.addEventListener('click', ()=> {
@@ -177,3 +177,4 @@ If the password is wrong, a GIF overlay will appear.`;
   </script>
 </body>
 </html>
+
