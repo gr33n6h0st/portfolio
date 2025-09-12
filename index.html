@@ -273,35 +273,34 @@ function unlockSite() {
   rotateQuotes();
 }
 
-loginBtn.addEventListener('click', ()=> {
+loginBtn.addEventListener('click', () => {
   const v = (loginPass.value || '').trim();
   if (v === 'mrsmart') {
     unlockSite();
   } else {
-  loginPass.value = '';
-  loginPass.placeholder = 'Incorrect — try again';
-  loginPass.focus();
+    loginPass.value = '';
+    loginPass.placeholder = 'Incorrect — try again';
+    loginPass.focus();
 
-  // shake login overlay
-  loginOverlay.animate(
-    [
-      { transform: 'translateX(-2px)' },
-      { transform: 'translateX(2px)' },
-      { transform: 'translateX(0)' }
-    ],
-    { duration: 320, iterations: 1 }
-  );
+    // shake login overlay
+    loginOverlay.animate(
+      [
+        { transform: 'translateX(-2px)' },
+        { transform: 'translateX(2px)' },
+        { transform: 'translateX(0)' }
+      ],
+      { duration: 320, iterations: 1 }
+    );
 
-  // show fullscreen fail GIF
-  const wrongGif = document.getElementById('wrongGifOverlay');
-  wrongGif.style.display = 'flex';
+    // show fullscreen fail GIF
+    const wrongGif = document.getElementById('wrongGifOverlay');
+    wrongGif.style.display = 'flex';
 
-  // hide after 3 seconds
-  setTimeout(() => { wrongGif.style.display = 'none'; }, 3000);
-}
-
+    // hide after 3 seconds
+    setTimeout(() => { wrongGif.style.display = 'none'; }, 3000);
   }
 });
+
 loginPass.addEventListener('keydown', (e)=>{ if(e.key === 'Enter') loginBtn.click(); });
 
 /* ------------------ HUD ------------------ */
@@ -489,3 +488,4 @@ function rotateQuotes(){
 
 </body>
 </html>
+
