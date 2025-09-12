@@ -67,14 +67,20 @@ a:hover{color:var(--hover);}
 /* -------- MAIN (center) -------- */
 #main {
   min-height:100vh; display:flex; flex-direction:column; align-items:center; justify-content:flex-start; padding:120px 28px 40px;
-  z-index:500;  text-align:center;
+  z-index:500; 
 }
 .container { max-width:1100px; width:100%; display:flex; gap:28px; align-items:flex-start; }
 
 /* Left column (nav / categories) */
 .leftCol {
-  width:320px; display:flex; flex-direction:column; gap:18px; align-items:flex-start;
+  width:320px;
+  display:flex;
+  flex-direction:column;
+  gap:18px;
+  align-items:flex-start;
+  margin: 0 auto;  /* ⬅️ add this line */
 }
+
 .headerTitle { font-size:18px; margin-bottom:8px; color:var(--neon); }
 .navItem {
   width:100%; padding:16px 14px; border-radius:12px; cursor:pointer;
@@ -396,5 +402,6 @@ function rotateQuotes(){
 </script>
 </body>
 </html>
+
 
 
