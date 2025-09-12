@@ -150,16 +150,6 @@ a:hover{color:var(--hover);}
 
 /* responsive */
 @media (max-width:980px){ .container{flex-direction:column;} .leftCol{width:100%; order:2;} .rightCol{order:1;} #hud{left:10px; top:8px; } }
-/* Center nav when no panel is open */
-#main.centerNav {
-  display: flex;
-  justify-content: center;
-}
-
-#main.centerNav .leftCol {
-  width: auto;   /* lets it shrink to content */
-  margin: 0;     /* removes any existing spacing */
-}
 
 </style>
 </head>
@@ -343,12 +333,12 @@ function startHud(){
 function openPanel(id){
   document.querySelectorAll('.panel').forEach(p=>p.classList.remove('show'));
   document.getElementById(id).classList.add('show');
-  document.getElementById('main').classList.remove('centerNav'); // un-center nav when panel opens
+  
 }
 
 function closePanel(id){
   document.getElementById(id).classList.remove('show');
-  document.getElementById('main').classList.add('centerNav'); // re-center nav when panel closes
+ 
 }
 
 
@@ -420,11 +410,12 @@ function rotateQuotes(){
     },600);
   },6000);
 }
-document.getElementById('main').classList.add('centerNav');
+
 
 </script>
 </body>
 </html>
+
 
 
 
