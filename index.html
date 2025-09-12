@@ -331,7 +331,7 @@ document.getElementById('navProd').onclick=()=>openPanel('prodPanel');
 document.getElementById('navRes').onclick=()=>openPanel('resPanel');
 document.getElementById('navContact').onclick=()=>openPanel('contactPanel');
 
-/* ------------------ Reflection Typing ------------------ */
+/* ------------------ Reflection Typing + Voice ------------------ */
 const refText = `Technology in the classroom empowers students by making learning interactive,
 collaborative, and tailored to individual needs. It transforms education.`;
 
@@ -340,27 +340,43 @@ let wordIndex = 0;
 let words = refText.split(" ");
 let typingTimer = null;
 
-function typeReflection() {
+function typeAndSpeakReflection() {
   reflectionEl.textContent = "";
   wordIndex = 0;
   clearInterval(typingTimer);
+  window.speechSynthesis.cancel(); // stop any ongoing speech
 
   typingTimer = setInterval(() => {
     if (wordIndex < words.length) {
-      reflectionEl.textContent += words[wordIndex] + " ";
+      const word = words[wordIndex];
+      reflectionEl.textContent += word + " ";
+      
+      // Speak this word
+      if ('speechSynthesis' in window) {
+        const utter = new SpeechSynthesisUtterance(word);
+        utter.lang = "en-US";
+        utter.rate = 1.05;   // tweak speed
+        utter.pitch = 1;
+        speechSynthesis.speak(utter);
+      }
+
       wordIndex++;
     } else {
       clearInterval(typingTimer);
     }
-  }, 200); // adjust typing speed here
+  }, 400); // delay between words
 }
 
-document.getElementById('navRef').addEventListener('click', typeReflection);
+document.getElementById('navRef').addEventListener('click', typeAndSpeakReflection);
 document.querySelectorAll('.navItem').forEach(btn => {
   btn.addEventListener('click', () => {
-    if (btn.id !== 'navRef') clearInterval(typingTimer);
+    if (btn.id !== 'navRef') {
+      clearInterval(typingTimer);
+      window.speechSynthesis.cancel();
+    }
   });
 });
+
 
 /* ------------------ Productions Lightbox ------------------ */
 const lb = document.getElementById('lightbox');
@@ -432,4 +448,5 @@ function rotateQuotes(){
 </script>
 </body>
 </html>
+
 
