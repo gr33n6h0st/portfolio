@@ -370,23 +370,55 @@ function typeReflection(){
 }
 document.getElementById('navRef').addEventListener('click',typeReflection);
 
-/* ------------------ Productions Lightbox ------------------ */
-const lb=document.getElementById('lightbox'); const lbImg=document.getElementById('lbImage'); const lbPrev=document.getElementById('lbPrev'); const lbNext=document.getElementById('lbNext'); const lbClose=document.getElementById('lbClose');
+/* ------------------ Productions Lightbox (smooth fade, all cards) ------------------ */
+const lb = document.getElementById('lightbox');
+const lbImg = document.getElementById('lbImage');
+const lbPrev = document.getElementById('lbPrev');
+const lbNext = document.getElementById('lbNext');
+const lbClose = document.getElementById('lbClose');
 
-let currIndex=0;
+let currIndex = 0;
+let currImages = [];
+
+// define images per production (you can add more images for other productions)
+const productionImagesMap = {
+  "0": PROD1_IMAGES,
+  "1": ["images/prod2-1.png"],
+  "2": ["images/prod3-1.png"],
+  "3": ["images/prod4-1.png"],
+  "4": ["images/prod5-1.png"],
+  "5": ["images/prod6-1.png"],
+  "6": ["images/prod7-1.png"],
+  "7": ["images/prod8-1.png"],
+  "8": ["images/prod9-1.png"]
+};
+
+// fade function
+function showLightboxImage(index){
+  lbImg.style.opacity = 0;
+  setTimeout(()=>{
+    lbImg.src = currImages[index];
+    lbImg.onload = ()=>{ lbImg.style.opacity = 1; };
+  }, 200);
+}
+
+// open lightbox
 document.querySelectorAll('.prodCard').forEach(card=>{
-  card.addEventListener('click',()=>{
-    if(card.dataset.index==="0"){
-      lb.style.display='flex';
-      currIndex=0;
-      lbImg.src=PROD1_IMAGES[currIndex];
-    }
+  card.addEventListener('click', ()=>{
+    const prodIndex = card.dataset.index;
+    if(!productionImagesMap.hasOwnProperty(prodIndex)) return;
+    currImages = productionImagesMap[prodIndex];
+    currIndex = 0;
+    lb.style.display = 'flex';
+    showLightboxImage(currIndex);
   });
 });
 
-lbPrev.onclick=()=>{currIndex=(currIndex-1+PROD1_IMAGES.length)%PROD1_IMAGES.length; lbImg.src=PROD1_IMAGES[currIndex];};
-lbNext.onclick=()=>{currIndex=(currIndex+1)%PROD1_IMAGES.length; lbImg.src=PROD1_IMAGES[currIndex];};
-lbClose.onclick=()=>{lb.style.display='none';};
+// navigation
+lbPrev.onclick = ()=>{ currIndex=(currIndex-1+currImages.length)%currImages.length; showLightboxImage(currIndex); };
+lbNext.onclick = ()=>{ currIndex=(currIndex+1)%currImages.length; showLightboxImage(currIndex); };
+lbClose.onclick = ()=>{ lb.style.display='none'; };
+
 
 /* ------------------ Quotes rotation ------------------ */
 const quotes=[
@@ -415,6 +447,7 @@ function rotateQuotes(){
 </script>
 </body>
 </html>
+
 
 
 
