@@ -338,7 +338,7 @@ function typeAndSpeakReflection() {
   reflectionEl.textContent = "";
   window.speechSynthesis.cancel();
 
-  // type out full text at once (letter by letter)
+  // ------------------ Type effect ------------------
   let index = 0;
   const typingSpeed = 25; // ms per character
 
@@ -352,15 +352,36 @@ function typeAndSpeakReflection() {
 
   typeNextChar();
 
-  // speak full text smoothly
+  // ------------------ Speech ------------------
   if ('speechSynthesis' in window) {
     const utter = new SpeechSynthesisUtterance(reflectionText);
     utter.lang = "en-US";
-    utter.rate = 1; // adjust speed here if needed
+    utter.rate = 1;
     utter.pitch = 1;
-    speechSynthesis.speak(utter);
+
+    function selectVoice() {
+      const voices = speechSynthesis.getVoices();
+
+      // pick the *same female voice every time*
+      let preferredVoice = voices.find(v => v.name === "Zira") || voices.find(v => v.name === "Samantha");
+
+      // fallback if neither exists
+      if (!preferredVoice && voices.length > 0) preferredVoice = voices[0];
+
+      if (preferredVoice) utter.voice = preferredVoice;
+
+      speechSynthesis.speak(utter);
+    }
+
+    // voices may load asynchronously
+    if (speechSynthesis.getVoices().length === 0) {
+      speechSynthesis.onvoiceschanged = selectVoice;
+    } else {
+      selectVoice();
+    }
   }
 }
+
 
 document.getElementById('navRef').addEventListener('click', typeAndSpeakReflection);
 
@@ -445,6 +466,7 @@ function rotateQuotes(){
 </script>
 </body>
 </html>
+
 
 
 
