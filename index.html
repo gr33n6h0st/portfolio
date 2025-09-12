@@ -331,7 +331,10 @@ document.getElementById('navProd').onclick=()=>openPanel('prodPanel');
 document.getElementById('navRes').onclick=()=>openPanel('resPanel');
 document.getElementById('navContact').onclick=()=>openPanel('contactPanel');
 
-/* ------------------ Reflection Voice-Synced ------------------ */
+const reflectionEl = document.getElementById('reflectionText');
+const reflectionText = `Here is your reflection text. You can type anything you want here. It will be typed out and spoken word by word.`;
+let typingTimer = null;
+
 function typeAndSpeakReflection() {
   reflectionEl.textContent = "";
   clearInterval(typingTimer);
@@ -368,7 +371,6 @@ function typeAndSpeakReflection() {
   speakNext();
 }
 
-
 document.getElementById('navRef').addEventListener('click', typeAndSpeakReflection);
 document.querySelectorAll('.navItem').forEach(btn => {
   btn.addEventListener('click', () => {
@@ -378,6 +380,7 @@ document.querySelectorAll('.navItem').forEach(btn => {
     }
   });
 });
+
 
 
 /* ------------------ Productions Lightbox ------------------ */
@@ -450,6 +453,7 @@ function rotateQuotes(){
 </script>
 </body>
 </html>
+
 
 
 
