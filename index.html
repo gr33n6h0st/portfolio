@@ -348,47 +348,63 @@ document.getElementById('navProd').onclick=()=>openPanel('prodPanel');
 document.getElementById('navRes').onclick=()=>openPanel('resPanel');
 document.getElementById('navContact').onclick=()=>openPanel('contactPanel');
 
-/* ------------------ Reflection Voice ------------------ */
-function speakReflection(text){
-  if (!('speechSynthesis' in window)) return; // safety check
+/* ------------------ Reflection Voice (synced with typing) ------------------ */
+function speakChunk(text){
+  if (!('speechSynthesis' in window)) return;
   const utterance = new SpeechSynthesisUtterance(text);
   utterance.pitch = 0.6;   // lower pitch for robotic feel
-  utterance.rate = 0.9;    // slower, deliberate pace
+  utterance.rate = 0.9;    // slower pace
   utterance.volume = 1.0;
-  // pick a voice if available
   const voices = speechSynthesis.getVoices();
   const roboVoice = voices.find(v => v.name.includes("Google UK English Male")) || voices[0];
   if (roboVoice) utterance.voice = roboVoice;
   speechSynthesis.speak(utterance);
 }
 
-
-/* Reflection typing */
 const refText = `Technology in the classroom is a dynamic force that can transform learning when used with intention and care.  
 It should not overshadow human connection, but enhance it.  
 
 This portfolio captures my evolving understanding as I explore new literacies and critical approaches to technology in education.`;
+
 const reflectionEl = document.getElementById('reflectionText');
-let idx=0; let typer=null;
+let typer = null;
+
 function typeReflection(){
-  reflectionEl.textContent='';
-  idx=0;
+  reflectionEl.textContent = '';
   clearInterval(typer);
+  speechSynthesis.cancel(); // stop any ongoing speech
 
-  // start speaking the whole text at the same time
-  speakReflection(refText);
+  const words = refText.split(/(\s+)/); // keep spaces
+  let wIndex = 0;
 
-  typer=setInterval(()=>{
-    if (idx<refText.length){
-      reflectionEl.textContent+=refText.charAt(idx);
-      idx++;
-    } else {
-      clearInterval(typer);
+  function typeWord(){
+    if (wIndex < words.length){
+      let word = words[wIndex];
+      let cIndex = 0;
+
+      // type the word letter by letter
+      typer = setInterval(()=>{
+        if (cIndex < word.length){
+          reflectionEl.textContent += word.charAt(cIndex);
+          cIndex++;
+        } else {
+          clearInterval(typer);
+          // speak the word (skip pure whitespace)
+          if (word.trim().length > 0){
+            speakChunk(word);
+          }
+          wIndex++;
+          setTimeout(typeWord, 100); // pause before next word
+        }
+      }, 30);
     }
-  },30);
+  }
+
+  typeWord();
 }
 
-document.getElementById('navRef').addEventListener('click',typeReflection);
+document.getElementById('navRef').addEventListener('click', typeReflection);
+
 
 /* ------------------ Productions Lightbox (smooth fade, all cards) ------------------ */
 const lb = document.getElementById('lightbox');
@@ -467,6 +483,7 @@ function rotateQuotes(){
 </script>
 </body>
 </html>
+
 
 
 
