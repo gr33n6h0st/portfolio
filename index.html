@@ -406,10 +406,14 @@ function updateLocationWeather(){
 
 /* ------------------ Panels ------------------ */
 function openPanel(id){ document.querySelectorAll('.panel').forEach(p=>p.classList.remove('show')); document.getElementById(id).classList.add('show'); }
-function closePanel(id){ document.getElementById(id).classList.remove('show'); }
+function closePanel(id){
+  document.getElementById(id).classList.remove('show');
+  if(id === 'refPanel') stopReflection(); // stops speech & typing
+}
+
 document.querySelectorAll('.navItem').forEach(el=>el.addEventListener('click',()=>openPanel(el.getAttribute('aria-controls'))));
 
-/* ------------------ Reflection typing ------------------ */
+
 // ------------------ Reflection typing ------------------
 const reflectionEl = document.getElementById('reflectionText');
 const reflections = [
