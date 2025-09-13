@@ -174,33 +174,65 @@ a:hover{color:var(--hover);}
 @media (max-width:980px){ .container{flex-direction:column;} .leftCol{width:100%; order:2;} .rightCol{order:1;} #hud{left:10px; top:8px; } }
 
 /* FUTURISTIC HUD PANEL FLY-IN */
-@keyframes flyInPanel {
+/* -------- FUTURISTIC HUD PANEL -------- */
+
+/* Panel cards */
+.panel {
+  display: none;
+  position: relative;
+  z-index: 1150;
+  max-height: 70vh;
+  overflow: auto;
+  border-radius: 12px;
+  padding: 20px;
+  background: var(--panel);
+  border: 1px solid rgba(0, 229, 255, 0.2);
+  box-shadow: 0 0 18px rgba(0, 229, 255, 0.6),
+              0 0 40px rgba(0, 229, 255, 0.15) inset;
+  backdrop-filter: blur(6px);
+}
+
+/* Gridline overlay for tech/HUD look */
+.panel::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 12px;
+  background: repeating-linear-gradient(0deg, rgba(0,255,255,0.05), rgba(0,255,255,0.05) 1px, transparent 1px, transparent 8px),
+              repeating-linear-gradient(90deg, rgba(0,255,255,0.05), rgba(0,255,255,0.05) 1px, transparent 1px, transparent 8px);
+  pointer-events: none;
+}
+
+/* Holographic fly-in animation */
+@keyframes hudFlyIn {
   0% {
     opacity: 0;
-    transform: translateY(-50px) skewY(8deg) rotateX(20deg) scale(0.85);
+    transform: scale(0.8) perspective(600px) rotateX(15deg);
+    filter: drop-shadow(0 0 20px var(--neon));
   }
-  60% {
-    opacity: 1;
-    transform: translateY(10px) skewY(3deg) rotateX(7deg) scale(1.03);
+  50% {
+    opacity: 0.6;
+    transform: scale(1.05) perspective(600px) rotateX(0deg);
+    filter: drop-shadow(0 0 40px var(--neon));
   }
   100% {
     opacity: 1;
-    transform: translateY(0) skewY(0) rotateX(0) scale(1);
+    transform: scale(1) perspective(600px) rotateX(0deg);
+    filter: drop-shadow(0 0 10px var(--neon));
   }
 }
 
 .panel.fly-in {
-  animation: flyInPanel 0.7s ease-out forwards;
-  transform-origin: top center;
+  animation: hudFlyIn 0.6s ease-out forwards;
+  transform-origin: center center;
 }
 
-/* stagger child elements */
+/* Staggered child elements fade-in (kept from original) */
 .panel.show > * {
   opacity: 0;
   transform: translateY(20px);
   animation: fadeUp 0.5s forwards;
 }
-
 .panel.show > *:nth-child(1) { animation-delay: 0.1s; }
 .panel.show > *:nth-child(2) { animation-delay: 0.2s; }
 .panel.show > *:nth-child(3) { animation-delay: 0.3s; }
@@ -433,11 +465,16 @@ function updateLocationWeather(){
 }
 
 /* ------------------ Panels ------------------ */
-/* ------------------ Panels ------------------ */
 function openPanel(id) {
   // Hide all panels first
   document.querySelectorAll('.panel').forEach(p => {
     p.classList.remove('show', 'fly-in');
+    // Also reset child elements opacity/transform
+    Array.from(p.children).forEach(child => {
+      child.style.opacity = 0;
+      child.style.transform = 'translateY(20px)';
+      child.style.animation = '';
+    });
   });
 
   const panel = document.getElementById(id);
@@ -446,16 +483,28 @@ function openPanel(id) {
   panel.classList.add('show');
 
   // Force browser to register the display change before animation
-  void panel.offsetHeight; // this forces a reflow
+  void panel.offsetHeight; // forces reflow
 
   // Then add fly-in animation
   panel.classList.add('fly-in');
+
+  // Once fly-in ends, start staggered fade-ups
+  panel.addEventListener('animationend', function startChildrenFade(e){
+    if(e.animationName === 'flyInPanel'){
+      Array.from(panel.children).forEach((child, idx) => {
+        child.style.animation = `fadeUp 0.5s forwards`;
+        child.style.animationDelay = `${0.1 * (idx + 1)}s`;
+      });
+      panel.removeEventListener('animationend', startChildrenFade);
+    }
+  });
 
   // Start reflection typing if needed
   if (id === 'refPanel') {
     typeReflection(reflections[0]);
   }
 }
+
 
 function closePanel(id) {
   const panel = document.getElementById(id);
@@ -567,6 +616,7 @@ function rotateQuotes(){
 
 </body>
 </html>
+
 
 
 
