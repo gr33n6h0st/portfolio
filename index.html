@@ -274,90 +274,90 @@ const loginPass = document.getElementById('loginPass');
 const wrongGif = document.getElementById('wrongGifOverlay');
 const wrongAudio = document.getElementById('wrongAudio');
 
-loginPass.addEventListener('keydown', (e) => {
-  if (e.key === 'Enter') loginBtn.click();
-});
+loginPass.addEventListener('keydown', e => { if(e.key==='Enter') loginBtn.click(); });
 
 loginBtn.addEventListener('click', () => {
   const v = (loginPass.value || '').trim();
   if (v === 'mrsmart') {
     loginOverlay.style.display = 'none';
-    document.getElementById('hud').style.opacity = '1';
-    document.getElementById('hud').style.visibility = 'visible';
+    const hud = document.getElementById('hud');
+    hud.style.opacity = '1';
+    hud.style.visibility = 'visible';
     startHud();
     rotateQuotes();
+    updateLocationWeather(); // start fetching coords and weather
+
+    // Play welcome audio
+    wrongAudio.muted = false;
+    wrongAudio.volume = 1;
+    wrongAudio.pause();
+    wrongAudio.currentTime = 0;
+    wrongAudio.play().catch(err => console.error('Audio failed:', err));
+
   } else {
     loginPass.value = '';
     loginPass.placeholder = 'Incorrect — try again';
     loginPass.focus();
-
-    loginOverlay.animate(
-      [
-        { transform: 'translateX(-2px)' },
-        { transform: 'translateX(2px)' },
-        { transform: 'translateX(0)' }
-      ],
-      { duration: 120, iterations: 3 }
-    );
-
-    wrongGif.style.display = 'flex';
-
-// Make sure the audio is unmuted and volume is normal
-wrongAudio.muted = false;
-wrongAudio.volume = 1;
-
-// Stop any current playback and reset to start
-wrongAudio.pause();
-wrongAudio.currentTime = 0;
-
-// Attempt to play and log errors
-wrongAudio.play().catch(err => {
-  console.error('Failed to play wrong password audio:', err);
-});
-
-// Hide the GIF after 2.2s
-setTimeout(() => {
-  wrongGif.style.display = 'none';
-  // Pause only if it's still playing
-  if (!wrongAudio.paused) wrongAudio.pause();
-}, 2200);
-
+    loginOverlay.animate([
+      { transform: 'translateX(-2px)' },
+      { transform: 'translateX(2px)' },
+      { transform: 'translateX(0)' }
+    ], { duration:120, iterations:3 });
+    wrongGif.style.display='flex';
+    wrongAudio.muted=false; wrongAudio.volume=1; wrongAudio.pause(); wrongAudio.currentTime=0;
+    wrongAudio.play().catch(err=>console.error('Audio failed:',err));
+    setTimeout(()=>{wrongGif.style.display='none'; if(!wrongAudio.paused) wrongAudio.pause();},2200);
   }
 });
 
-
-
-/* ------------------ HUD ------------------ */
+/* ------------------ HUD (time/date) ------------------ */
 function startHud(){
   const timeEl = document.getElementById('hud-time');
   const dateEl = document.getElementById('hud-date');
   function updateHud(){
     const now = new Date();
-    const hh = String(now.getHours()).padStart(2,'0');
-    const mm = String(now.getMinutes()).padStart(2,'0');
-    const ss = String(now.getSeconds()).padStart(2,'0');
-    timeEl.textContent = `${hh}:${mm}:${ss}`;
+    timeEl.textContent = now.toLocaleTimeString();
     dateEl.textContent = now.toDateString();
   }
   updateHud();
   setInterval(updateHud,1000);
 }
 
+/* ------------------ Location & Weather ------------------ */
+function updateLocationWeather(){
+  const cityEl = document.getElementById('hud-city');
+  const coordsEl = document.getElementById('hud-coords-text');
+  const weatherEl = document.getElementById('hud-weather-text');
+
+  if(!navigator.geolocation){ coordsEl.textContent='Unavailable'; weatherEl.textContent='Unavailable'; return; }
+
+  navigator.geolocation.getCurrentPosition(async pos => {
+    const {latitude, longitude} = pos.coords;
+    coordsEl.textContent = `${latitude.toFixed(4)}, ${longitude.toFixed(4)}`;
+
+    try{
+      const res = await fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=${OWM_API_KEY}&units=metric`);
+      const data = await res.json();
+      cityEl.textContent = data.name || 'Unknown';
+      weatherEl.textContent = `${data.weather[0].description}, ${data.main.temp.toFixed(1)}°C`;
+    } catch(e){
+      weatherEl.textContent='Weather unavailable';
+      console.error(e);
+    }
+  }, err => {
+    coordsEl.textContent='Denied';
+    weatherEl.textContent='Weather unavailable';
+    console.error(err);
+  });
+}
+
 /* ------------------ Panels ------------------ */
-function openPanel(id){
-  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('show'));
-  document.getElementById(id).classList.add('show');
-}
-function closePanel(id){
-  document.getElementById(id).classList.remove('show');
-}
-document.querySelectorAll('.navItem').forEach(el=>{
-  el.addEventListener('click',()=>openPanel(el.getAttribute('aria-controls')));
-});
+function openPanel(id){ document.querySelectorAll('.panel').forEach(p=>p.classList.remove('show')); document.getElementById(id).classList.add('show'); }
+function closePanel(id){ document.getElementById(id).classList.remove('show'); }
+document.querySelectorAll('.navItem').forEach(el=>el.addEventListener('click',()=>openPanel(el.getAttribute('aria-controls'))));
 
 /* ------------------ Reflection typing ------------------ */
 const reflectionEl = document.getElementById('reflectionText');
-const cursorEl = document.getElementById('reflectionCursor');
 const reflections = [
   "Exploring the convergence of tech and human creativity.",
   "Reflecting on my journey through coding and design.",
@@ -366,71 +366,56 @@ const reflections = [
 let typingTimer = null;
 function typeReflection(text){
   if(typingTimer) clearInterval(typingTimer);
-  reflectionEl.textContent = '';
-  let i=0;
+  reflectionEl.textContent=''; let i=0;
   speechSynthesis.cancel();
-  const utter = new SpeechSynthesisUtterance(text);
+  const utter=new SpeechSynthesisUtterance(text);
   window.speechSynthesis.speak(utter);
-  typingTimer = setInterval(()=>{
-    if(i<text.length){
-      reflectionEl.textContent += text[i];
-      i++;
-    }else{
-      clearInterval(typingTimer);
-      typingTimer = null;
-    }
+  typingTimer=setInterval(()=>{
+    if(i<text.length){ reflectionEl.textContent+=text[i]; i++; } else { clearInterval(typingTimer); typingTimer=null; }
   },35);
 }
 document.getElementById('navRef').addEventListener('click',()=>typeReflection(reflections[Math.floor(Math.random()*reflections.length)]));
 
 /* ------------------ Productions Lightbox ------------------ */
-const productionImagesMap = {0: PROD1_IMAGES};
-let currImages = [], currIndex = 0;
-const lb = document.getElementById('lightbox');
-const lbImg = document.getElementById('lbImage');
+const productionImagesMap={0:PROD1_IMAGES};
+let currImages=[],currIndex=0;
+const lb=document.getElementById('lightbox');
+const lbImg=document.getElementById('lbImage');
 document.querySelectorAll('.prodCard').forEach(card=>{
   card.addEventListener('click',()=>{
-    const idx = card.dataset.index;
-    currImages = productionImagesMap[idx] || [];
+    const idx=card.dataset.index;
+    currImages=productionImagesMap[idx]||[];
     if(!currImages.length) return;
-    currIndex=0;
-    lbImg.src = currImages[currIndex];
-    lb.style.display='flex';
+    currIndex=0; lbImg.src=currImages[currIndex]; lb.style.display='flex';
   });
 });
-document.getElementById('lbPrev').addEventListener('click',()=>{
-  if(!currImages.length) return;
-  currIndex = (currIndex-1+currImages.length)%currImages.length;
-  lbImg.src = currImages[currIndex];
-});
-document.getElementById('lbNext').addEventListener('click',()=>{
-  if(!currImages.length) return;
-  currIndex = (currIndex+1)%currImages.length;
-  lbImg.src = currImages[currIndex];
-});
+document.getElementById('lbPrev').addEventListener('click',()=>{if(!currImages.length)return; currIndex=(currIndex-1+currImages.length)%currImages.length; lbImg.src=currImages[currIndex];});
+document.getElementById('lbNext').addEventListener('click',()=>{if(!currImages.length)return; currIndex=(currIndex+1)%currImages.length; lbImg.src=currImages[currIndex];});
 document.getElementById('lbClose').addEventListener('click',()=>{lb.style.display='none';});
 
 /* ------------------ Quotes rotation ------------------ */
-const quotes = [
+const quotes=[
   "Code is like humor. When you have to explain it, it’s bad.",
   "First, solve the problem. Then, write the code.",
   "Experience is the name everyone gives to their mistakes."
 ];
-const quoteEl = document.getElementById('quote');
+const quoteEl=document.getElementById('quote');
 function rotateQuotes(){
   let qidx=0;
   setInterval(()=>{
     quoteEl.style.opacity=0;
     setTimeout(()=>{
-      quoteEl.textContent = quotes[qidx];
+      quoteEl.textContent=quotes[qidx];
       quoteEl.style.opacity=1;
       qidx=(qidx+1)%quotes.length;
     },500);
   },6000);
 }
 </script>
+
 </body>
 </html>
+
 
 
 
