@@ -313,7 +313,7 @@ const loginAudioWrong = document.getElementById('loginAudioWrong');
 function handleLogin() {
   const v = (loginPass.value || '').trim();
 
-  if (v === 'mrsmart') {
+    if (v === 'mrsmart') {
     // ✅ Correct password
     correctGif.style.display = 'flex';
 
@@ -330,8 +330,8 @@ function handleLogin() {
     hud.style.opacity = '1';
     hud.style.visibility = 'visible';
     startHud();
-    rotateQuotes();
-    updateLocationWeather();
+    rotateQuote();
+    updateWeather();
 
     // Hide GIF after 4s
     setTimeout(() => {
@@ -354,7 +354,6 @@ function handleLogin() {
   }
 }
 
-
 // Click button
 loginBtn.addEventListener('click', handleLogin);
 
@@ -362,7 +361,6 @@ loginBtn.addEventListener('click', handleLogin);
 loginPass.addEventListener('keyup', (e) => {
   if (e.key === 'Enter') handleLogin();
 });
-
 
 // NAVIGATION
 const navs = document.querySelectorAll('.navItem');
@@ -433,21 +431,19 @@ const hudCity = document.getElementById('hud-city');
 const hudCoordsText = document.getElementById('hud-coords-text');
 const hudWeatherText = document.getElementById('hud-weather-text');
 
-function showHUD(){ 
-  hud.style.opacity=1; hud.style.visibility='visible'; 
-  startHud(); 
-}
 function startHud(){
   updateTime();
   setInterval(updateTime,1000);
   updateWeather();
 }
+
 function updateTime(){
   const now = new Date();
   hudDate.textContent = now.toDateString();
   hudTime.textContent = now.toLocaleTimeString();
 }
-function updateWeather(){
+
+async function updateWeather(){
   if(navigator.geolocation){
     navigator.geolocation.getCurrentPosition(async pos=>{
       const lat = pos.coords.latitude, lon=pos.coords.longitude;
@@ -513,3 +509,4 @@ rotateQuote();
 </script>
 </body>
 </html>
+
