@@ -276,8 +276,16 @@ a:hover{color:var(--hover);}
 
 <!-- Wrong Password GIF Overlay -->
 <div id="wrongGifOverlay" style="display:none; position:fixed; inset:0; justify-content:center; align-items:center; background: rgba(0,0,0,0.85); z-index:1500;">
-  <img src="images/computer missing GIF.gif" alt="Wrong Password GIF" style="width:100%; height:100%; object-fit:cover;">
+  <img src="images/Blue Screen Art GIF by Pi-Slices.gif" alt="Wrong Password GIF" style="width:100%; height:100%; object-fit:cover;">
 </div>
+
+<!-- Correct Password GIF Overlay -->
+<div id="correctGifOverlay" style="display:none; position:fixed; inset:0; justify-content:center; align-items:center; background:#000; z-index:1500;">
+  <img src="images/Blue%20Screen%20Art%20GIF%20by%20Pi-Slices.gif" 
+       alt="Access Granted GIF" 
+       style="max-width:100%; max-height:100%; object-fit:contain;">
+</div>
+
   
 <!-- Add audio here -->
 <audio id="loginAudioCorrect" src="sounds/BC_Audio.mp3" preload="auto"></audio>
@@ -310,57 +318,41 @@ loginBtn.addEventListener('click', () => {
   const loginAudioWrong = document.getElementById('loginAudioWrong');
 
   if (v === 'mrsmart') {
-    // Hide login overlay
-    loginOverlay.style.display = 'none';
+  // Hide login overlay
+  loginOverlay.style.display = 'none';
 
-    // Show the globe after login
-    document.getElementById('cornerGlobe').style.display = 'block';
+  // Show correct GIF overlay
+  const correctGif = document.getElementById('correctGifOverlay');
+  correctGif.style.display = 'flex';
+  correctGif.style.opacity = '1';
 
-    // Show HUD
-    const hud = document.getElementById('hud');
-    hud.style.opacity = '1';
-    hud.style.visibility = 'visible';
-    startHud();
-    rotateQuotes();
-    updateLocationWeather();
+  // Play correct login audio
+  loginAudioCorrect.muted = false;
+  loginAudioCorrect.volume = 0.7;
+  loginAudioCorrect.pause();
+  loginAudioCorrect.currentTime = 0;
+  loginAudioCorrect.play().catch(err => console.error('Audio failed:', err));
 
-    // Play correct login audio
-    loginAudioCorrect.muted = false;
-    loginAudioCorrect.volume = 0.7;
-    loginAudioCorrect.pause();
-    loginAudioCorrect.currentTime = 0;
-    loginAudioCorrect.play().catch(err => console.error('Audio failed:', err));
+  // After 4 seconds, fade out GIF and show main content
+  setTimeout(() => {
+    correctGif.style.transition = 'opacity 1s ease';
+    correctGif.style.opacity = '0';
 
-  } else {
-    // Reset input
-    loginPass.value = '';
-    loginPass.placeholder = 'Incorrect — try again';
-    loginPass.focus();
-
-    // Shake animation
-    loginOverlay.animate([
-      { transform: 'translateX(-2px)' },
-      { transform: 'translateX(2px)' },
-      { transform: 'translateX(0)' }
-    ], { duration: 120, iterations: 3 });
-
-    // Show wrong password GIF
-    wrongGif.style.display = 'flex';
-
-    // Play wrong login audio
-    loginAudioWrong.muted = false;
-    loginAudioWrong.volume = 0.7;
-    loginAudioWrong.pause();
-    loginAudioWrong.currentTime = 0;
-    loginAudioWrong.play().catch(err => console.error('Audio failed:', err));
-
-    // Hide GIF after 2.2s
     setTimeout(() => {
-      wrongGif.style.display = 'none';
-      if (!loginAudioWrong.paused) loginAudioWrong.pause();
-    }, 2200);
-  }
-});
+      correctGif.style.display = 'none';
+
+      // Show globe + HUD
+      document.getElementById('cornerGlobe').style.display = 'block';
+      const hud = document.getElementById('hud');
+      hud.style.opacity = '1';
+      hud.style.visibility = 'visible';
+      startHud();
+      rotateQuotes();
+      updateLocationWeather();
+    }, 1000); // wait for fade-out
+  }, 4000);
+}
+
 
 
 /* ------------------ HUD (time/date) ------------------ */
