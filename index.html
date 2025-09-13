@@ -433,35 +433,51 @@ function updateLocationWeather(){
 }
 
 /* ------------------ Panels ------------------ */
-function openPanel(id){
-  document.querySelectorAll('.panel').forEach(p=>{
-    p.classList.remove('show','fly-in');
+/* ------------------ Panels ------------------ */
+function openPanel(id) {
+  // Hide all panels first
+  document.querySelectorAll('.panel').forEach(p => {
+    p.classList.remove('show', 'fly-in');
   });
 
   const panel = document.getElementById(id);
-  panel.classList.add('show','fly-in');
 
-  if(id==='refPanel'){
+  // Show panel first
+  panel.classList.add('show');
+
+  // Force browser to register the display change before animation
+  void panel.offsetHeight; // this forces a reflow
+
+  // Then add fly-in animation
+  panel.classList.add('fly-in');
+
+  // Start reflection typing if needed
+  if (id === 'refPanel') {
     typeReflection(reflections[0]);
   }
 }
 
-function closePanel(id){
+function closePanel(id) {
   const panel = document.getElementById(id);
-  panel.classList.remove('show','fly-in');
 
-  if(id === 'refPanel'){
-    if(typingTimer) clearInterval(typingTimer);
+  // Remove fly-in & show classes
+  panel.classList.remove('show', 'fly-in');
+
+  // Stop typing and speech if reflection panel
+  if (id === 'refPanel') {
+    if (typingTimer) clearInterval(typingTimer);
     typingTimer = null;
     window.speechSynthesis.cancel();
   }
 }
 
-document.querySelectorAll('.navItem').forEach(el=>{
-  el.addEventListener('click',()=>{
+// Attach nav click events
+document.querySelectorAll('.navItem').forEach(el => {
+  el.addEventListener('click', () => {
     openPanel(el.getAttribute('aria-controls'));
   });
 });
+
 
 /* ------------------ Reflection typing ------------------ */
 const reflectionEl = document.getElementById('reflectionText');
@@ -551,6 +567,7 @@ function rotateQuotes(){
 
 </body>
 </html>
+
 
 
 
