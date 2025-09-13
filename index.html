@@ -62,7 +62,7 @@ a:hover{color:var(--hover);}
 @keyframes blink{0%,50%{opacity:1}51%,100%{opacity:0}}
 
 /* Productions grid */
-.productionsGrid { display:grid; grid-template-columns:repeat(3,1fr); gap:14px; }
+.productionsGrid { display:grid; grid-template-columns:repeat(3,1fr); gap:14px; margin-top:20px; }
 .prodCard { padding:16px; border-radius:10px; border:1px solid rgba(0,229,255,0.05); background: linear-gradient(180deg, rgba(0,0,0,0.5), rgba(12,12,14,0.35)); cursor:pointer; transition: all .18s ease; }
 .prodCard h3 { margin:0 0 6px; font-size:15px; }
 .prodCard p { margin:0; color:rgba(0,229,255,0.9); font-size:13px; }
@@ -120,7 +120,10 @@ a:hover{color:var(--hover);}
       <div class="navItem" data-panel="panel3">Panel 3</div>
     </div>
     <div class="rightCol">
-      <div id="panel1" class="panel show"><div id="reflectionText">Welcome to the terminal <span class="cursor"></span></div></div>
+      <div id="panel1" class="panel show">
+        <div id="reflectionText">Welcome to the terminal <span class="cursor"></span></div>
+        <div class="productionsGrid" id="productionsGrid"></div>
+      </div>
       <div id="panel2" class="panel"><div>Panel 2 content</div></div>
       <div id="panel3" class="panel"><div>Panel 3 content</div></div>
       <div class="quoteBox" id="quoteBox"></div>
@@ -154,6 +157,13 @@ a:hover{color:var(--hover);}
 
 <script>
 const OWM_API_KEY = '5043108521e5dc1feccf33701c3221bf';
+const PROD1_IMAGES = [
+  "images/Screenshot 2025-09-10 130926.png",
+  "images/Screenshot 2025-09-10 123717.png",
+  "images/Screenshot 2025-09-10 115645.png",
+  "images/Screenshot 2025-09-10 114858.png",
+  "images/Screenshot 2025-09-10 114832.png"
+];
 const quotes = [
   "The only limit is your imagination.",
   "Code is poetry.",
@@ -186,6 +196,7 @@ function handleLogin() {
     startHud();
     rotateQuote();
     updateWeather();
+    renderProductions();
     setTimeout(()=>{correctGif.style.display='none';},4000);
   } else {
     wrongGif.style.display = 'flex';
@@ -240,6 +251,43 @@ function updateWeather() {
       }).catch(err=>console.error(err));
   });
 }
+
+/* ------------------ Productions Grid + Lightbox ------------------ */
+const productionsGrid = document.getElementById('productionsGrid');
+const lightbox = document.getElementById('lightbox');
+const lbImage = document.getElementById('lbImage');
+let lbIndex = 0;
+
+function renderProductions() {
+  productionsGrid.innerHTML = '';
+  PROD1_IMAGES.forEach((src,i)=>{
+    const card = document.createElement('div');
+    card.classList.add('prodCard');
+    card.innerHTML = `<h3>Screenshot ${i+1}</h3>`;
+    card.addEventListener('click',()=>{
+      openLightbox(i);
+    });
+    productionsGrid.appendChild(card);
+  });
+}
+
+function openLightbox(i){
+  lbIndex = i;
+  lbImage.src = PROD1_IMAGES[lbIndex];
+  lightbox.style.display='flex';
+}
+
+function closeLightbox(){ lightbox.style.display='none'; }
+
+document.getElementById('lbClose').addEventListener('click',closeLightbox);
+document.getElementById('lbPrev').addEventListener('click',()=>{
+  lbIndex = (lbIndex-1+PROD1_IMAGES.length)%PROD1_IMAGES.length;
+  lbImage.src = PROD1_IMAGES[lbIndex];
+});
+document.getElementById('lbNext').addEventListener('click',()=>{
+  lbIndex = (lbIndex+1)%PROD1_IMAGES.length;
+  lbImage.src = PROD1_IMAGES[lbIndex];
+});
 </script>
 </body>
 </html>
