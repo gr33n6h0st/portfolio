@@ -313,46 +313,46 @@ const loginAudioWrong = document.getElementById('loginAudioWrong');
 function handleLogin() {
   const v = (loginPass.value || '').trim();
 
-    if (v === 'mrsmart') {
-    // ✅ Correct password
+  if (v === 'mrsmart') {
+    loginBtn.disabled = true;        // ✅ prevent multiple triggers
+    loginPass.disabled = true;
+
     correctGif.style.display = 'flex';
 
     loginAudioCorrect.muted = false;
     loginAudioCorrect.volume = 0.7;
     loginAudioCorrect.pause();
     loginAudioCorrect.currentTime = 0;
-    loginAudioCorrect.play().catch(err => console.error('Audio failed:', err));
+    loginAudioCorrect.play();
 
-    // Show HUD immediately, even while GIF plays
-    loginOverlay.style.display = 'none';
-    document.getElementById('cornerGlobe').style.display = 'block';
-    const hud = document.getElementById('hud');
-    hud.style.opacity = '1';
-    hud.style.visibility = 'visible';
-    startHud();
-    rotateQuote();
-    updateWeather();
-
-    // Hide GIF after 4s
+    // Show HUD + main content **after GIF finishes**
     setTimeout(() => {
       correctGif.style.display = 'none';
+      loginOverlay.style.display = 'none';
+      document.getElementById('cornerGlobe').style.display = 'block';
+      const hud = document.getElementById('hud');
+      hud.style.opacity = '1';
+      hud.style.visibility = 'visible';
+      startHud();
+      rotateQuote();
+      updateWeather();
     }, 4000);
 
   } else {
     // ❌ Wrong password
     wrongGif.style.display = 'flex';
-
     loginAudioWrong.muted = false;
     loginAudioWrong.volume = 0.7;
     loginAudioWrong.pause();
     loginAudioWrong.currentTime = 0;
-    loginAudioWrong.play().catch(err => console.error('Audio failed:', err));
+    loginAudioWrong.play();
 
     setTimeout(() => {
       wrongGif.style.display = 'none';
     }, 3000);
   }
 }
+
 
 // Click button
 loginBtn.addEventListener('click', handleLogin);
