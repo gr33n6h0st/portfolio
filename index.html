@@ -324,61 +324,54 @@ loginBtn.addEventListener('click', () => {
   const loginAudioWrong = document.getElementById('loginAudioWrong');
 
   if (v === 'mrsmart') {
-  // Hide login overlay
-  loginOverlay.style.display = 'none';
+    // ✅ Correct password
+    loginOverlay.style.display = 'none';
+    const correctGif = document.getElementById('correctGifOverlay');
+    correctGif.style.display = 'flex';
+    correctGif.style.opacity = '1';
 
-  // Show correct GIF overlay
-  const correctGif = document.getElementById('correctGifOverlay');
-  correctGif.style.display = 'flex';
-  correctGif.style.opacity = '1';
-
-  // Play correct login audio
-  loginAudioCorrect.muted = false;
-  loginAudioCorrect.volume = 0.7;
-  loginAudioCorrect.pause();
-  loginAudioCorrect.currentTime = 0;
-  loginAudioCorrect.play().catch(err => console.error('Audio failed:', err));
-
-  // After 4 seconds, fade out GIF and show main content
-  setTimeout(() => {
-    correctGif.style.transition = 'opacity 1s ease';
-    correctGif.style.opacity = '0';
+    loginAudioCorrect.muted = false;
+    loginAudioCorrect.volume = 0.7;
+    loginAudioCorrect.pause();
+    loginAudioCorrect.currentTime = 0;
+    loginAudioCorrect.play().catch(err => console.error('Audio failed:', err));
 
     setTimeout(() => {
-      correctGif.style.display = 'none';
+      correctGif.style.transition = 'opacity 1s ease';
+      correctGif.style.opacity = '0';
 
-      // Show globe + HUD
-      document.getElementById('cornerGlobe').style.display = 'block';
-      const hud = document.getElementById('hud');
-      hud.style.opacity = '1';
-      hud.style.visibility = 'visible';
-      startHud();
-      rotateQuotes();
-      updateLocationWeather();
-    }, 1000); // wait for fade-out
-  }, 4000);
-} else {
-  // ❌ Wrong password
-  const wrongGif = document.getElementById('gifOverlay');
-  wrongGif.style.display = 'flex';
-  wrongGif.style.opacity = '1';
+      setTimeout(() => {
+        correctGif.style.display = 'none';
+        document.getElementById('cornerGlobe').style.display = 'block';
+        const hud = document.getElementById('hud');
+        hud.style.opacity = '1';
+        hud.style.visibility = 'visible';
+        startHud();
+        rotateQuotes();
+        updateLocationWeather();
+      }, 1000);
+    }, 4000);
 
-  loginAudioWrong.muted = false;
-  loginAudioWrong.volume = 0.7;
-  loginAudioWrong.pause();
-  loginAudioWrong.currentTime = 0;
-  loginAudioWrong.play().catch(err => console.error('Audio failed:', err));
+  } else {
+    // ❌ Wrong password
+    const wrongGif = document.getElementById('gifOverlay');
+    wrongGif.style.display = 'flex';
+    wrongGif.style.opacity = '1';
 
-  // Hide wrong GIF after 3 seconds
-  setTimeout(() => {
-    wrongGif.style.transition = 'opacity 1s ease';
-    wrongGif.style.opacity = '0';
-    setTimeout(() => { wrongGif.style.display = 'none'; }, 1000);
-  }, 3000);
-}
+    loginAudioWrong.muted = false;
+    loginAudioWrong.volume = 0.7;
+    loginAudioWrong.pause();
+    loginAudioWrong.currentTime = 0;
+    loginAudioWrong.play().catch(err => console.error('Audio failed:', err));
 
-
-}); // <-- closes the loginBtn.addEventListener
+    setTimeout(() => {
+      wrongGif.style.transition = 'opacity 1s ease';
+      wrongGif.style.opacity = '0';
+      setTimeout(() => { wrongGif.style.display = 'none'; }, 1000);
+    }, 3000);
+  }
+});
+ // <-- closes the loginBtn.addEventListener
 
 
 
