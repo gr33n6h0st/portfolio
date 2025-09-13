@@ -32,7 +32,7 @@ a:hover{color:var(--hover);}
 
 /* top-right globe gif */
 #cornerGlobe {
-  display:none; /* hidden until login works */
+  display:none;
   position:fixed;
   top:12px;
   right:12px;
@@ -51,9 +51,6 @@ a:hover{color:var(--hover);}
   mask-position: center;
   mask-size: cover;
 }
-
-
-
 
 /* -------- LOGIN (opaque overlay) -------- */
 #loginOverlay {
@@ -131,7 +128,7 @@ a:hover{color:var(--hover);}
 .panel.show { display:block; }
 
 /* reflection */
-#reflectionText{white-space:pre-wrap; font-size:14px; color:rgba(0,229,255,0.95); }
+#reflectionText{white-space:pre-wrap; font-size:14px; color:rgba(0,229,255,0.95); overflow:auto; max-height:300px;}
 .cursor { display:inline-block; width:10px; margin-left:6px; background:var(--neon); animation:blink 1s steps(2) infinite; vertical-align:middle; }
 @keyframes blink{0%,50%{opacity:1}51%,100%{opacity:0}}
 
@@ -193,108 +190,103 @@ a:hover{color:var(--hover);}
   <div id="hud" aria-live="polite">
     <div class="hud-row" id="hud-date">Loading date…</div>
     <div class="hud-row" id="hud-time">--:--:--</div>
-    <div class="hud-row" id="hud-loc"><i class="fa-solid fa-location-dot"></i> <span id="hud-city">Toronto</span></div>
-    <div class="hud-row" id="hud-coords">Coords: <span id="hud-coords-text">—</span></div>
-    <div class="hud-row" id="hud-weather"><i class="fa-solid fa-cloud-sun"></i> <span id="hud-weather-text">—</span></div>
+    <div class="hud-row" id="hud-loc"><i class="fa-solid fa-location-dot"></i> <span id="hud-city">Loading…</span></div>
+    <div class="hud-row" id="hud-coords">Coords: <span id="hud-coords-text">Loading…</span></div>
+    <div class="hud-row" id="hud-weather"><i class="fa-solid fa-cloud-sun"></i> <span id="hud-weather-text">Loading…</span></div>
   </div>
 
-  <!-- MAIN -->
-  <main id="main">
-    <div class="container">
-      <!-- LEFT -->
-      <div class="leftCol" aria-hidden="false">
-        <div class="headerTitle">[Hello World]</div>
-        <div id="navWho" class="navItem" role="button" tabindex="0" aria-controls="whoPanel">Whoami</div>
-        <div id="navRef" class="navItem" role="button" tabindex="0" aria-controls="refPanel">Reflection</div>
-        <div id="navProd" class="navItem" role="button" tabindex="0" aria-controls="prodPanel">Productions</div>
-        <div id="navRes" class="navItem" role="button" tabindex="0" aria-controls="resPanel">Resources</div>
-        <div id="navContact" class="navItem" role="button" tabindex="0" aria-controls="contactPanel">Contact</div>
-      </div>
+<!-- MAIN -->
+<main id="main">
+<div class="container">
+<!-- LEFT -->
+<div class="leftCol" aria-hidden="false">
+<div class="headerTitle">[Hello World]</div>
+<div id="navWho" class="navItem" role="button" tabindex="0" aria-controls="whoPanel">Whoami</div>
+<div id="navRef" class="navItem" role="button" tabindex="0" aria-controls="refPanel">Reflection</div>
+<div id="navProd" class="navItem" role="button" tabindex="0" aria-controls="prodPanel">Productions</div>
+<div id="navRes" class="navItem" role="button" tabindex="0" aria-controls="resPanel">Resources</div>
+<div id="navContact" class="navItem" role="button" tabindex="0" aria-controls="contactPanel">Contact</div>
+</div>
 
-      <!-- RIGHT -->
-      <div class="rightCol">
-        <!-- PANELS -->
-        <section id="whoPanel" class="panel" role="region" aria-labelledby="navWho">
-          <h2>Whoami</h2>
-          <p><strong>Brandon Smart</strong><br>Teachable: Computer Technology</p>
-          <button class="backBtn" onclick="closePanel('whoPanel')">← Back</button>
-        </section>
+<!-- RIGHT -->
+<div class="rightCol">
+<section id="whoPanel" class="panel" role="region" aria-labelledby="navWho">
+<h2>Whoami</h2>
+<p><strong>Brandon Smart</strong><br>Teachable: Computer Technology</p>
+<button class="backBtn" onclick="closePanel('whoPanel')">← Back</button>
+</section>
 
-        <section id="refPanel" class="panel" role="region" aria-labelledby="navRef">
-          <h2>Reflection</h2>
-          <div id="reflectionText" aria-live="polite"></div><span class="cursor" id="reflectionCursor" aria-hidden="true"></span>
-          <button class="backBtn" onclick="closePanel('refPanel')">← Back</button>
-        </section>
+<section id="refPanel" class="panel" role="region" aria-labelledby="navRef">
+<h2>Reflection</h2>
+<div id="reflectionText" aria-live="polite"></div><span class="cursor" id="reflectionCursor" aria-hidden="true"></span>
+<button class="backBtn" onclick="closePanel('refPanel')">← Back</button>
+</section>
 
-        <section id="prodPanel" class="panel" role="region" aria-labelledby="navProd">
-          <h2>Productions</h2>
-          <div class="productionsGrid" id="productionsGrid">
-            <div class="prodCard" data-index="0"><h3>Production 1: Power up</h3><p>View Content</p></div>
-            <div class="prodCard" data-index="1"><h3>Production 2: New Literacies Reflection</h3><p>Placeholder</p></div>
-            <div class="prodCard" data-index="2"><h3>Production 3: Critical Algorithmic Literacies and AI</h3><p>Placeholder</p></div>
-            <div class="prodCard" data-index="3"><h3>Production 4: Graphic Novel</h3><p>Placeholder</p></div>
-            <div class="prodCard" data-index="4"><h3>Production 5: On the Way to Video Inquiry</h3><p>Placeholder</p></div>
-            <div class="prodCard" data-index="5"><h3>Production 6: Video Works</h3><p>Placeholder</p></div>
-            <div class="prodCard" data-index="6"><h3>Production 7: Learning Principles</h3><p>Placeholder</p></div>
-            <div class="prodCard" data-index="7"><h3>Production 8: World Building</h3><p>Placeholder</p></div>
-            <div class="prodCard" data-index="8"><h3>Production 9: Twine</h3><p>Placeholder</p></div>
-          </div>
-          <button class="backBtn" onclick="closePanel('prodPanel')">← Back</button>
-        </section>
+<section id="prodPanel" class="panel" role="region" aria-labelledby="navProd">
+<h2>Productions</h2>
+<div class="productionsGrid" id="productionsGrid">
+  <div class="prodCard" data-index="0"><h3>Production 1: Power up</h3><p>View Content</p></div>
+  <div class="prodCard" data-index="1"><h3>Production 2: New Literacies Reflection</h3><p>Placeholder</p></div>
+  <div class="prodCard" data-index="2"><h3>Production 3: Critical Algorithmic Literacies and AI</h3><p>Placeholder</p></div>
+  <div class="prodCard" data-index="3"><h3>Production 4: Graphic Novel</h3><p>Placeholder</p></div>
+  <div class="prodCard" data-index="4"><h3>Production 5: On the Way to Video Inquiry</h3><p>Placeholder</p></div>
+  <div class="prodCard" data-index="5"><h3>Production 6: Video Works</h3><p>Placeholder</p></div>
+  <div class="prodCard" data-index="6"><h3>Production 7: Learning Principles</h3><p>Placeholder</p></div>
+  <div class="prodCard" data-index="7"><h3>Production 8: World Building</h3><p>Placeholder</p></div>
+  <div class="prodCard" data-index="8"><h3>Production 9: Twine</h3><p>Placeholder</p></div>
+</div>
+<button class="backBtn" onclick="closePanel('prodPanel')">← Back</button>
+</section>
 
-        <section id="resPanel" class="panel" role="region" aria-labelledby="navRes">
-          <h2>Resources</h2>
-          <p><a href="https://youtube.com" target="_blank" rel="noopener">YouTube</a></p>
-          <p><a href="https://google.ca" target="_blank" rel="noopener">Google</a></p>
-          <p><a href="https://github.com" target="_blank" rel="noopener">GitHub</a></p>
-          <button class="backBtn" onclick="closePanel('resPanel')">← Back</button>
-        </section>
+<section id="resPanel" class="panel" role="region" aria-labelledby="navRes">
+<h2>Resources</h2>
+<p><a href="https://youtube.com" target="_blank" rel="noopener">YouTube</a></p>
+<p><a href="https://google.ca" target="_blank" rel="noopener">Google</a></p>
+<p><a href="https://github.com" target="_blank" rel="noopener">GitHub</a></p>
+<button class="backBtn" onclick="closePanel('resPanel')">← Back</button>
+</section>
 
-        <section id="contactPanel" class="panel" role="region" aria-labelledby="navContact">
-          <h2>Contact</h2>
-          <div class="contact-row">
-            <div class="mail"><i class="fa-solid fa-envelope"></i>&nbsp; <a href="mailto:bsmart@my.yorku.ca">bsmart@my.yorku.ca</a></div>
-          </div>
-          <button class="backBtn" onclick="closePanel('contactPanel')">← Back</button>
-        </section>
-      </div>
-    </div>
+<section id="contactPanel" class="panel" role="region" aria-labelledby="navContact">
+<h2>Contact</h2>
+<div class="contact-row">
+<div class="mail"><i class="fa-solid fa-envelope"></i>&nbsp; <a href="mailto:bsmart@my.yorku.ca">bsmart@my.yorku.ca</a></div>
+</div>
+<button class="backBtn" onclick="closePanel('contactPanel')">← Back</button>
+</section>
+</div>
+</div>
 
-    <!-- QUOTES -->
-    <div id="quote" class="quoteBox">Loading inspiration…</div>
-  </main>
+<!-- QUOTES -->
+<div id="quote" class="quoteBox">Loading inspiration…</div>
+</main>
 
-  <!-- LIGHTBOX -->
-  <div id="lightbox" role="dialog" aria-hidden="true">
-    <img id="lbImage" src="" alt="Screenshot">
-    <div class="lbControls">
-      <button id="lbPrev">Prev</button>
-      <button id="lbNext">Next</button>
-      <button id="lbClose">Close</button>
-    </div>
-  </div>
+<!-- LIGHTBOX -->
+<div id="lightbox" role="dialog" aria-hidden="true">
+<img id="lbImage" src="" alt="Screenshot">
+<div class="lbControls">
+<button id="lbPrev">Prev</button>
+<button id="lbNext">Next</button>
+<button id="lbClose">Close</button>
+</div>
+</div>
 
 <!-- Wrong Password GIF Overlay -->
 <div id="gifOverlay" style="display:none; position:fixed; inset:0; justify-content:center; align-items:center; background:#000; z-index:1500;">
-  <img src="images/Blue Screen Art GIF by Pi-Slices.gif" 
-       alt="Wrong Password GIF" 
-       style="width:100%; height:100%; object-fit:cover;">
+<img src="images/Blue Screen Art GIF by Pi-Slices.gif" 
+     alt="Wrong Password GIF" 
+     style="width:100%; height:100%; object-fit:cover;">
 </div>
 
 <!-- Correct Password GIF Overlay -->
 <div id="correctGifOverlay" style="display:none; position:fixed; inset:0; justify-content:center; align-items:center; background:#000; z-index:1500;">
-  <img src="images/enter_screen_gif.gif" 
-       alt="Access Granted GIF" 
-       style="width:100%; height:100%; object-fit:cover;">
+<img src="images/enter_screen_gif.gif" 
+     alt="Access Granted GIF" 
+     style="width:100%; height:100%; object-fit:cover;">
 </div>
 
-
-
-  
-<!-- Add audio here -->
+<!-- Audio -->
 <audio id="loginAudioCorrect" src="sounds/BC_Audio.mp3" preload="auto"></audio>
 <audio id="loginAudioWrong" src="sounds/Error_Audio.mp3" preload="auto"></audio>
-
 
 <script>
 const OWM_API_KEY = '5043108521e5dc1feccf33701c3221bf';
@@ -306,217 +298,184 @@ const PROD1_IMAGES = [
   "images/Screenshot 2025-09-10 114832.png"
 ];
 
-/* ------------------ Login ------------------ */
-const loginOverlay = document.getElementById('loginOverlay');
+let isTyping = false;
+let currentAudio = null;
+
+// LOGIN
 const loginBtn = document.getElementById('loginBtn');
 const loginPass = document.getElementById('loginPass');
-const wrongGif = document.getElementById('gifOverlay');
-const wrongAudio = document.getElementById('loginAudioWrong');
+const loginOverlay = document.getElementById('loginOverlay');
+const gifOverlay = document.getElementById('gifOverlay');
+const correctGifOverlay = document.getElementById('correctGifOverlay');
+const loginAudioCorrect = document.getElementById('loginAudioCorrect');
+const loginAudioWrong = document.getElementById('loginAudioWrong');
 
+function playAudio(audioEl){
+  if(currentAudio){ currentAudio.pause(); currentAudio.currentTime=0; }
+  currentAudio = audioEl;
+  audioEl.play();
+}
 
-loginBtn.addEventListener('click', () => {
-  const v = (loginPass.value || '').trim();
-  const loginAudioCorrect = document.getElementById('loginAudioCorrect');
-  const loginAudioWrong = document.getElementById('loginAudioWrong');
-  const correctGif = document.getElementById('correctGifOverlay');
-  const wrongGif = document.getElementById('gifOverlay');
-
-  if (v === 'mrsmart') {
-    // ✅ Correct password
-    correctGif.style.display = 'flex';
-
-    loginAudioCorrect.muted = false;
-    loginAudioCorrect.volume = 0.7;
-    loginAudioCorrect.pause();
-    loginAudioCorrect.currentTime = 0;
-    loginAudioCorrect.play().catch(err => console.error('Audio failed:', err));
-
-    setTimeout(() => {
-      correctGif.style.display = 'none';
-      loginOverlay.style.display = 'none'; // hide overlay AFTER GIF
-      document.getElementById('cornerGlobe').style.display = 'block';
-      const hud = document.getElementById('hud');
-      hud.style.opacity = '1';
-      hud.style.visibility = 'visible';
-      startHud();
-      rotateQuotes();
-      updateLocationWeather();
-    }, 4000);
-
-  } else {
-    // ❌ Wrong password
-    wrongGif.style.display = 'flex';
-
-    loginAudioWrong.muted = false;
-    loginAudioWrong.volume = 0.7;
-    loginAudioWrong.pause();
-    loginAudioWrong.currentTime = 0;
-    loginAudioWrong.play().catch(err => console.error('Audio failed:', err));
-
-    setTimeout(() => {
-      wrongGif.style.display = 'none'; // hide after 3s
-    }, 3000);
+loginBtn.addEventListener('click', ()=>{
+  const pw = loginPass.value.trim();
+  if(pw==='mrsmart'){
+    loginOverlay.style.display='none';
+    correctGifOverlay.style.display='flex';
+    playAudio(loginAudioCorrect);
+    setTimeout(()=>{correctGifOverlay.style.display='none'; showHUD(); }, 2500);
+  } else{
+    gifOverlay.style.display='flex';
+    playAudio(loginAudioWrong);
+    setTimeout(()=>{gifOverlay.style.display='none'; }, 2500);
   }
 });
 
- // <-- closes the loginBtn.addEventListener
-
-
-
-/* ------------------ HUD (time/date) ------------------ */
-function startHud(){
-  const timeEl = document.getElementById('hud-time');
-  const dateEl = document.getElementById('hud-date');
-  function updateHud(){
-    const now = new Date();
-    timeEl.textContent = now.toLocaleTimeString();
-    dateEl.textContent = now.toDateString();
-  }
-  updateHud();
-  setInterval(updateHud,1000);
+// NAVIGATION
+const navs = document.querySelectorAll('.navItem');
+const panels = document.querySelectorAll('.panel');
+navs.forEach(nav=>{
+  nav.addEventListener('click',()=>{ openPanel(nav.getAttribute('aria-controls')); });
+});
+function openPanel(id){
+  panels.forEach(p=>p.classList.remove('show'));
+  document.getElementById(id).classList.add('show');
+  if(id==='refPanel'){ startReflection(); }
 }
-
-/* ------------------ Location & Weather ------------------ */
-function updateLocationWeather(){
-  const cityEl = document.getElementById('hud-city');
-  const coordsEl = document.getElementById('hud-coords-text');
-  const weatherEl = document.getElementById('hud-weather-text');
-
-  if(!navigator.geolocation){ coordsEl.textContent='Unavailable'; weatherEl.textContent='Unavailable'; return; }
-
-  navigator.geolocation.getCurrentPosition(async pos => {
-    const {latitude, longitude} = pos.coords;
-    coordsEl.textContent = `${latitude.toFixed(4)}, ${longitude.toFixed(4)}`;
-
-    try{
-      const res = await fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=${OWM_API_KEY}&units=metric`);
-      const data = await res.json();
-      cityEl.textContent = data.name || 'Unknown';
-      weatherEl.textContent = `${data.weather[0].description}, ${data.main.temp.toFixed(1)}°C`;
-    } catch(e){
-      weatherEl.textContent='Weather unavailable';
-      console.error(e);
-    }
-  }, err => {
-    coordsEl.textContent='Denied';
-    weatherEl.textContent='Weather unavailable';
-    console.error(err);
-  });
-}
-
-/* ------------------ Panels ------------------ */
-function openPanel(id){ document.querySelectorAll('.panel').forEach(p=>p.classList.remove('show')); document.getElementById(id).classList.add('show'); }
-function closePanel(id){
+function closePanel(id){ 
   document.getElementById(id).classList.remove('show');
-  if(id === 'refPanel') stopReflection(); // stops speech & typing
+  stopReflection();
 }
 
-document.querySelectorAll('.navItem').forEach(el=>el.addEventListener('click',()=>openPanel(el.getAttribute('aria-controls'))));
-
-
-// ------------------ Reflection typing ------------------
-const reflectionEl = document.getElementById('reflectionText');
-const reflections = [
-  `Building this site has been a deep learning experience. As I create and structure each section, I notice how I interact differently with coding tools, the browser, and design interfaces compared to traditional classroom learning. 
-Using HTML, CSS, and JavaScript forces me to think in terms of both logic and aesthetics, balancing functionality with appearance. The immediate feedback from the browser—seeing changes live, debugging errors, and watching animations or interactive elements respond—helps me internalize what works and what doesn’t. 
-AI tools have been critical as a guide; they suggest code optimizations, point out mistakes, and sometimes give creative alternatives. 
-
-I also consult online documentation, tutorials, and forums, and occasionally local communities of developers and students to see how they approach similar challenges. These resources, combined with AI guidance, create a learning loop: I try, I get feedback, I adjust, and I reflect. During the process, my emotions fluctuate—frustration appears when things break unexpectedly, curiosity drives me to experiment, and satisfaction comes from solving problems or achieving a visual effect I envisioned. 
-The moment-to-moment learning differs from typical school exercises; it’s hands-on, iterative, and self-directed. There’s no prescribed path; success is measured by functioning code and the coherence of the site itself rather than grades.
-
-Compared to prior learning experiences in school or workshops, this project requires simultaneous attention to multiple layers—technical, visual, and conceptual—making the process more holistic and immersive. Every design decision, from color choices to layout structure, is both a learning opportunity and an expression of creativity. 
-The site acts as both a canvas and a feedback mechanism, reflecting my progress, mistakes, and growth in real time. Overall, the experience emphasizes experimentation, problem-solving, and reflection in ways that are more self-directed, interactive, and personally meaningful than traditional learning environments.`
+// REFLECTION
+const reflectionText = document.getElementById('reflectionText');
+const reflectionCursor = document.getElementById('reflectionCursor');
+const reflectionLines = [
+  "Hello, I’m Brandon Smart. This reflection showcases my thoughts on learning and digital literacies.",
+  "I enjoy exploring computer technology and expressing ideas creatively through multimedia projects.",
+  "Every project I make helps me grow as a learner and as a teacher."
 ];
+let reflectionIndex=0;
+let charIndex=0;
+let reflectionInterval;
 
-let typingTimer = null;
-
-function typeReflection(text){
-  if(typingTimer) clearInterval(typingTimer);
-  reflectionEl.textContent='';
-  let i=0;
-  speechSynthesis.cancel();
-  const utter = new SpeechSynthesisUtterance(text);
-  window.speechSynthesis.speak(utter);
-
-  typingTimer = setInterval(() => {
-    if(i < text.length){
-      reflectionEl.textContent += text[i];
-      i++;
-    } else {
-      clearInterval(typingTimer);
-      typingTimer = null;
-    }
-  }, 35);
+function typeReflection(){
+  if(reflectionIndex>=reflectionLines.length){ reflectionCursor.style.display='none'; isTyping=false; return; }
+  let line = reflectionLines[reflectionIndex];
+  if(charIndex<line.length){
+    reflectionText.textContent += line.charAt(charIndex);
+    charIndex++;
+    reflectionText.scrollTop = reflectionText.scrollHeight;
+  } else{
+    reflectionText.textContent+='\n\n';
+    charIndex=0; reflectionIndex++;
+  }
+}
+function startReflection(){
+  if(isTyping) return;
+  isTyping=true;
+  reflectionText.textContent='';
+  reflectionIndex=0; charIndex=0;
+  reflectionCursor.style.display='inline-block';
+  reflectionInterval = setInterval(typeReflection,40);
+  speakReflection();
+}
+function stopReflection(){ 
+  clearInterval(reflectionInterval);
+  reflectionCursor.style.display='none';
+  if(window.speechSynthesis) speechSynthesis.cancel();
+  isTyping=false;
+}
+function speakReflection(){
+  if(!window.speechSynthesis) return;
+  const utter = new SpeechSynthesisUtterance(reflectionLines.join(' '));
+  speechSynthesis.speak(utter);
 }
 
-// Stop reflection typing and speech immediately
-function stopReflection(){
-  if(typingTimer) clearInterval(typingTimer);
-  typingTimer = null;
-  window.speechSynthesis.cancel();
+// HUD
+const hud = document.getElementById('hud');
+const hudDate = document.getElementById('hud-date');
+const hudTime = document.getElementById('hud-time');
+const hudCity = document.getElementById('hud-city');
+const hudCoordsText = document.getElementById('hud-coords-text');
+const hudWeatherText = document.getElementById('hud-weather-text');
+
+function showHUD(){ 
+  hud.style.opacity=1; hud.style.visibility='visible'; 
+  startHud(); 
+}
+function startHud(){
+  updateTime();
+  setInterval(updateTime,1000);
+  updateWeather();
+}
+function updateTime(){
+  const now = new Date();
+  hudDate.textContent = now.toDateString();
+  hudTime.textContent = now.toLocaleTimeString();
+}
+function updateWeather(){
+  if(navigator.geolocation){
+    navigator.geolocation.getCurrentPosition(async pos=>{
+      const lat = pos.coords.latitude, lon=pos.coords.longitude;
+      hudCoordsText.textContent = `${lat.toFixed(3)}, ${lon.toFixed(3)}`;
+      try{
+        const res = await fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${OWM_API_KEY}&units=metric`);
+        const data = await res.json();
+        hudCity.textContent = data.name;
+        hudWeatherText.textContent = `${data.weather[0].description}, ${data.main.temp}°C`;
+      }catch(e){ hudWeatherText.textContent='Weather unavailable'; }
+    }, err=>{
+      hudCity.textContent='Unavailable';
+      hudCoordsText.textContent='Denied';
+      hudWeatherText.textContent='Weather unavailable';
+    });
+  } else{ hudCity.textContent='Unsupported'; hudCoordsText.textContent='N/A'; hudWeatherText.textContent='Weather unavailable'; }
 }
 
-document.getElementById('navRef').addEventListener('click', () => {
-  typeReflection(reflections[0]); // always use your 350-word blurb
-});
-
-
-
-/* ------------------ Productions Lightbox ------------------ */
-const productionImagesMap={0:PROD1_IMAGES};
-let currImages=[],currIndex=0;
-const lb=document.getElementById('lightbox');
-const lbImg=document.getElementById('lbImage');
+// PRODUCTIONS LIGHTBOX
+const lightbox = document.getElementById('lightbox');
+const lbImage = document.getElementById('lbImage');
+let lbIndex = 0;
 document.querySelectorAll('.prodCard').forEach(card=>{
-  card.addEventListener('click',()=>{
-    const idx=card.dataset.index;
-    currImages=productionImagesMap[idx]||[];
-    if(!currImages.length) return;
-    currIndex=0; lbImg.src=currImages[currIndex]; lb.style.display='flex';
+  card.addEventListener('click', ()=>{
+    const idx=parseInt(card.dataset.index);
+    if(idx!==0) return;
+    lbIndex=0; showLightbox();
   });
 });
-document.getElementById('lbPrev').addEventListener('click',()=>{if(!currImages.length)return; currIndex=(currIndex-1+currImages.length)%currImages.length; lbImg.src=currImages[currIndex];});
-document.getElementById('lbNext').addEventListener('click',()=>{if(!currImages.length)return; currIndex=(currIndex+1)%currImages.length; lbImg.src=currImages[currIndex];});
-document.getElementById('lbClose').addEventListener('click',()=>{lb.style.display='none';});
-
-/* ------------------ Quotes rotation ------------------ */
-const quotes=[
-  "Code is like humor. When you have to explain it, it’s bad.",
-  "First, solve the problem. Then, write the code.",
-  "Experience is the name everyone gives to their mistakes."
-];
-const quoteEl=document.getElementById('quote');
-function rotateQuotes(){
-  let qidx=0;
-  setInterval(()=>{
-    quoteEl.style.opacity=0;
-    setTimeout(()=>{
-      quoteEl.textContent=quotes[qidx];
-      quoteEl.style.opacity=1;
-      qidx=(qidx+1)%quotes.length;
-    },500);
-  },6000);
+document.getElementById('lbNext').addEventListener('click', ()=>{
+  lbIndex=(lbIndex+1)%PROD1_IMAGES.length; showLightbox();
+});
+document.getElementById('lbPrev').addEventListener('click', ()=>{
+  lbIndex=(lbIndex-1+PROD1_IMAGES.length)%PROD1_IMAGES.length; showLightbox();
+});
+document.getElementById('lbClose').addEventListener('click', ()=>{ lightbox.style.display='none'; });
+function showLightbox(){
+  lbImage.src = PROD1_IMAGES[lbIndex];
+  lbImage.alt = `Production 1 Screenshot ${lbIndex+1}`;
+  lightbox.style.display='flex';
 }
+
+// QUOTES
+const quotes = [
+  "Knowledge is power.",
+  "Creativity takes courage.",
+  "Stay hungry, stay foolish.",
+  "The best way to predict the future is to create it."
+];
+let quoteIndex=0;
+const quoteBox = document.getElementById('quote');
+function rotateQuote(){
+  quoteBox.style.opacity=0;
+  setTimeout(()=>{
+    quoteBox.textContent=quotes[quoteIndex];
+    quoteBox.style.opacity=1;
+    quoteIndex=(quoteIndex+1)%quotes.length;
+  },600);
+}
+setInterval(rotateQuote,6000);
+rotateQuote();
+
 </script>
-
-<img src="images/globeglow.gif" id="cornerGlobe" alt="Globe Glow" style="display:none; border-radius:50%;">
-
-
-
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
