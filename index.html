@@ -66,6 +66,9 @@
     border: 2px solid #fff;
     border-radius: 10px;
     background-color: rgba(255,255,255,0.05);
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 1s ease, transform 1s ease;
   }
 
   .production h2 { font-size: 1.8em; margin-bottom: 10px; }
@@ -78,6 +81,9 @@
     margin: 20px 0;
     border-radius: 10px;
     border: 2px solid #fff;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 1s ease, transform 1s ease;
   }
 
   video { display: block; margin: 20px auto; }
@@ -112,14 +118,14 @@
   <!-- Production 1 -->
   <div class="production">
     <h2>Production 1</h2>
-    <p>Description of production 1. Add details, context, or links here.</p>
+    <p>Description of production 1.</p>
     <img src="production1-image.jpg" alt="Production 1 Image">
   </div>
 
   <!-- Production 2 -->
   <div class="production">
     <h2>Production 2</h2>
-    <p>Description of production 2. Include images, videos, or GIFs.</p>
+    <p>Description of production 2.</p>
     <video controls>
       <source src="production2-video.mp4" type="video/mp4">
       Your browser does not support the video tag.
@@ -137,7 +143,7 @@
     </video>
   </div>
 
-  <!-- Add more productions as needed -->
+  <!-- Add more productions here -->
 </div>
 
 <script>
@@ -153,13 +159,25 @@
     e.preventDefault();
 
     if(passwordInput.value === correctPassword){
-      // Stop any playing wrong password audio
+      // Stop wrong audio
       wrongAudio.pause();
       wrongAudio.currentTime = 0;
 
       // Hide login, show content
       loginContainer.style.display = 'none';
       content.style.display = 'block';
+
+      // Sequential fade-in
+      const elements = content.querySelectorAll('img, video, .production');
+      let delay = 0;
+      elements.forEach(el => {
+        setTimeout(() => {
+          el.style.opacity = 1;
+          el.style.transform = 'translateY(0)';
+        }, delay);
+        delay += 300; // 0.3s between each element
+      });
+
     } else {
       // Play wrong password sound
       wrongAudio.pause();
