@@ -5,45 +5,28 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Brandon Smart Portfolio</title>
 <style>
-  /* === ORIGINAL STYLES PRESERVED === */
+  /* === ORIGINAL TERMINAL STYLE PRESERVED === */
   body {
-    font-family: 'YourOriginalFont', sans-serif; /* keep original font */
-    background-color: #f0f0f0; /* original background color */
-    color: #000; /* original text color */
+    font-family: 'Courier New', monospace; /* terminal font */
+    background-color: #000; /* terminal background */
+    color: #0f0; /* terminal green text */
     margin: 0;
     padding: 0;
-    text-align: center;
+    text-align: left;
+    padding-left: 20px;
   }
 
-  h1, h2, p {
-    margin: 0 0 10px 0;
-    font-weight: normal; /* preserve original weights */
+  .terminal-line {
+    margin: 5px 0;
   }
 
-  /* LOGIN SCREEN */
-  #loginContainer {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    height: 100vh;
-  }
-
-  #loginContainer h1 {
-    font-size: 2em;
-    margin-bottom: 20px;
-  }
-
-  #passwordInput {
-    padding: 10px;
-    font-size: 16px;
-    margin-right: 5px;
-  }
-
-  button {
-    padding: 10px 20px;
-    font-size: 16px;
-    cursor: pointer;
+  input {
+    background: none;
+    border: none;
+    color: #0f0;
+    font-family: 'Courier New', monospace;
+    font-size: 1em;
+    outline: none;
   }
 
   /* HIDDEN CONTENT */
@@ -57,15 +40,12 @@
   .production {
     margin: 30px 0;
     padding: 15px;
-    border: 1px solid #ccc; /* original border style */
-    background-color: #fff; /* original background for production boxes */
+    border: 1px solid #0f0;
+    background-color: #000;
     opacity: 0;
     transform: translateY(20px);
     transition: opacity 1s ease, transform 1s ease;
   }
-
-  .production h2 { font-size: 1.8em; margin-bottom: 10px; }
-  .production p { font-size: 1.1em; }
 
   img, video {
     max-width: 90%;
@@ -73,33 +53,31 @@
     opacity: 0;
     transform: translateY(15px);
     transition: opacity 1s ease, transform 1s ease;
+    border: 1px solid #0f0;
+    border-radius: 5px;
   }
 
   video { display: block; margin: 20px auto; }
 
-  /* RESPONSIVE */
   @media (max-width:768px){
-    h1 { font-size: 1.8em; }
-    h2 { font-size: 1.3em; }
-    p { font-size: 1em; }
+    body { font-size: 0.9em; }
   }
 </style>
 </head>
 <body>
 
-<!-- LOGIN SCREEN -->
+<!-- TERMINAL LOGIN -->
 <div id="loginContainer">
-  <h1>Enter Password</h1>
-  <form id="loginForm">
-    <input type="password" id="passwordInput" placeholder="Password" required>
-    <button type="submit">Enter</button>
-  </form>
+  <div class="terminal-line">Login:</div>
+  <div class="terminal-line">
+    <input type="password" id="passwordInput" autofocus>
+  </div>
   <audio id="wrongAudio" src="wrong-password-sound.mp3" preload="auto"></audio>
 </div>
 
 <!-- HIDDEN CONTENT -->
 <div id="content">
-  <h1>Welcome to Brandon Smart's Portfolio</h1>
+  <h1 style="color:#0f0;">Welcome to Brandon Smart's Portfolio</h1>
 
   <!-- GIF -->
   <img src="your-gif.gif" alt="Animated GIF">
@@ -131,12 +109,9 @@
       Your browser does not support the video tag.
     </video>
   </div>
-
-  <!-- Add more productions as needed -->
 </div>
 
 <script>
-  const loginForm = document.getElementById('loginForm');
   const passwordInput = document.getElementById('passwordInput');
   const loginContainer = document.getElementById('loginContainer');
   const content = document.getElementById('content');
@@ -144,38 +119,33 @@
 
   const correctPassword = 'YOUR_PASSWORD'; // <-- replace with actual password
 
-  loginForm.addEventListener('submit', function(e){
-    e.preventDefault();
+  passwordInput.addEventListener('keypress', function(e){
+    if(e.key === 'Enter'){
+      if(passwordInput.value === correctPassword){
+        wrongAudio.pause();
+        wrongAudio.currentTime = 0;
 
-    if(passwordInput.value === correctPassword){
-      // Stop wrong password audio if playing
-      wrongAudio.pause();
-      wrongAudio.currentTime = 0;
+        loginContainer.style.display = 'none';
+        content.style.display = 'block';
 
-      // Hide login, show content
-      loginContainer.style.display = 'none';
-      content.style.display = 'block';
+        // Sequential fade-in
+        const elements = content.querySelectorAll('img, video, .production');
+        let delay = 0;
+        elements.forEach(el => {
+          setTimeout(() => {
+            el.style.opacity = 1;
+            el.style.transform = 'translateY(0)';
+          }, delay);
+          delay += 300;
+        });
 
-      // Sequential fade-in
-      const elements = content.querySelectorAll('img, video, .production');
-      let delay = 0;
-      elements.forEach(el => {
-        setTimeout(() => {
-          el.style.opacity = 1;
-          el.style.transform = 'translateY(0)';
-        }, delay);
-        delay += 300; // 0.3s delay between elements
-      });
+      } else {
+        wrongAudio.pause();
+        wrongAudio.currentTime = 0;
+        wrongAudio.play();
 
-    } else {
-      // Play wrong password audio
-      wrongAudio.pause();
-      wrongAudio.currentTime = 0;
-      wrongAudio.play();
-
-      alert('Incorrect password. Try again.');
-      passwordInput.value = '';
-      passwordInput.focus();
+        passwordInput.value = '';
+      }
     }
   });
 </script>
