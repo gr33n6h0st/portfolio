@@ -354,8 +354,10 @@ loginBtn.addEventListener('click', () => {
     loginAudioWrong.play().catch(err => console.error('Audio failed:', err));
 
     setTimeout(() => {
-      wrongGif.s
-
+      wrongGif.style.display = 'none'; // hide after 3s
+    }, 3000);
+  }
+});
 
  // <-- closes the loginBtn.addEventListener
 
@@ -408,6 +410,7 @@ function closePanel(id){ document.getElementById(id).classList.remove('show'); }
 document.querySelectorAll('.navItem').forEach(el=>el.addEventListener('click',()=>openPanel(el.getAttribute('aria-controls'))));
 
 /* ------------------ Reflection typing ------------------ */
+// ------------------ Reflection typing ------------------
 const reflectionEl = document.getElementById('reflectionText');
 const reflections = [
   `Building this site has been a deep learning experience. As I create and structure each section, I notice how I interact differently with coding tools, the browser, and design interfaces compared to traditional classroom learning. 
@@ -442,21 +445,17 @@ function typeReflection(text){
   }, 35);
 }
 
+// Stop reflection typing and speech immediately
+function stopReflection(){
+  if(typingTimer) clearInterval(typingTimer);
+  typingTimer = null;
+  window.speechSynthesis.cancel();
+}
+
 document.getElementById('navRef').addEventListener('click', () => {
   typeReflection(reflections[0]); // always use your 350-word blurb
 });
 
-/* ------------------ Stop Reflection when panel closes ------------------ */
-function closePanel(id){
-  const panel = document.getElementById(id);
-  panel.classList.remove('show');
-
-  if(id === 'refPanel'){
-    if(typingTimer) clearInterval(typingTimer);
-    typingTimer = null;
-    window.speechSynthesis.cancel(); // stops the voice immediately
-  }
-}
 
 
 /* ------------------ Productions Lightbox ------------------ */
