@@ -371,17 +371,42 @@ The site acts as both a canvas and a feedback mechanism, reflecting my progress,
 ];
 
 let typingTimer = null;
+
 function typeReflection(text){
   if(typingTimer) clearInterval(typingTimer);
-  reflectionEl.textContent=''; let i=0;
+  reflectionEl.textContent='';
+  let i=0;
   speechSynthesis.cancel();
-  const utter=new SpeechSynthesisUtterance(text);
+  const utter = new SpeechSynthesisUtterance(text);
   window.speechSynthesis.speak(utter);
-  typingTimer=setInterval(()=>{
-    if(i<text.length){ reflectionEl.textContent+=text[i]; i++; } else { clearInterval(typingTimer); typingTimer=null; }
-  },35);
+
+  typingTimer = setInterval(() => {
+    if(i < text.length){
+      reflectionEl.textContent += text[i];
+      i++;
+    } else {
+      clearInterval(typingTimer);
+      typingTimer = null;
+    }
+  }, 35);
 }
-document.getElementById('navRef').addEventListener('click',()=>typeReflection(reflections[Math.floor(Math.random()*reflections.length)]));
+
+document.getElementById('navRef').addEventListener('click', () => {
+  typeReflection(reflections[0]); // always use your 350-word blurb
+});
+
+/* ------------------ Stop Reflection when panel closes ------------------ */
+function closePanel(id){
+  const panel = document.getElementById(id);
+  panel.classList.remove('show');
+
+  if(id === 'refPanel'){
+    if(typingTimer) clearInterval(typingTimer);
+    typingTimer = null;
+    window.speechSynthesis.cancel(); // stops the voice immediately
+  }
+}
+
 
 /* ------------------ Productions Lightbox ------------------ */
 const productionImagesMap={0:PROD1_IMAGES};
