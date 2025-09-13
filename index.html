@@ -300,7 +300,6 @@ loginBtn.addEventListener('click', () => {
       { duration: 120, iterations: 3 }
     );
 
-    // show GIF/audio
     wrongGif.style.display = 'flex';
     wrongAudio.currentTime = 0;
     wrongAudio.play().catch(()=>{});
@@ -310,6 +309,8 @@ loginBtn.addEventListener('click', () => {
     }, 2200);
   }
 });
+
+
 
 /* ------------------ HUD ------------------ */
 function startHud(){
@@ -415,4 +416,5 @@ function rotateQuotes(){
 </script>
 </body>
 </html>
+
 
