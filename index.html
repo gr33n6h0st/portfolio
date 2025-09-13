@@ -32,6 +32,7 @@ a:hover{color:var(--hover);}
 
 /* top-right globe gif */
 #cornerGlobe {
+  display:none; /* hidden until login works */
   position:fixed;
   top:12px;
   right:12px;
@@ -50,6 +51,7 @@ a:hover{color:var(--hover);}
   mask-position: center;
   mask-size: cover;
 }
+
 
 
 
@@ -274,7 +276,7 @@ a:hover{color:var(--hover);}
 
 <!-- Wrong Password GIF Overlay -->
 <div id="wrongGifOverlay" style="display:none; position:fixed; inset:0; justify-content:center; align-items:center; background: rgba(0,0,0,0.85); z-index:1500;">
-  <img src="images/Glitch Coding GIF by Squirrel Monkey.gif" alt="Wrong Password GIF" style="width:100%; height:100%; object-fit:cover;">
+  <img src="images/computer missing GIF.gif" alt="Wrong Password GIF" style="width:100%; height:100%; object-fit:cover;">
 </div>
   
 <!-- Add audio here -->
@@ -303,6 +305,14 @@ loginBtn.addEventListener('click', () => {
   const v = (loginPass.value || '').trim();
   if (v === 'mrsmart') {
     loginOverlay.style.display = 'none';
+   
+
+    
+    // Show the globe only after successful login
+    // Show the globe only after successful login
+    document.getElementById('cornerGlobe').style.display = 'block';
+
+
     const hud = document.getElementById('hud');
     hud.style.opacity = '1';
     hud.style.visibility = 'visible';
@@ -332,6 +342,7 @@ loginBtn.addEventListener('click', () => {
     setTimeout(()=>{wrongGif.style.display='none'; if(!wrongAudio.paused) wrongAudio.pause();},2200);
   }
 });
+
 
 /* ------------------ HUD (time/date) ------------------ */
 function startHud(){
@@ -468,11 +479,13 @@ function rotateQuotes(){
 }
 </script>
 
-<img src="images/globeglow.gif" id="cornerGlobe" alt="Globe Glow">
+<img src="images/globeglow.gif" id="cornerGlobe" alt="Globe Glow" style="display:none; border-radius:50%;">
+
 
 
 </body>
 </html>
+
 
 
 
