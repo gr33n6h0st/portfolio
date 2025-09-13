@@ -5,11 +5,11 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Brandon Smart Portfolio</title>
 <style>
-  /* === ORIGINAL TERMINAL STYLE PRESERVED === */
+  /* === BLACK TERMINAL WITH BLUE INPUT === */
   body {
-    font-family: 'Courier New', monospace; /* terminal font */
-    background-color: #000; /* terminal background */
-    color: #0f0; /* terminal green text */
+    font-family: 'Courier New', monospace;
+    background-color: #000; /* black terminal background */
+    color: #00f; /* blue text for terminal vibe */
     margin: 0;
     padding: 0;
     text-align: left;
@@ -21,12 +21,17 @@
   }
 
   input {
-    background: none;
-    border: none;
-    color: #0f0;
+    background-color: #000; /* black background */
+    border: 2px solid #00f; /* blue border for terminal vibe */
+    color: #00f; /* blue text */
     font-family: 'Courier New', monospace;
     font-size: 1em;
+    padding: 5px;
     outline: none;
+  }
+
+  input::placeholder {
+    color: #00f;
   }
 
   /* HIDDEN CONTENT */
@@ -35,16 +40,21 @@
     padding: 20px;
     max-width: 1000px;
     margin: 0 auto;
+    color: #fff; /* normal content in white */
   }
 
   .production {
     margin: 30px 0;
     padding: 15px;
-    border: 1px solid #0f0;
+    border: 1px solid #00f; /* blue border */
     background-color: #000;
     opacity: 0;
     transform: translateY(20px);
     transition: opacity 1s ease, transform 1s ease;
+  }
+
+  .production h2, .production p {
+    color: #00f; /* keep blue text inside production boxes */
   }
 
   img, video {
@@ -53,7 +63,7 @@
     opacity: 0;
     transform: translateY(15px);
     transition: opacity 1s ease, transform 1s ease;
-    border: 1px solid #0f0;
+    border: 1px solid #00f;
     border-radius: 5px;
   }
 
@@ -70,14 +80,14 @@
 <div id="loginContainer">
   <div class="terminal-line">Login:</div>
   <div class="terminal-line">
-    <input type="password" id="passwordInput" autofocus>
+    <input type="password" id="passwordInput" autofocus placeholder="Enter password">
   </div>
   <audio id="wrongAudio" src="wrong-password-sound.mp3" preload="auto"></audio>
 </div>
 
 <!-- HIDDEN CONTENT -->
 <div id="content">
-  <h1 style="color:#0f0;">Welcome to Brandon Smart's Portfolio</h1>
+  <h1>Welcome to Brandon Smart's Portfolio</h1>
 
   <!-- GIF -->
   <img src="your-gif.gif" alt="Animated GIF">
@@ -117,7 +127,7 @@
   const content = document.getElementById('content');
   const wrongAudio = document.getElementById('wrongAudio');
 
-  const correctPassword = 'mrsmart'; // <-- replace with actual password
+  const correctPassword = 'mrsmart'; // actual password
 
   passwordInput.addEventListener('keypress', function(e){
     if(e.key === 'Enter'){
