@@ -292,14 +292,20 @@ loginBtn.addEventListener('click', () => {
       { duration: 320, iterations: 1 }
     );
 
-    // show fullscreen fail GIF
-    const wrongGif = document.getElementById('wrongGifOverlay');
-    wrongGif.style.display = 'flex';
+// show fullscreen fail GIF and play audio
+const wrongGif = document.getElementById('wrongGifOverlay');
+const wrongAudio = document.getElementById('wrongAudio');
 
-    // hide after 3 seconds
-    setTimeout(() => { wrongGif.style.display = 'none'; }, 3000);
-  }
-});
+wrongGif.style.display = 'flex';
+wrongAudio.currentTime = 0;
+wrongAudio.play();
+
+// hide after GIF duration (adjust 3000 to your GIF length in ms)
+setTimeout(() => {
+  wrongGif.style.display = 'none';
+  wrongAudio.pause();
+}, 3000);
+
 
 loginPass.addEventListener('keydown', (e)=>{ if(e.key === 'Enter') loginBtn.click(); });
 
@@ -483,9 +489,13 @@ function rotateQuotes(){
 </script>
 <!-- Wrong Password GIF Overlay -->
 <div id="wrongGifOverlay" style="display:none; position:fixed; inset:0; justify-content:center; align-items:center; background: rgba(0,0,0,0.85); z-index:1500;">
-  <img src="images/Glitch Coding GIF by Squirrel Monkey.gif" alt="Wrong Password GIF" style="width:100%; height:100%; object-fit:cover;">
+  <img src="images/glitch net art GIF by Nico Roxe.gif" alt="Wrong Password GIF" style="width:100%; height:100%; object-fit:cover;">
 </div>
-
+  
+<!-- Add audio here -->
+<audio id="wrongAudio" src="sounds/Welcome to the Game - Hacking Alert.mp3" preload="auto"></audio>
+  
 </body>
 </html>
+
 
