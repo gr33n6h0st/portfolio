@@ -301,12 +301,27 @@ loginBtn.addEventListener('click', () => {
     );
 
     wrongGif.style.display = 'flex';
-    wrongAudio.currentTime = 0;
-    wrongAudio.play().catch(()=>{});
-    setTimeout(() => {
-      wrongGif.style.display = 'none';
-      wrongAudio.pause();
-    }, 2200);
+
+// Make sure the audio is unmuted and volume is normal
+wrongAudio.muted = false;
+wrongAudio.volume = 1;
+
+// Stop any current playback and reset to start
+wrongAudio.pause();
+wrongAudio.currentTime = 0;
+
+// Attempt to play and log errors
+wrongAudio.play().catch(err => {
+  console.error('Failed to play wrong password audio:', err);
+});
+
+// Hide the GIF after 2.2s
+setTimeout(() => {
+  wrongGif.style.display = 'none';
+  // Pause only if it's still playing
+  if (!wrongAudio.paused) wrongAudio.pause();
+}, 2200);
+
   }
 });
 
@@ -416,5 +431,6 @@ function rotateQuotes(){
 </script>
 </body>
 </html>
+
 
 
