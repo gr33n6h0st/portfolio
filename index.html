@@ -323,16 +323,19 @@ function handleLogin() {
     loginAudioCorrect.currentTime = 0;
     loginAudioCorrect.play().catch(err => console.error('Audio failed:', err));
 
+    // Show HUD immediately, even while GIF plays
+    loginOverlay.style.display = 'none';
+    document.getElementById('cornerGlobe').style.display = 'block';
+    const hud = document.getElementById('hud');
+    hud.style.opacity = '1';
+    hud.style.visibility = 'visible';
+    startHud();
+    rotateQuotes();
+    updateLocationWeather();
+
+    // Hide GIF after 4s
     setTimeout(() => {
       correctGif.style.display = 'none';
-      loginOverlay.style.display = 'none';
-      document.getElementById('cornerGlobe').style.display = 'block';
-      const hud = document.getElementById('hud');
-      hud.style.opacity = '1';
-      hud.style.visibility = 'visible';
-      startHud();
-      rotateQuotes();
-      updateLocationWeather();
     }, 4000);
 
   } else {
@@ -350,6 +353,7 @@ function handleLogin() {
     }, 3000);
   }
 }
+
 
 // Click button
 loginBtn.addEventListener('click', handleLogin);
