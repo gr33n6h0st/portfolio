@@ -193,6 +193,7 @@ a:hover{color:var(--hover);}
 }
 
 /* Gridline overlay for tech/HUD look */
+/* Gridline overlay for tech/HUD look with pulse */
 .panel::before {
   content: "";
   position: absolute;
@@ -201,48 +202,24 @@ a:hover{color:var(--hover);}
   background: repeating-linear-gradient(0deg, rgba(0,255,255,0.05), rgba(0,255,255,0.05) 1px, transparent 1px, transparent 8px),
               repeating-linear-gradient(90deg, rgba(0,255,255,0.05), rgba(0,255,255,0.05) 1px, transparent 1px, transparent 8px);
   pointer-events: none;
+  transform: rotateZ(0deg);
+  animation: gridPulse 2.5s ease-in-out infinite, gridRotate 10s linear infinite;
 }
 
-/* Holographic fly-in animation */
-@keyframes hudFlyIn {
-  0% {
-    opacity: 0;
-    transform: scale(0.8) perspective(600px) rotateX(15deg);
-    filter: drop-shadow(0 0 20px var(--neon));
+@keyframes gridPulse {
+  0%, 100% {
+    opacity: 0.05;
+    box-shadow: 0 0 8px rgba(0, 229, 255, 0.1);
   }
   50% {
-    opacity: 0.6;
-    transform: scale(1.05) perspective(600px) rotateX(0deg);
-    filter: drop-shadow(0 0 40px var(--neon));
-  }
-  100% {
-    opacity: 1;
-    transform: scale(1) perspective(600px) rotateX(0deg);
-    filter: drop-shadow(0 0 10px var(--neon));
+    opacity: 0.12;
+    box-shadow: 0 0 20px rgba(0, 229, 255, 0.25);
   }
 }
 
-.panel.fly-in {
-  animation: hudFlyIn 0.6s ease-out forwards;
-  transform-origin: center center;
-}
-
-/* Staggered child elements fade-in (kept from original) */
-.panel.show > * {
-  opacity: 0;
-  transform: translateY(20px);
-  animation: fadeUp 0.5s forwards;
-}
-.panel.show > *:nth-child(1) { animation-delay: 0.1s; }
-.panel.show > *:nth-child(2) { animation-delay: 0.2s; }
-.panel.show > *:nth-child(3) { animation-delay: 0.3s; }
-.panel.show > *:nth-child(4) { animation-delay: 0.4s; }
-
-@keyframes fadeUp {
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+@keyframes gridRotate {
+  0% { transform: rotateZ(0deg); }
+  100% { transform: rotateZ(1deg); }
 }
 
 
@@ -616,6 +593,7 @@ function rotateQuotes(){
 
 </body>
 </html>
+
 
 
 
