@@ -12,7 +12,6 @@
 <style>
 :root{
   --neon: #00e5ff;
-  --bg-dark: #030305;
   --panel: rgba(10,12,15,0.9);
   --hover: #00ffb3;
   --hud-w: 260px;
@@ -115,7 +114,7 @@ a:hover{color:var(--hover);}
   <div class="container">
     <div class="leftCol">
       <div class="headerTitle">Navigation</div>
-      <div class="navItem" data-panel="panel1">Terminal</div>
+      <div class="navItem" data-panel="panel1">Panel 1</div>
       <div class="navItem" data-panel="panel2">Panel 2</div>
       <div class="navItem" data-panel="panel3">Panel 3</div>
     </div>
@@ -124,12 +123,8 @@ a:hover{color:var(--hover);}
         <div id="reflectionText">Welcome to the terminal <span class="cursor"></span></div>
         <div class="productionsGrid" id="productionsGrid"></div>
       </div>
-      <div id="panel2" class="panel">
-        <div>Your actual Panel 2 content here</div>
-      </div>
-      <div id="panel3" class="panel">
-        <div>Your actual Panel 3 content here</div>
-      </div>
+      <div id="panel2" class="panel"><div>Panel 2 content</div></div>
+      <div id="panel3" class="panel"><div>Panel 3 content</div></div>
       <div class="quoteBox" id="quoteBox"></div>
     </div>
   </div>
@@ -145,12 +140,12 @@ a:hover{color:var(--hover);}
   </div>
 </div>
 
-<!-- Wrong Password GIF -->
+<!-- Wrong Password GIF Overlay -->
 <div id="gifOverlay" style="display:none; position:fixed; inset:0; justify-content:center; align-items:center; background:#000; z-index:1500;">
   <img src="images/Blue Screen Art GIF by Pi-Slices.gif" alt="Wrong Password GIF" style="width:100%; height:100%; object-fit:cover;">
 </div>
 
-<!-- Correct Password GIF -->
+<!-- Correct Password GIF Overlay -->
 <div id="correctGifOverlay" style="display:none; position:fixed; inset:0; justify-content:center; align-items:center; background:#000; z-index:1500;">
   <img src="images/enter_screen_gif.gif" alt="Access Granted GIF" style="width:100%; height:100%; object-fit:cover;">
 </div>
@@ -176,7 +171,6 @@ const quotes = [
   "Technology meets creativity."
 ];
 
-/* ------------------ Login ------------------ */
 const loginOverlay = document.getElementById('loginOverlay');
 const loginBtn = document.getElementById('loginBtn');
 const loginPass = document.getElementById('loginPass');
@@ -186,43 +180,48 @@ const loginAudioCorrect = document.getElementById('loginAudioCorrect');
 const loginAudioWrong = document.getElementById('loginAudioWrong');
 const hud = document.getElementById('hud');
 const globe = document.getElementById('cornerGlobe');
+const productionsGrid = document.getElementById('productionsGrid');
+const lightbox = document.getElementById('lightbox');
+const lbImage = document.getElementById('lbImage');
+let lbIndex = 0;
+let quoteIndex = 0;
 
+/* ------------------ Login ------------------ */
 function handleLogin() {
-  const v = (loginPass.value||'').trim();
-  if(v==='mrsmart'){
+  const v = (loginPass.value || '').trim();
+  if(v === 'mrsmart'){
     correctGif.style.display='flex';
     loginAudioCorrect.currentTime=0;
-    loginAudioCorrect.play().catch(err=>console.error(err));
+    loginAudioCorrect.play().catch(e=>console.error(e));
     loginOverlay.style.display='none';
     globe.style.display='block';
     hud.style.opacity='1';
     hud.style.visibility='visible';
     startHud();
-    updateWeather();
     rotateQuote();
+    updateWeather();
     renderProductions();
     setTimeout(()=>{correctGif.style.display='none';},4000);
-  }else{
+  } else {
     wrongGif.style.display='flex';
     loginAudioWrong.currentTime=0;
-    loginAudioWrong.play().catch(err=>console.error(err));
+    loginAudioWrong.play().catch(e=>console.error(e));
     setTimeout(()=>{wrongGif.style.display='none';},3000);
   }
 }
-loginBtn.addEventListener('click',handleLogin);
-loginPass.addEventListener('keyup',e=>{if(e.key==='Enter') handleLogin();});
+loginBtn.addEventListener('click', handleLogin);
+loginPass.addEventListener('keyup', e=>{ if(e.key==='Enter') handleLogin(); });
 
 /* ------------------ Panels ------------------ */
 document.querySelectorAll('.navItem').forEach(item=>{
   item.addEventListener('click',()=>{
-    const panelId = item.getAttribute('data-panel');
+    const panelId=item.getAttribute('data-panel');
     document.querySelectorAll('.panel').forEach(p=>p.classList.remove('show'));
     document.getElementById(panelId).classList.add('show');
   });
 });
 
 /* ------------------ Quotes ------------------ */
-let quoteIndex=0;
 function rotateQuote(){
   const box=document.getElementById('quoteBox');
   box.textContent=quotes[quoteIndex];
@@ -243,9 +242,9 @@ function startHud(){
 
 /* ------------------ Weather ------------------ */
 function updateWeather(){
-  if(!navigator.geolocation) return;
+  if(!navigator.geolocation)return;
   navigator.geolocation.getCurrentPosition(pos=>{
-    const {latitude,longitude}=pos.coords;
+    const {latitude, longitude}=pos.coords;
     document.getElementById('hud-coords-text').textContent=`${latitude.toFixed(2)}, ${longitude.toFixed(2)}`;
     fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=${OWM_API_KEY}&units=metric`)
       .then(r=>r.json())
@@ -256,12 +255,7 @@ function updateWeather(){
   });
 }
 
-/* ------------------ Productions Grid + Lightbox ------------------ */
-const productionsGrid = document.getElementById('productionsGrid');
-const lightbox = document.getElementById('lightbox');
-const lbImage = document.getElementById('lbImage');
-let lbIndex=0;
-
+/* ------------------ Productions + Lightbox ------------------ */
 function renderProductions(){
   productionsGrid.innerHTML='';
   PROD1_IMAGES.forEach((src,i)=>{
@@ -273,23 +267,11 @@ function renderProductions(){
   });
 }
 
-function openLightbox(i){
-  lbIndex=i;
-  lbImage.src=PROD1_IMAGES[lbIndex];
-  lightbox.style.display='flex';
-}
-
+function openLightbox(i){ lbIndex=i; lbImage.src=PROD1_IMAGES[lbIndex]; lightbox.style.display='flex'; }
 function closeLightbox(){ lightbox.style.display='none'; }
-
 document.getElementById('lbClose').addEventListener('click',closeLightbox);
-document.getElementById('lbPrev').addEventListener('click',()=>{
-  lbIndex=(lbIndex-1+PROD1_IMAGES.length)%PROD1_IMAGES.length;
-  lbImage.src=PROD1_IMAGES[lbIndex];
-});
-document.getElementById('lbNext').addEventListener('click',()=>{
-  lbIndex=(lbIndex+1)%PROD1_IMAGES.length;
-  lbImage.src=PROD1_IMAGES[lbIndex];
-});
+document.getElementById('lbPrev').addEventListener('click',()=>{ lbIndex=(lbIndex-1+PROD1_IMAGES.length)%PROD1_IMAGES.length; lbImage.src=PROD1_IMAGES[lbIndex]; });
+document.getElementById('lbNext').addEventListener('click',()=>{ lbIndex=(lbIndex+1)%PROD1_IMAGES.length; lbImage.src=PROD1_IMAGES[lbIndex]; });
 </script>
 </body>
 </html>
