@@ -359,10 +359,17 @@ document.querySelectorAll('.navItem').forEach(el=>el.addEventListener('click',()
 /* ------------------ Reflection typing ------------------ */
 const reflectionEl = document.getElementById('reflectionText');
 const reflections = [
-  "Exploring the convergence of tech and human creativity.",
-  "Reflecting on my journey through coding and design.",
-  "Learning new literacies every day."
+  `Building this site has been a deep learning experience. As I create and structure each section, I notice how I interact differently with coding tools, the browser, and design interfaces compared to traditional classroom learning. 
+Using HTML, CSS, and JavaScript forces me to think in terms of both logic and aesthetics, balancing functionality with appearance. The immediate feedback from the browser—seeing changes live, debugging errors, and watching animations or interactive elements respond—helps me internalize what works and what doesn’t. 
+AI tools have been critical as a guide; they suggest code optimizations, point out mistakes, and sometimes give creative alternatives. 
+
+I also consult online documentation, tutorials, and forums, and occasionally local communities of developers and students to see how they approach similar challenges. These resources, combined with AI guidance, create a learning loop: I try, I get feedback, I adjust, and I reflect. During the process, my emotions fluctuate—frustration appears when things break unexpectedly, curiosity drives me to experiment, and satisfaction comes from solving problems or achieving a visual effect I envisioned. 
+The moment-to-moment learning differs from typical school exercises; it’s hands-on, iterative, and self-directed. There’s no prescribed path; success is measured by functioning code and the coherence of the site itself rather than grades.
+
+Compared to prior learning experiences in school or workshops, this project requires simultaneous attention to multiple layers—technical, visual, and conceptual—making the process more holistic and immersive. Every design decision, from color choices to layout structure, is both a learning opportunity and an expression of creativity. 
+The site acts as both a canvas and a feedback mechanism, reflecting my progress, mistakes, and growth in real time. Overall, the experience emphasizes experimentation, problem-solving, and reflection in ways that are more self-directed, interactive, and personally meaningful than traditional learning environments.`
 ];
+
 let typingTimer = null;
 function typeReflection(text){
   if(typingTimer) clearInterval(typingTimer);
@@ -415,6 +422,7 @@ function rotateQuotes(){
 
 </body>
 </html>
+
 
 
 
