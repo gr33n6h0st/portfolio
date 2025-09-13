@@ -314,8 +314,6 @@ const wrongGif = document.getElementById('gifOverlay');
 const wrongAudio = document.getElementById('loginAudioWrong');
 
 
-loginPass.addEventListener('keydown', e => { if(e.key==='Enter') loginBtn.click(); });
-
 loginBtn.addEventListener('click', () => {
   const v = (loginPass.value || '').trim();
 
@@ -326,8 +324,7 @@ loginBtn.addEventListener('click', () => {
     // ✅ Correct password
     loginOverlay.style.display = 'none';
     const correctGif = document.getElementById('correctGifOverlay');
-    correctGif.style.display = 'flex';
-    correctGif.style.opacity = '1';
+    correctGif.style.display = 'flex'; // show instantly
 
     loginAudioCorrect.muted = false;
     loginAudioCorrect.volume = 0.7;
@@ -336,26 +333,20 @@ loginBtn.addEventListener('click', () => {
     loginAudioCorrect.play().catch(err => console.error('Audio failed:', err));
 
     setTimeout(() => {
-      correctGif.style.transition = 'opacity 1s ease';
-      correctGif.style.opacity = '0';
-
-      setTimeout(() => {
-        correctGif.style.display = 'none';
-        document.getElementById('cornerGlobe').style.display = 'block';
-        const hud = document.getElementById('hud');
-        hud.style.opacity = '1';
-        hud.style.visibility = 'visible';
-        startHud();
-        rotateQuotes();
-        updateLocationWeather();
-      }, 1000);
-    }, 4000);
+      correctGif.style.display = 'none'; // hide instantly
+      document.getElementById('cornerGlobe').style.display = 'block';
+      const hud = document.getElementById('hud');
+      hud.style.opacity = '1';
+      hud.style.visibility = 'visible';
+      startHud();
+      rotateQuotes();
+      updateLocationWeather();
+    }, 4000); // keeps GIF on screen 4 seconds
 
   } else {
     // ❌ Wrong password
     const wrongGif = document.getElementById('gifOverlay');
-    wrongGif.style.display = 'flex';
-    wrongGif.style.opacity = '1';
+    wrongGif.style.display = 'flex'; // show instantly
 
     loginAudioWrong.muted = false;
     loginAudioWrong.volume = 0.7;
@@ -364,12 +355,11 @@ loginBtn.addEventListener('click', () => {
     loginAudioWrong.play().catch(err => console.error('Audio failed:', err));
 
     setTimeout(() => {
-      wrongGif.style.transition = 'opacity 1s ease';
-      wrongGif.style.opacity = '0';
-      setTimeout(() => { wrongGif.style.display = 'none'; }, 1000);
+      wrongGif.style.display = 'none'; // hide instantly after 3 seconds
     }, 3000);
   }
 });
+
  // <-- closes the loginBtn.addEventListener
 
 
