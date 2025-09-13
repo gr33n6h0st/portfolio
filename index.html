@@ -108,7 +108,7 @@ a:hover{color:var(--hover);}
 </div>
 
 <!-- Globe -->
-<img id="cornerGlobe" src="images/globe.gif" alt="Globe" />
+<img id="cornerGlobe" src="images/globe.gif" alt="Globe" style="display:none;" />
 
 <!-- MAIN -->
 <main id="main">
@@ -264,9 +264,7 @@ function renderProductions() {
     const card = document.createElement('div');
     card.classList.add('prodCard');
     card.innerHTML = `<h3>Screenshot ${i+1}</h3>`;
-    card.addEventListener('click',()=>{
-      openLightbox(i);
-    });
+    card.addEventListener('click',()=>{ openLightbox(i); });
     productionsGrid.appendChild(card);
   });
 }
