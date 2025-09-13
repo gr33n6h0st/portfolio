@@ -265,6 +265,12 @@ const loginOverlay = document.getElementById('loginOverlay');
 const loginBtn = document.getElementById('loginBtn');
 const loginPass = document.getElementById('loginPass');
 
+// Trigger login on Enter key
+loginPass.addEventListener('keydown', (e) => {
+  if (e.key === 'Enter') loginBtn.click();
+});
+
+
 function unlockSite() {
   loginOverlay.style.display = 'none';
   document.getElementById('hud').style.opacity = '1';
@@ -298,16 +304,14 @@ const wrongAudio = document.getElementById('wrongAudio');
 
 wrongGif.style.display = 'flex';
 wrongAudio.currentTime = 0;
-wrongAudio.play();
+wrongAudio.play().catch(() => {}); // prevents browser errors if autoplay blocked
 
-// hide after GIF duration (adjust 3000 to your GIF length in ms)
+// hide after 3 seconds
 setTimeout(() => {
   wrongGif.style.display = 'none';
   wrongAudio.pause();
 }, 3000);
 
-
-loginPass.addEventListener('keydown', (e)=>{ if(e.key === 'Enter') loginBtn.click(); });
 
 /* ------------------ HUD ------------------ */
 const hudDate = document.getElementById('hud-date');
@@ -497,5 +501,6 @@ function rotateQuotes(){
   
 </body>
 </html>
+
 
 
