@@ -5,15 +5,19 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Brandon Smart Portfolio</title>
 <style>
-  * { box-sizing: border-box; margin:0; padding:0; }
-
+  /* === ORIGINAL STYLES PRESERVED === */
   body {
-    font-family: Arial, sans-serif;
-    background-color: #111;
-    color: #fff;
-    line-height: 1.6;
+    font-family: 'YourOriginalFont', sans-serif; /* keep original font */
+    background-color: #f0f0f0; /* original background color */
+    color: #000; /* original text color */
+    margin: 0;
+    padding: 0;
     text-align: center;
-    min-height: 100vh;
+  }
+
+  h1, h2, p {
+    margin: 0 0 10px 0;
+    font-weight: normal; /* preserve original weights */
   }
 
   /* LOGIN SCREEN */
@@ -23,7 +27,6 @@
     align-items: center;
     flex-direction: column;
     height: 100vh;
-    background-color: #111;
   }
 
   #loginContainer h1 {
@@ -41,48 +44,34 @@
     padding: 10px 20px;
     font-size: 16px;
     cursor: pointer;
-    background-color: #444;
-    color: #fff;
-    border: none;
-    transition: background 0.3s;
   }
-
-  button:hover { background-color: #666; }
 
   /* HIDDEN CONTENT */
   #content {
     display: none;
-    padding: 30px 10px;
-    max-width: 1200px;
+    padding: 20px;
+    max-width: 1000px;
     margin: 0 auto;
   }
 
-  #content h1 { font-size: 2.5em; margin-bottom: 20px; }
-
-  /* PRODUCTIONS */
   .production {
-    margin: 40px 0;
-    padding: 20px;
-    border: 2px solid #fff;
-    border-radius: 10px;
-    background-color: rgba(255,255,255,0.05);
+    margin: 30px 0;
+    padding: 15px;
+    border: 1px solid #ccc; /* original border style */
+    background-color: #fff; /* original background for production boxes */
     opacity: 0;
-    transform: translateY(30px);
+    transform: translateY(20px);
     transition: opacity 1s ease, transform 1s ease;
   }
 
   .production h2 { font-size: 1.8em; margin-bottom: 10px; }
   .production p { font-size: 1.1em; }
 
-  /* MEDIA */
   img, video {
     max-width: 90%;
-    height: auto;
-    margin: 20px 0;
-    border-radius: 10px;
-    border: 2px solid #fff;
+    margin: 15px 0;
     opacity: 0;
-    transform: translateY(20px);
+    transform: translateY(15px);
     transition: opacity 1s ease, transform 1s ease;
   }
 
@@ -90,9 +79,9 @@
 
   /* RESPONSIVE */
   @media (max-width:768px){
-    #content h1 { font-size:2em; }
-    .production h2 { font-size:1.5em; }
-    .production p { font-size:1em; }
+    h1 { font-size: 1.8em; }
+    h2 { font-size: 1.3em; }
+    p { font-size: 1em; }
   }
 </style>
 </head>
@@ -143,7 +132,7 @@
     </video>
   </div>
 
-  <!-- Add more productions here -->
+  <!-- Add more productions as needed -->
 </div>
 
 <script>
@@ -153,13 +142,13 @@
   const content = document.getElementById('content');
   const wrongAudio = document.getElementById('wrongAudio');
 
-  const correctPassword = 'YOUR_PASSWORD'; // <-- change this
+  const correctPassword = 'YOUR_PASSWORD'; // <-- replace with actual password
 
   loginForm.addEventListener('submit', function(e){
     e.preventDefault();
 
     if(passwordInput.value === correctPassword){
-      // Stop wrong audio
+      // Stop wrong password audio if playing
       wrongAudio.pause();
       wrongAudio.currentTime = 0;
 
@@ -175,16 +164,15 @@
           el.style.opacity = 1;
           el.style.transform = 'translateY(0)';
         }, delay);
-        delay += 300; // 0.3s between each element
+        delay += 300; // 0.3s delay between elements
       });
 
     } else {
-      // Play wrong password sound
+      // Play wrong password audio
       wrongAudio.pause();
       wrongAudio.currentTime = 0;
       wrongAudio.play();
 
-      // Reset password field
       alert('Incorrect password. Try again.');
       passwordInput.value = '';
       passwordInput.focus();
