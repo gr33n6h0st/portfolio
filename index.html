@@ -172,6 +172,48 @@ a:hover{color:var(--hover);}
 
 /* responsive */
 @media (max-width:980px){ .container{flex-direction:column;} .leftCol{width:100%; order:2;} .rightCol{order:1;} #hud{left:10px; top:8px; } }
+
+/* FUTURISTIC HUD PANEL FLY-IN */
+@keyframes flyInPanel {
+  0% {
+    opacity: 0;
+    transform: translateY(-50px) skewY(8deg) rotateX(20deg) scale(0.85);
+  }
+  60% {
+    opacity: 1;
+    transform: translateY(10px) skewY(3deg) rotateX(7deg) scale(1.03);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) skewY(0) rotateX(0) scale(1);
+  }
+}
+
+.panel.fly-in {
+  animation: flyInPanel 0.7s ease-out forwards;
+  transform-origin: top center;
+}
+
+/* stagger child elements */
+.panel.show > * {
+  opacity: 0;
+  transform: translateY(20px);
+  animation: fadeUp 0.5s forwards;
+}
+
+.panel.show > *:nth-child(1) { animation-delay: 0.1s; }
+.panel.show > *:nth-child(2) { animation-delay: 0.2s; }
+.panel.show > *:nth-child(3) { animation-delay: 0.3s; }
+.panel.show > *:nth-child(4) { animation-delay: 0.4s; }
+
+@keyframes fadeUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+
 </style>
 </head>
 <body>
@@ -299,24 +341,19 @@ const loginOverlay = document.getElementById('loginOverlay');
 const loginBtn = document.getElementById('loginBtn');
 const loginPass = document.getElementById('loginPass');
 const wrongGif = document.getElementById('wrongGifOverlay');
-const wrongAudio = document.getElementById('wrongAudio');
+const loginAudioCorrect = document.getElementById('loginAudioCorrect');
+const loginAudioWrong = document.getElementById('loginAudioWrong');
 
+loginPass.focus();
 loginPass.addEventListener('keydown', e => { if(e.key==='Enter') loginBtn.click(); });
 
 loginBtn.addEventListener('click', () => {
   const v = (loginPass.value || '').trim();
 
-  const loginAudioCorrect = document.getElementById('loginAudioCorrect');
-  const loginAudioWrong = document.getElementById('loginAudioWrong');
-
   if (v === 'mrsmart') {
-    // Hide login overlay
     loginOverlay.style.display = 'none';
-
-    // Show the globe after login
     document.getElementById('cornerGlobe').style.display = 'block';
 
-    // Show HUD
     const hud = document.getElementById('hud');
     hud.style.opacity = '1';
     hud.style.visibility = 'visible';
@@ -324,44 +361,35 @@ loginBtn.addEventListener('click', () => {
     rotateQuotes();
     updateLocationWeather();
 
-    // Play correct login audio
     loginAudioCorrect.muted = false;
     loginAudioCorrect.volume = 0.7;
-    loginAudioCorrect.pause();
     loginAudioCorrect.currentTime = 0;
     loginAudioCorrect.play().catch(err => console.error('Audio failed:', err));
 
   } else {
-    // Reset input
     loginPass.value = '';
     loginPass.placeholder = 'Incorrect — try again';
     loginPass.focus();
 
-    // Shake animation
     loginOverlay.animate([
       { transform: 'translateX(-2px)' },
       { transform: 'translateX(2px)' },
       { transform: 'translateX(0)' }
     ], { duration: 120, iterations: 3 });
 
-    // Show wrong password GIF
     wrongGif.style.display = 'flex';
 
-    // Play wrong login audio
     loginAudioWrong.muted = false;
     loginAudioWrong.volume = 0.7;
-    loginAudioWrong.pause();
     loginAudioWrong.currentTime = 0;
     loginAudioWrong.play().catch(err => console.error('Audio failed:', err));
 
-    // Hide GIF after 2.2s
     setTimeout(() => {
       wrongGif.style.display = 'none';
       if (!loginAudioWrong.paused) loginAudioWrong.pause();
     }, 2200);
   }
 });
-
 
 /* ------------------ HUD (time/date) ------------------ */
 function startHud(){
@@ -405,9 +433,35 @@ function updateLocationWeather(){
 }
 
 /* ------------------ Panels ------------------ */
-function openPanel(id){ document.querySelectorAll('.panel').forEach(p=>p.classList.remove('show')); document.getElementById(id).classList.add('show'); }
-function closePanel(id){ document.getElementById(id).classList.remove('show'); }
-document.querySelectorAll('.navItem').forEach(el=>el.addEventListener('click',()=>openPanel(el.getAttribute('aria-controls'))));
+function openPanel(id){
+  document.querySelectorAll('.panel').forEach(p=>{
+    p.classList.remove('show','fly-in');
+  });
+
+  const panel = document.getElementById(id);
+  panel.classList.add('show','fly-in');
+
+  if(id==='refPanel'){
+    typeReflection(reflections[0]);
+  }
+}
+
+function closePanel(id){
+  const panel = document.getElementById(id);
+  panel.classList.remove('show','fly-in');
+
+  if(id === 'refPanel'){
+    if(typingTimer) clearInterval(typingTimer);
+    typingTimer = null;
+    window.speechSynthesis.cancel();
+  }
+}
+
+document.querySelectorAll('.navItem').forEach(el=>{
+  el.addEventListener('click',()=>{
+    openPanel(el.getAttribute('aria-controls'));
+  });
+});
 
 /* ------------------ Reflection typing ------------------ */
 const reflectionEl = document.getElementById('reflectionText');
@@ -444,28 +498,12 @@ function typeReflection(text){
   }, 35);
 }
 
-document.getElementById('navRef').addEventListener('click', () => {
-  typeReflection(reflections[0]); // always use your 350-word blurb
-});
-
-/* ------------------ Stop Reflection when panel closes ------------------ */
-function closePanel(id){
-  const panel = document.getElementById(id);
-  panel.classList.remove('show');
-
-  if(id === 'refPanel'){
-    if(typingTimer) clearInterval(typingTimer);
-    typingTimer = null;
-    window.speechSynthesis.cancel(); // stops the voice immediately
-  }
-}
-
-
 /* ------------------ Productions Lightbox ------------------ */
 const productionImagesMap={0:PROD1_IMAGES};
 let currImages=[],currIndex=0;
 const lb=document.getElementById('lightbox');
 const lbImg=document.getElementById('lbImage');
+
 document.querySelectorAll('.prodCard').forEach(card=>{
   card.addEventListener('click',()=>{
     const idx=card.dataset.index;
@@ -474,8 +512,17 @@ document.querySelectorAll('.prodCard').forEach(card=>{
     currIndex=0; lbImg.src=currImages[currIndex]; lb.style.display='flex';
   });
 });
-document.getElementById('lbPrev').addEventListener('click',()=>{if(!currImages.length)return; currIndex=(currIndex-1+currImages.length)%currImages.length; lbImg.src=currImages[currIndex];});
-document.getElementById('lbNext').addEventListener('click',()=>{if(!currImages.length)return; currIndex=(currIndex+1)%currImages.length; lbImg.src=currImages[currIndex];});
+
+document.getElementById('lbPrev').addEventListener('click',()=>{
+  if(!currImages.length) return;
+  currIndex=(currIndex-1+currImages.length)%currImages.length;
+  lbImg.src=currImages[currIndex];
+});
+document.getElementById('lbNext').addEventListener('click',()=>{
+  if(!currImages.length) return;
+  currIndex=(currIndex+1)%currImages.length;
+  lbImg.src=currImages[currIndex];
+});
 document.getElementById('lbClose').addEventListener('click',()=>{lb.style.display='none';});
 
 /* ------------------ Quotes rotation ------------------ */
@@ -504,6 +551,7 @@ function rotateQuotes(){
 
 </body>
 </html>
+
 
 
 
