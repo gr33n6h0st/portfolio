@@ -1,225 +1,178 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Hello World - Brandon Smart's Portfolio</title>
-
-<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Brandon Smart Portfolio</title>
 <style>
-:root{
-  --neon: #00e5ff;
-  --bg-dark: #030305;
-  --panel: rgba(10,12,15,0.9);
-  --hover: #00ffb3;
-  --hud-w: 260px;
-}
-*{box-sizing:border-box}
-html,body{height:100%;margin:0;font-family:'Share Tech Mono',monospace;background:linear-gradient(180deg,#020203,#07080a);color:var(--neon);}
-a{color:var(--neon);text-decoration:none;transition: color .18s;}
-a:hover{color:var(--hover);}
-.scanlines{pointer-events:none;position:fixed;inset:0;z-index:40;background:repeating-linear-gradient(to bottom, rgba(0,229,255,0.03) 0px, rgba(0,229,255,0.03) 1px, transparent 1px, transparent 3px);opacity:0.12;}
-#cornerGlobe{display:none;position:fixed;top:12px;right:12px;width:120px;height:auto;z-index:2000;pointer-events:none;border-radius:50%;}
-#loginOverlay{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background: rgba(0,0,0,0.98);z-index:1200;}
-.login-card{width:380px;padding:28px;border-radius:14px;background: linear-gradient(135deg, rgba(0,229,255,0.04), rgba(0,102,153,0.03));border:1px solid rgba(0,229,255,0.12);text-align:center;box-shadow:0 18px 60px rgba(0,0,0,0.7), inset 0 0 14px rgba(0,229,255,0.02);}
-.login-card h1{margin:0 0 12px;font-size:20px;}
-.login-input{width:100%;padding:12px 14px;border-radius:999px;border:1px solid rgba(0,229,255,0.12);background: rgba(0,0,0,0.45);color:var(--neon);outline:none;font-size:14px;}
-.login-actions{margin-top:14px;display:flex;justify-content:center;gap:12px;}
-.btn-primary{padding:10px 20px;border-radius:999px;border:none;cursor:pointer;background:linear-gradient(135deg,var(--neon),#00bfff);color:#081018;font-weight:700;}
-.login-sub{margin-top:10px;font-size:13px;color:rgba(0,229,255,0.7);}
-#hud{position:fixed;left:18px;top:12px;width:var(--hud-w);background:linear-gradient(180deg, rgba(0,0,0,0.55), rgba(0,0,0,0.35));border-radius:10px;padding:10px 12px;border:1px solid rgba(0,229,255,0.06);box-shadow:0 8px 40px rgba(0,0,0,0.6);font-size:13px;opacity:0;visibility:hidden;z-index:1100;}
-.hud-row{display:flex;gap:8px;align-items:center;}
-#main{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;padding:120px 28px 40px;z-index:500;}
-.container{max-width:1100px;width:100%;display:flex;gap:28px;align-items:flex-start;margin:0 auto;}
-.leftCol{width:320px;display:flex;flex-direction:column;gap:18px;align-items:flex-start;}
-.headerTitle{font-size:18px;margin-bottom:8px;}
-.navItem{width:100%;padding:16px 14px;border-radius:12px;cursor:pointer;background: linear-gradient(180deg, rgba(10,12,14,0.6), rgba(18,20,22,0.55));border:1px solid rgba(0,229,255,0.04);font-weight:700;transition: all .18s ease;}
-.navItem:hover{background: linear-gradient(180deg, var(--neon), #00bfff);color:#00111b;transform:translateY(-4px);box-shadow:0 16px 40px rgba(0,229,255,0.06);}
-.rightCol{flex:1;min-height:400px;}
-.panel{display:none;position:relative;z-index:1150;max-height:70vh;overflow:auto;border-radius:12px;padding:20px;background:var(--panel);border:1px solid rgba(0,229,255,0.04);box-shadow:0 20px 60px rgba(0,0,0,0.7);}
-.panel.show{display:block;}
-.backBtn{margin-top:12px;padding:8px 12px;border-radius:8px;background:transparent;border:1px solid rgba(0,229,255,0.06);color:var(--neon);cursor:pointer;}
-.backBtn:hover{background:rgba(0,229,255,0.06);color:#001018;}
-#reflectionText{white-space:pre-wrap;font-size:14px;color:rgba(0,229,255,0.95);}
-.cursor{display:inline-block;width:10px;margin-left:6px;background:var(--neon);animation:blink 1s steps(2) infinite;vertical-align:middle;}
-@keyframes blink{0%,50%{opacity:1}51%,100%{opacity:0}}
-.productionsGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;}
-.prodCard{padding:16px;border-radius:10px;border:1px solid rgba(0,229,255,0.05);background: linear-gradient(180deg, rgba(0,0,0,0.5), rgba(12,12,14,0.35));cursor:pointer;transition: all .18s ease;}
-.prodCard h3{margin:0 0 6px;font-size:15px;}
-.prodCard p{margin:0;color:rgba(0,229,255,0.9);font-size:13px;}
-.prodCard:hover{background: linear-gradient(180deg, var(--neon), #00bfff);color:#001018;transform:translateY(-6px);box-shadow:0 22px 50px rgba(0,229,255,0.06);}
-#lightbox{display:none;position:fixed;inset:0;background: rgba(0,0,0,0.96);align-items:center;justify-content:center;flex-direction:column;z-index:1300;}
-#lightbox img{max-width:86%;max-height:82%;border:3px solid var(--neon);border-radius:8px;}
-.lbControls{margin-top:12px;display:flex;gap:12px;}
-.lbControls button{padding:8px 12px;border-radius:8px;border:none;cursor:pointer;background:var(--neon);color:#001018;font-weight:700;}
-.quoteBox{margin-top:40px;text-align:center;font-size:16px;color:rgba(0,229,255,0.85);transition: opacity 0.6s ease;min-height:40px;}
-@media(max-width:980px){.container{flex-direction:column;}.leftCol{width:100%;order:2;}.rightCol{order:1;}#hud{left:10px;top:8px;}}
+  * { box-sizing: border-box; margin:0; padding:0; }
+
+  body {
+    font-family: Arial, sans-serif;
+    background-color: #111;
+    color: #fff;
+    line-height: 1.6;
+    text-align: center;
+    min-height: 100vh;
+  }
+
+  /* LOGIN SCREEN */
+  #loginContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    height: 100vh;
+    background-color: #111;
+  }
+
+  #loginContainer h1 {
+    font-size: 2em;
+    margin-bottom: 20px;
+  }
+
+  #passwordInput {
+    padding: 10px;
+    font-size: 16px;
+    margin-right: 5px;
+  }
+
+  button {
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    background-color: #444;
+    color: #fff;
+    border: none;
+    transition: background 0.3s;
+  }
+
+  button:hover { background-color: #666; }
+
+  /* HIDDEN CONTENT */
+  #content {
+    display: none;
+    padding: 30px 10px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  #content h1 { font-size: 2.5em; margin-bottom: 20px; }
+
+  /* PRODUCTIONS */
+  .production {
+    margin: 40px 0;
+    padding: 20px;
+    border: 2px solid #fff;
+    border-radius: 10px;
+    background-color: rgba(255,255,255,0.05);
+  }
+
+  .production h2 { font-size: 1.8em; margin-bottom: 10px; }
+  .production p { font-size: 1.1em; }
+
+  /* MEDIA */
+  img, video {
+    max-width: 90%;
+    height: auto;
+    margin: 20px 0;
+    border-radius: 10px;
+    border: 2px solid #fff;
+  }
+
+  video { display: block; margin: 20px auto; }
+
+  /* RESPONSIVE */
+  @media (max-width:768px){
+    #content h1 { font-size:2em; }
+    .production h2 { font-size:1.5em; }
+    .production p { font-size:1em; }
+  }
 </style>
 </head>
 <body>
-<div class="scanlines"></div>
 
-<!-- LOGIN -->
-<div id="loginOverlay">
-  <div class="login-card">
-    <h1>Login</h1>
-    <input id="loginPass" class="login-input" type="password" placeholder="Enter password">
-    <div class="login-actions">
-      <button id="loginBtn" class="btn-primary">Enter</button>
-    </div>
-    <div class="login-sub">Enter the terminal</div>
-  </div>
+<!-- LOGIN SCREEN -->
+<div id="loginContainer">
+  <h1>Enter Password</h1>
+  <form id="loginForm">
+    <input type="password" id="passwordInput" placeholder="Password" required>
+    <button type="submit">Enter</button>
+  </form>
+  <audio id="wrongAudio" src="wrong-password-sound.mp3" preload="auto"></audio>
 </div>
 
-<!-- HUD -->
-<div id="hud">
-  <div class="hud-row" id="hud-date">Loading date…</div>
-  <div class="hud-row" id="hud-time">--:--:--</div>
-  <div class="hud-row" id="hud-loc"><i class="fa-solid fa-location-dot"></i> <span id="hud-city">Toronto</span></div>
-  <div class="hud-row" id="hud-coords">Coords: <span id="hud-coords-text">—</span></div>
-  <div class="hud-row" id="hud-weather"><i class="fa-solid fa-cloud-sun"></i> <span id="hud-weather-text">—</span></div>
-</div>
+<!-- HIDDEN CONTENT -->
+<div id="content">
+  <h1>Welcome to Brandon Smart's Portfolio</h1>
 
-<!-- MAIN -->
-<main id="main">
-  <div class="container">
-    <div class="leftCol">
-      <div class="headerTitle">[Hello World]</div>
-      <div id="navWho" class="navItem" aria-controls="whoPanel">Whoami</div>
-      <div id="navRef" class="navItem" aria-controls="refPanel">Reflection</div>
-      <div id="navProd" class="navItem" aria-controls="prodPanel">Productions</div>
-      <div id="navRes" class="navItem" aria-controls="resPanel">Resources</div>
-      <div id="navContact" class="navItem" aria-controls="contactPanel">Contact</div>
-    </div>
-    <div class="rightCol">
-      <section id="whoPanel" class="panel">
-        <h2>Whoami</h2>
-        <p><strong>Brandon Smart</strong><br>Teachable: Computer Technology</p>
-        <button class="backBtn" onclick="closePanel('whoPanel')">← Back</button>
-      </section>
-      <section id="refPanel" class="panel">
-        <h2>Reflection</h2>
-        <div id="reflectionText"></div><span class="cursor" id="reflectionCursor"></span>
-        <button class="backBtn" onclick="closePanel('refPanel')">← Back</button>
-      </section>
-      <section id="prodPanel" class="panel">
-        <h2>Productions</h2>
-        <div class="productionsGrid" id="productionsGrid">
-          <div class="prodCard" data-index="0"><h3>Production 1: Power up</h3><p>View Content</p></div>
-        </div>
-        <button class="backBtn" onclick="closePanel('prodPanel')">← Back</button>
-      </section>
-      <section id="resPanel" class="panel">
-        <h2>Resources</h2>
-        <p><a href="https://youtube.com" target="_blank">YouTube</a></p>
-        <p><a href="https://google.ca" target="_blank">Google</a></p>
-        <p><a href="https://github.com" target="_blank">GitHub</a></p>
-        <button class="backBtn" onclick="closePanel('resPanel')">← Back</button>
-      </section>
-      <section id="contactPanel" class="panel">
-        <h2>Contact</h2>
-        <div><i class="fa-solid fa-envelope"></i>&nbsp;<a href="mailto:bsmart@my.yorku.ca">bsmart@my.yorku.ca</a></div>
-        <button class="backBtn" onclick="closePanel('contactPanel')">← Back</button>
-      </section>
-    </div>
+  <!-- GIF -->
+  <img src="your-gif.gif" alt="Animated GIF">
+
+  <!-- Production 1 -->
+  <div class="production">
+    <h2>Production 1</h2>
+    <p>Description of production 1. Add details, context, or links here.</p>
+    <img src="production1-image.jpg" alt="Production 1 Image">
   </div>
-  <div id="quote" class="quoteBox">Loading inspiration…</div>
-</main>
 
-<!-- LIGHTBOX -->
-<div id="lightbox">
-  <img id="lbImage" src="" alt="Screenshot">
-  <div class="lbControls">
-    <button id="lbPrev">Prev</button>
-    <button id="lbNext">Next</button>
-    <button id="lbClose">Close</button>
+  <!-- Production 2 -->
+  <div class="production">
+    <h2>Production 2</h2>
+    <p>Description of production 2. Include images, videos, or GIFs.</p>
+    <video controls>
+      <source src="production2-video.mp4" type="video/mp4">
+      Your browser does not support the video tag.
+    </video>
   </div>
+
+  <!-- Production 3 -->
+  <div class="production">
+    <h2>Production 3</h2>
+    <p>Description of production 3.</p>
+    <img src="production3-image.jpg" alt="Production 3 Image">
+    <video controls>
+      <source src="production3-video.mp4" type="video/mp4">
+      Your browser does not support the video tag.
+    </video>
+  </div>
+
+  <!-- Add more productions as needed -->
 </div>
-
-<img src="images/globeglow.gif" id="cornerGlobe" alt="Globe Glow">
-
-<audio id="loginAudioCorrect" src="sounds/BC_Audio.mp3" preload="auto"></audio>
-<audio id="loginAudioWrong" src="sounds/Error_Audio.mp3" preload="auto"></audio>
 
 <script>
-const OWM_API_KEY='5043108521e5dc1feccf33701c3221bf';
-const PROD1_IMAGES=["images/Screenshot 2025-09-10 130926.png","images/Screenshot 2025-09-10 123717.png"];
-const loginOverlay=document.getElementById('loginOverlay');
-const loginBtn=document.getElementById('loginBtn');
-const loginPass=document.getElementById('loginPass');
-const cornerGlobe=document.getElementById('cornerGlobe');
-const loginAudioCorrect=document.getElementById('loginAudioCorrect');
-const loginAudioWrong=document.getElementById('loginAudioWrong');
+  const loginForm = document.getElementById('loginForm');
+  const passwordInput = document.getElementById('passwordInput');
+  const loginContainer = document.getElementById('loginContainer');
+  const content = document.getElementById('content');
+  const wrongAudio = document.getElementById('wrongAudio');
 
-loginPass.focus();
-loginPass.addEventListener('keydown',e=>{if(e.key==='Enter')loginBtn.click();});
-loginBtn.addEventListener('click',()=>{
-  const v=(loginPass.value||'').trim();
-  if(v==='mrsmart'){
-    loginOverlay.style.display='none';
-    cornerGlobe.style.display='block';
-    const hud=document.getElementById('hud');hud.style.opacity='1';hud.style.visibility='visible';
-    startHud();rotateQuotes();updateLocationWeather();
-    loginAudioCorrect.volume=0.7;loginAudioCorrect.currentTime=0;loginAudioCorrect.play();
-  }else{
-    loginPass.value='';loginPass.placeholder='Incorrect — try again';loginPass.focus();
-    loginAudioWrong.volume=0.7;loginAudioWrong.currentTime=0;loginAudioWrong.play();
-  }
-});
+  const correctPassword = 'YOUR_PASSWORD'; // <-- change this
 
-function startHud(){
-  const timeEl=document.getElementById('hud-time');
-  const dateEl=document.getElementById('hud-date');
-  function updateHud(){const now=new Date();timeEl.textContent=now.toLocaleTimeString();dateEl.textContent=now.toDateString();}
-  updateHud();setInterval(updateHud,1000);
-}
+  loginForm.addEventListener('submit', function(e){
+    e.preventDefault();
 
-function updateLocationWeather(){
-  const cityEl=document.getElementById('hud-city');
-  const coordsEl=document.getElementById('hud-coords-text');
-  const weatherEl=document.getElementById('hud-weather-text');
-  if(!navigator.geolocation){coordsEl.textContent='Unavailable';weatherEl.textContent='Unavailable';return;}
-  navigator.geolocation.getCurrentPosition(async pos=>{
-    const {latitude,longitude}=pos.coords;coordsEl.textContent=`${latitude.toFixed(4)}, ${longitude.toFixed(4)}`;
-    try{
-      const res=await fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=${OWM_API_KEY}&units=metric`);
-      const data=await res.json();
-      cityEl.textContent=data.name||'Unknown';
-      weatherEl.textContent=`${data.weather[0].description}, ${data.main.temp.toFixed(1)}°C`;
-    }catch(e){weatherEl.textContent='Weather unavailable';console.error(e);}
-  },err=>{coordsEl.textContent='Denied';weatherEl.textContent='Weather unavailable';});
-}
+    if(passwordInput.value === correctPassword){
+      // Stop any playing wrong password audio
+      wrongAudio.pause();
+      wrongAudio.currentTime = 0;
 
-function openPanel(id){
-  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('show'));
-  const panel=document.getElementById(id);panel.classList.add('show');
-  if(id==='refPanel') typeReflection(reflections[0]);
-}
-function closePanel(id){document.getElementById(id).classList.remove('show');if(id==='refPanel'){if(typingTimer)clearInterval(typingTimer);typingTimer=null;window.speechSynthesis.cancel();}}
+      // Hide login, show content
+      loginContainer.style.display = 'none';
+      content.style.display = 'block';
+    } else {
+      // Play wrong password sound
+      wrongAudio.pause();
+      wrongAudio.currentTime = 0;
+      wrongAudio.play();
 
-document.querySelectorAll('.navItem').forEach(el=>el.addEventListener('click',()=>openPanel(el.getAttribute('aria-controls'))));
-
-const reflectionEl=document.getElementById('reflectionText');
-const reflections=[`Building this site has been a deep learning experience. Using HTML, CSS, and JavaScript forces me to think in terms of both logic and aesthetics...`];
-let typingTimer=null;
-function typeReflection(text){
-  if(typingTimer)clearInterval(typingTimer);reflectionEl.textContent='';let i=0;
-  speechSynthesis.cancel();const utter=new SpeechSynthesisUtterance(text);window.speechSynthesis.speak(utter);
-  typingTimer=setInterval(()=>{if(i<text.length){reflectionEl.textContent+=text[i];i++;}else{clearInterval(typingTimer);typingTimer=null;}},35);
-}
-
-let currImages=[],currIndex=0;
-const lb=document.getElementById('lightbox');const lbImg=document.getElementById('lbImage');
-document.querySelectorAll('.prodCard').forEach(card=>{card.addEventListener('click',()=>{currImages=PROD1_IMAGES;currIndex=0;lbImg.src=currImages[currIndex];lb.style.display='flex';});});
-document.getElementById('lbPrev').addEventListener('click',()=>{currIndex=(currIndex-1+currImages.length)%currImages.length;lbImg.src=currImages[currIndex];});
-document.getElementById('lbNext').addEventListener('click',()=>{currIndex=(currIndex+1)%currImages.length;lbImg.src=currImages[currIndex];});
-document.getElementById('lbClose').addEventListener('click',()=>{lb.style.display='none';});
-
-const quotes=["Code is like humor. When you have to explain it, it’s bad.","First, solve the problem. Then, write the code.","Experience is the name everyone gives to their mistakes."];
-const quoteEl=document.getElementById('quote');
-function rotateQuotes(){let qidx=0;setInterval(()=>{quoteEl.style.opacity=0;setTimeout(()=>{quoteEl.textContent=quotes[qidx];quoteEl.style.opacity=1;qidx=(qidx+1)%quotes.length;},500);},6000);}
+      // Reset password field
+      alert('Incorrect password. Try again.');
+      passwordInput.value = '';
+      passwordInput.focus();
+    }
+  });
 </script>
+
 </body>
 </html>
