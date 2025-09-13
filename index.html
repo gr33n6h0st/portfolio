@@ -61,6 +61,7 @@ a:hover{color:var(--hover);}
   background:linear-gradient(180deg, rgba(0,0,0,0.55), rgba(0,0,0,0.35));
   border-radius:10px; padding:10px 12px; border:1px solid rgba(0,229,255,0.06);
   box-shadow: 0 8px 40px rgba(0,0,0,0.6); color:var(--neon); font-size:13px;
+  opacity:0; visibility:hidden;
 }
 .hud-row { display:flex; gap:8px; align-items:center; }
 
@@ -74,9 +75,7 @@ a:hover{color:var(--hover);}
 /* Left column (nav / categories) */
 .leftCol {
   width:320px;
-  display:flex;
-  flex-direction:column;
-  gap:18px;
+  display:flex; flex-direction:column; gap:18px;
   align-items:flex-start;
 }
 
@@ -206,14 +205,14 @@ a:hover{color:var(--hover);}
           <h2>Productions</h2>
           <div class="productionsGrid" id="productionsGrid">
             <div class="prodCard" data-index="0"><h3>Production 1: Power up</h3><p>View Content</p></div>
-            <div class="prodCard" data-index=""><h3>Production 2: New Literacies Reflection</h3><p>Placeholder</p></div>
-            <div class="prodCard" data-index=""><h3>Production 3: Critical Algorithmic Literacies and AI</h3><p>Placeholder</p></div>
-            <div class="prodCard" data-index=""><h3>Production 4: Graphic Novel</h3><p>Placeholder</p></div>
-            <div class="prodCard" data-index=""><h3>Production 5: On the Way to Video Inquiry</h3><p>Placeholder</p></div>
-            <div class="prodCard" data-index=""><h3>Production 6: Video Works</h3><p>Placeholder</p></div>
-            <div class="prodCard" data-index=""><h3>Production 7: Learning Principles</h3><p>Placeholder</p></div>
-            <div class="prodCard" data-index=""><h3>Production 8: World Building</h3><p>Placeholder</p></div>
-            <div class="prodCard" data-index=""><h3>Production 9: Twine</h3><p>Placeholder</p></div>
+            <div class="prodCard" data-index="1"><h3>Production 2: New Literacies Reflection</h3><p>Placeholder</p></div>
+            <div class="prodCard" data-index="2"><h3>Production 3: Critical Algorithmic Literacies and AI</h3><p>Placeholder</p></div>
+            <div class="prodCard" data-index="3"><h3>Production 4: Graphic Novel</h3><p>Placeholder</p></div>
+            <div class="prodCard" data-index="4"><h3>Production 5: On the Way to Video Inquiry</h3><p>Placeholder</p></div>
+            <div class="prodCard" data-index="5"><h3>Production 6: Video Works</h3><p>Placeholder</p></div>
+            <div class="prodCard" data-index="6"><h3>Production 7: Learning Principles</h3><p>Placeholder</p></div>
+            <div class="prodCard" data-index="7"><h3>Production 8: World Building</h3><p>Placeholder</p></div>
+            <div class="prodCard" data-index="8"><h3>Production 9: Twine</h3><p>Placeholder</p></div>
           </div>
           <button class="backBtn" onclick="closePanel('prodPanel')">← Back</button>
         </section>
@@ -250,257 +249,169 @@ a:hover{color:var(--hover);}
     </div>
   </div>
 
+<!-- Wrong Password GIF Overlay -->
+<div id="wrongGifOverlay" style="display:none; position:fixed; inset:0; justify-content:center; align-items:center; background: rgba(0,0,0,0.85); z-index:1500;">
+  <img src="images/glitch_net_art.gif" alt="Wrong Password GIF" style="width:100%; height:100%; object-fit:cover;">
+</div>
+  
+<!-- Add audio here -->
+<audio id="wrongAudio" src="sounds/Welcome_to_the_Game_Hacking_Alert.mp3" preload="auto"></audio>
+
 <script>
 const OWM_API_KEY = '5043108521e5dc1feccf33701c3221bf';
 const PROD1_IMAGES = [
-  "images/Screenshot 2025-09-10 130926.png",
-  "images/Screenshot 2025-09-10 123717.png",
-  "images/Screenshot 2025-09-10 115645.png",
-  "images/Screenshot 2025-09-10 114858.png",
-  "images/Screenshot 2025-09-10 114832.png"
+  "images/Screenshot_2025-09-10_130926.png",
+  "images/Screenshot_2025-09-10_123717.png",
+  "images/Screenshot_2025-09-10_115645.png",
+  "images/Screenshot_2025-09-10_114858.png",
+  "images/Screenshot_2025-09-10_114832.png"
 ];
 
 /* ------------------ Login ------------------ */
 const loginOverlay = document.getElementById('loginOverlay');
 const loginBtn = document.getElementById('loginBtn');
 const loginPass = document.getElementById('loginPass');
+const wrongGif = document.getElementById('wrongGifOverlay');
+const wrongAudio = document.getElementById('wrongAudio');
 
-// Trigger login on Enter key
 loginPass.addEventListener('keydown', (e) => {
   if (e.key === 'Enter') loginBtn.click();
 });
 
-
-function unlockSite() {
-  loginOverlay.style.display = 'none';
-  document.getElementById('hud').style.opacity = '1';
-  document.getElementById('hud').style.visibility = 'visible';
-  startHud();
-  rotateQuotes();
-}
-
 loginBtn.addEventListener('click', () => {
   const v = (loginPass.value || '').trim();
   if (v === 'mrsmart') {
-    unlockSite();
+    loginOverlay.style.display = 'none';
+    document.getElementById('hud').style.opacity = '1';
+    document.getElementById('hud').style.visibility = 'visible';
+    startHud();
+    rotateQuotes();
   } else {
     loginPass.value = '';
     loginPass.placeholder = 'Incorrect — try again';
     loginPass.focus();
 
-    // shake login overlay
     loginOverlay.animate(
       [
         { transform: 'translateX(-2px)' },
         { transform: 'translateX(2px)' },
         { transform: 'translateX(0)' }
       ],
-      { duration: 320, iterations: 1 }
+      { duration: 120, iterations: 3 }
     );
 
-// show fullscreen fail GIF and play audio
-const wrongGif = document.getElementById('wrongGifOverlay');
-const wrongAudio = document.getElementById('wrongAudio');
-
-wrongGif.style.display = 'flex';
-wrongAudio.currentTime = 0;
-wrongAudio.play().catch(() => {}); // prevents browser errors if autoplay blocked
-
-// hide after 3 seconds
-setTimeout(() => {
-  wrongGif.style.display = 'none';
-  wrongAudio.pause();
-}, 3000);
-
+    // show GIF/audio
+    wrongGif.style.display = 'flex';
+    wrongAudio.currentTime = 0;
+    wrongAudio.play().catch(()=>{});
+    setTimeout(() => {
+      wrongGif.style.display = 'none';
+      wrongAudio.pause();
+    }, 2200);
+  }
+});
 
 /* ------------------ HUD ------------------ */
-const hudDate = document.getElementById('hud-date');
-const hudTime = document.getElementById('hud-time');
-const hudCity = document.getElementById('hud-city');
-const hudCoordsText = document.getElementById('hud-coords-text');
-const hudWeatherText = document.getElementById('hud-weather-text');
-
-let hudInterval = null;
 function startHud(){
-  function updateTime(){
+  const timeEl = document.getElementById('hud-time');
+  const dateEl = document.getElementById('hud-date');
+  function updateHud(){
     const now = new Date();
-    hudDate.textContent = now.toLocaleDateString(undefined, { weekday:'long', month:'long', day:'numeric', year:'numeric' });
-    hudTime.textContent = now.toLocaleTimeString();
+    const hh = String(now.getHours()).padStart(2,'0');
+    const mm = String(now.getMinutes()).padStart(2,'0');
+    const ss = String(now.getSeconds()).padStart(2,'0');
+    timeEl.textContent = `${hh}:${mm}:${ss}`;
+    dateEl.textContent = now.toDateString();
   }
-  updateTime();
-  if (hudInterval) clearInterval(hudInterval);
-  hudInterval = setInterval(updateTime,1000);
-
-  if (navigator.geolocation){
-    navigator.geolocation.getCurrentPosition(async (pos)=>{
-      const lat = pos.coords.latitude.toFixed(4);
-      const lon = pos.coords.longitude.toFixed(4);
-      hudCoordsText.textContent = lat+','+lon;
-      try{
-        const resp = await fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&units=metric&appid=${OWM_API_KEY}`);
-        const data = await resp.json();
-        if (data.weather && data.weather[0]){
-          hudCity.textContent = data.name;
-          hudWeatherText.textContent = data.main.temp.toFixed(0)+'°C '+data.weather[0].main;
-        }
-      } catch(e){ console.log("Weather fail",e); }
-    });
-  }
+  updateHud();
+  setInterval(updateHud,1000);
 }
 
 /* ------------------ Panels ------------------ */
-function openPanel(id){ document.querySelectorAll('.panel').forEach(p=>p.classList.remove('show')); document.getElementById(id).classList.add('show'); }
-function closePanel(id){ document.getElementById(id).classList.remove('show'); }
-
-document.getElementById('navWho').onclick=()=>openPanel('whoPanel');
-document.getElementById('navRef').onclick=()=>openPanel('refPanel');
-document.getElementById('navProd').onclick=()=>openPanel('prodPanel');
-document.getElementById('navRes').onclick=()=>openPanel('resPanel');
-document.getElementById('navContact').onclick=()=>openPanel('contactPanel');
-
-const reflectionEl = document.getElementById('reflectionText');
-const reflectionText = `Here is your reflection text. You can type anything you want here. It will be typed out smoothly without awkward pauses.`;
-
-function typeAndSpeakReflection() {
-  reflectionEl.textContent = "";
-  window.speechSynthesis.cancel();
-
-  // ------------------ Type effect ------------------
-  let index = 0;
-  const typingSpeed = 25; // ms per character
-
-  function typeNextChar() {
-    if (index < reflectionText.length) {
-      reflectionEl.textContent += reflectionText.charAt(index);
-      index++;
-      setTimeout(typeNextChar, typingSpeed);
-    }
-  }
-
-  typeNextChar();
-
-  // ------------------ Speech ------------------
-  if ('speechSynthesis' in window) {
-    const utter = new SpeechSynthesisUtterance(reflectionText);
-    utter.lang = "en-US";
-    utter.rate = 1;
-    utter.pitch = 1;
-
-    function selectVoice() {
-      const voices = speechSynthesis.getVoices();
-
-      // pick the *same female voice every time*
-      let preferredVoice = voices.find(v => v.name === "Zira") || voices.find(v => v.name === "Samantha");
-
-      // fallback if neither exists
-      if (!preferredVoice && voices.length > 0) preferredVoice = voices[0];
-
-      if (preferredVoice) utter.voice = preferredVoice;
-
-      speechSynthesis.speak(utter);
-    }
-
-    // voices may load asynchronously
-    if (speechSynthesis.getVoices().length === 0) {
-      speechSynthesis.onvoiceschanged = selectVoice;
-    } else {
-      selectVoice();
-    }
-  }
+function openPanel(id){
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('show'));
+  document.getElementById(id).classList.add('show');
 }
-
-
-document.getElementById('navRef').addEventListener('click', typeAndSpeakReflection);
-
-// stop speech when navigating away
-document.querySelectorAll('.navItem').forEach(btn => {
-  btn.addEventListener('click', () => {
-    if (btn.id !== 'navRef') {
-      window.speechSynthesis.cancel();
-    }
-  });
+function closePanel(id){
+  document.getElementById(id).classList.remove('show');
+}
+document.querySelectorAll('.navItem').forEach(el=>{
+  el.addEventListener('click',()=>openPanel(el.getAttribute('aria-controls')));
 });
 
-
+/* ------------------ Reflection typing ------------------ */
+const reflectionEl = document.getElementById('reflectionText');
+const cursorEl = document.getElementById('reflectionCursor');
+const reflections = [
+  "Exploring the convergence of tech and human creativity.",
+  "Reflecting on my journey through coding and design.",
+  "Learning new literacies every day."
+];
+let typingTimer = null;
+function typeReflection(text){
+  if(typingTimer) clearInterval(typingTimer);
+  reflectionEl.textContent = '';
+  let i=0;
+  speechSynthesis.cancel();
+  const utter = new SpeechSynthesisUtterance(text);
+  window.speechSynthesis.speak(utter);
+  typingTimer = setInterval(()=>{
+    if(i<text.length){
+      reflectionEl.textContent += text[i];
+      i++;
+    }else{
+      clearInterval(typingTimer);
+      typingTimer = null;
+    }
+  },35);
+}
+document.getElementById('navRef').addEventListener('click',()=>typeReflection(reflections[Math.floor(Math.random()*reflections.length)]));
 
 /* ------------------ Productions Lightbox ------------------ */
+const productionImagesMap = {0: PROD1_IMAGES};
+let currImages = [], currIndex = 0;
 const lb = document.getElementById('lightbox');
 const lbImg = document.getElementById('lbImage');
-const lbPrev = document.getElementById('lbPrev');
-const lbNext = document.getElementById('lbNext');
-const lbClose = document.getElementById('lbClose');
-
-let currIndex = 0;
-let currImages = [];
-
-const productionImagesMap = {
-  "0": PROD1_IMAGES,
-  "1": ["images/prod2-1.png"],
-  "2": ["images/prod3-1.png"],
-  "3": ["images/prod4-1.png"],
-  "4": ["images/prod5-1.png"],
-  "5": ["images/prod6-1.png"],
-  "6": ["images/prod7-1.png"],
-  "7": ["images/prod8-1.png"],
-  "8": ["images/prod9-1.png"]
-};
-
-function showLightboxImage(index){
-  lbImg.style.opacity = 0;
-  setTimeout(()=>{
-    lbImg.src = currImages[index];
-    lbImg.onload = ()=>{ lbImg.style.opacity = 1; };
-  }, 200);
-}
-
 document.querySelectorAll('.prodCard').forEach(card=>{
-  card.addEventListener('click', ()=>{
-    const prodIndex = card.dataset.index;
-    if(!productionImagesMap.hasOwnProperty(prodIndex)) return;
-    currImages = productionImagesMap[prodIndex];
-    currIndex = 0;
-    lb.style.display = 'flex';
-    showLightboxImage(currIndex);
+  card.addEventListener('click',()=>{
+    const idx = card.dataset.index;
+    currImages = productionImagesMap[idx] || [];
+    if(!currImages.length) return;
+    currIndex=0;
+    lbImg.src = currImages[currIndex];
+    lb.style.display='flex';
   });
 });
-
-lbPrev.onclick = ()=>{ currIndex=(currIndex-1+currImages.length)%currImages.length; showLightboxImage(currIndex); };
-lbNext.onclick = ()=>{ currIndex=(currIndex+1)%currImages.length; showLightboxImage(currIndex); };
-lbClose.onclick = ()=>{ lb.style.display='none'; };
+document.getElementById('lbPrev').addEventListener('click',()=>{
+  if(!currImages.length) return;
+  currIndex = (currIndex-1+currImages.length)%currImages.length;
+  lbImg.src = currImages[currIndex];
+});
+document.getElementById('lbNext').addEventListener('click',()=>{
+  if(!currImages.length) return;
+  currIndex = (currIndex+1)%currImages.length;
+  lbImg.src = currImages[currIndex];
+});
+document.getElementById('lbClose').addEventListener('click',()=>{lb.style.display='none';});
 
 /* ------------------ Quotes rotation ------------------ */
-const quotes=[
-  "Technology should empower, not distract.",
-  "Every tool we use shapes how we learn.",
-  "Critical thinking is the best software.",
-  "Innovation is strongest when guided by purpose.",
-  "Education evolves with reflection and practice."
+const quotes = [
+  "Code is like humor. When you have to explain it, it’s bad.",
+  "First, solve the problem. Then, write the code.",
+  "Experience is the name everyone gives to their mistakes."
 ];
-let qIndex=0;
+const quoteEl = document.getElementById('quote');
 function rotateQuotes(){
-  const qEl=document.getElementById('quote');
-  if(!qEl) return;
-  qEl.textContent=quotes[qIndex];
+  let qidx=0;
   setInterval(()=>{
-    qIndex=(qIndex+1)%quotes.length;
-    qEl.style.opacity=0;
+    quoteEl.style.opacity=0;
     setTimeout(()=>{
-      qEl.textContent=quotes[qIndex];
-      qEl.style.opacity=1;
-    },600);
+      quoteEl.textContent = quotes[qidx];
+      quoteEl.style.opacity=1;
+      qidx=(qidx+1)%quotes.length;
+    },500);
   },6000);
 }
 </script>
-<!-- Wrong Password GIF Overlay -->
-<div id="wrongGifOverlay" style="display:none; position:fixed; inset:0; justify-content:center; align-items:center; background: rgba(0,0,0,0.85); z-index:1500;">
-  <img src="images/glitch net art GIF by Nico Roxe.gif" alt="Wrong Password GIF" style="width:100%; height:100%; object-fit:cover;">
-</div>
-  
-<!-- Add audio here -->
-<audio id="wrongAudio" src="sounds/Welcome to the Game - Hacking Alert.mp3" preload="auto"></audio>
-  
 </body>
 </html>
-
-
-
