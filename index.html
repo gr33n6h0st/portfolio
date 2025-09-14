@@ -108,7 +108,7 @@ h1, h2, .headerTitle, .navItem, #reflectionText, .hud-row, .quoteBox {
 #main { min-height:100vh; display:flex; flex-direction:column; align-items:center; justify-content:flex-start; padding:120px 28px 40px; z-index:500; position: relative; }
 .container { max-width:1100px; width:100%; display:flex; gap:28px; align-items:flex-start; margin: 0 auto; position: relative; z-index: 5; }
 .leftCol { width:320px; display:flex; flex-direction:column; gap:18px; align-items:flex-start; }
-.headerTitle { font-size:18px; margin-bottom:8px; color:var(--neon); }
+.headerTitle { font-size:18px; margin-bottom:8px; color:var(--neon); cursor:pointer; user-select:none; }
 .navItem {
   width:100%; padding:16px 14px; border-radius:12px; cursor:pointer;
   background: linear-gradient(180deg, rgba(10,12,14,0.6), rgba(18,20,22,0.55));
@@ -160,11 +160,11 @@ h1, h2, .headerTitle, .navItem, #reflectionText, .hud-row, .quoteBox {
   transition: opacity 0.4s;
   opacity: 1;
 }
-/* lightbox controls below image, no overlap */
+/* smaller lightbox control buttons to avoid overlap */
 .lbControls {
   margin-top: 22px;
   display: flex;
-  gap: 18px;
+  gap: 12px;
   justify-content: center;
   z-index: 10;
   transition: opacity 0.2s;
@@ -175,19 +175,19 @@ h1, h2, .headerTitle, .navItem, #reflectionText, .hud-row, .quoteBox {
   pointer-events: none;
 }
 .lbControls button {
-  min-width:90px;
-  padding: 12px 20px;
-  border-radius: 8px;
+  min-width: 60px;
+  padding: 6px 12px;
+  border-radius: 6px;
   border: none;
   cursor: pointer;
   background: var(--neon);
   color: #001018;
   font-weight: 700;
-  font-size: 1.05em;
+  font-size: 0.85em;
   transition: background 0.17s, color 0.17s, transform 0.22s;
 }
 .lbControls button:hover {
-  background:var(--hover); color:#06222f; transform:translateY(-2px) scale(1.04);
+  background: var(--hover); color: #06222f; transform: translateY(-2px) scale(1.04);
 }
 .backBtn { margin-top:12px; padding:8px 12px; border-radius:8px; background:transparent; border:1px solid rgba(0,229,255,0.06); color:var(--neon); cursor:pointer; }
 .backBtn:hover { background:rgba(0,229,255,0.06); color:#001018; }
@@ -199,7 +199,6 @@ h1, h2, .headerTitle, .navItem, #reflectionText, .hud-row, .quoteBox {
   transition: opacity 0.6s ease;
   min-height: 40px;
 }
-
 /* Cyber glitch text effect */
 .glitchText {
   position: relative;
@@ -207,7 +206,6 @@ h1, h2, .headerTitle, .navItem, #reflectionText, .hud-row, .quoteBox {
   font-weight: 700;
   animation: flicker 3s infinite alternate ease-in-out;
 }
-
 .glitchText::before,
 .glitchText::after {
   content: attr(data-text);
@@ -219,30 +217,74 @@ h1, h2, .headerTitle, .navItem, #reflectionText, .hud-row, .quoteBox {
   animation: glitchShift 2.5s infinite alternate ease-in-out;
   pointer-events: none;
 }
-
 .glitchText::before {
   left: 2px;
   text-shadow: -2px 0 red;
   animation-delay: 0s;
 }
-
 .glitchText::after {
   left: -2px;
   text-shadow: 2px 0 cyan;
   clip-path: polygon(0 55%, 100% 55%, 100% 100%, 0 100%);
   animation-delay: 1.25s;
 }
-
 @keyframes flicker {
   0%, 100% { opacity: 1; }
   50% { opacity: 0.85; }
 }
-
 @keyframes glitchShift {
   0%, 100% { transform: translateX(0); }
   50% { transform: translateX(1.5px); }
 }
-
+/* Terminal styles */
+#terminalContainer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background: var(--panel);
+  max-height: 200px;
+  border-top: 1px solid rgba(0,229,255,0.3);
+  display: none;
+  flex-direction: column;
+  z-index: 2000;
+  font-size: 14px;
+  color: var(--neon);
+  font-family: 'Share Tech Mono', monospace;
+  user-select: text;
+  padding: 10px 20px;
+  box-sizing: border-box;
+}
+#terminalContent {
+  flex: 1;
+  overflow-y: auto;
+  white-space: pre-wrap;
+  margin-bottom: 6px;
+  min-height: 80px;
+}
+#terminalInputContainer {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+#terminalPrompt {
+  flex-shrink: 0;
+}
+#terminalInput {
+  flex: 1;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid var(--neon);
+  color: var(--neon);
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 14px;
+  outline: none;
+  padding: 6px 10px;
+  caret-color: var(--neon);
+}
+#terminalInput::placeholder {
+  color: rgba(0,229,255,0.4);
+}
 @media (max-width:980px){
   .container{flex-direction:column;}
   .leftCol{width:100%; order:2;}
@@ -254,10 +296,8 @@ h1, h2, .headerTitle, .navItem, #reflectionText, .hud-row, .quoteBox {
 </head>
 <body>
   <div class="scanlines" aria-hidden="true"></div>
-
   <!-- Particle background canvas -->
   <canvas id="hudParticles" style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; pointer-events: none; z-index: 0;"></canvas>
-  
   <!-- LOGIN -->
   <div id="loginOverlay" role="dialog" aria-label="Login">
     <div class="login-card" role="document">
@@ -282,7 +322,7 @@ h1, h2, .headerTitle, .navItem, #reflectionText, .hud-row, .quoteBox {
     <div class="container">
       <!-- LEFT -->
       <div class="leftCol" aria-hidden="false">
-        <div class="headerTitle">>: ["Hello World..."]</div>
+        <div class="headerTitle" id="headerToggleTerminal">>: ["Hello World..."]</div>
         <div id="navWho" class="navItem" role="button" tabindex="0" aria-controls="whoPanel">Whoami</div>
         <div id="navRef" class="navItem" role="button" tabindex="0" aria-controls="refPanel">Reflection</div>
         <div id="navProd" class="navItem" role="button" tabindex="0" aria-controls="prodPanel">Productions</div>
@@ -334,6 +374,16 @@ h1, h2, .headerTitle, .navItem, #reflectionText, .hud-row, .quoteBox {
     </div>
     <div id="quote" class="quoteBox">Loading inspiration…</div>
   </main>
+  
+  <!-- Terminal panel -->
+  <div id="terminalContainer" role="region" aria-label="Terminal interface">
+    <div id="terminalContent" aria-live="polite" aria-atomic="false"></div>
+    <div id="terminalInputContainer">
+      <div id="terminalPrompt">>&nbsp;</div>
+      <input id="terminalInput" type="text" placeholder="Type command here..." autocomplete="off" aria-label="Terminal command input" />
+    </div>
+  </div>
+
   <!-- LIGHTBOX -->
   <div id="lightbox" role="dialog" aria-hidden="true" style="display:none">
     <img id="lbImage" src="" alt="Screenshot">
@@ -350,6 +400,7 @@ h1, h2, .headerTitle, .navItem, #reflectionText, .hud-row, .quoteBox {
   <!-- Audio -->
   <audio id="loginAudioCorrect" src="sounds/BC_Audio.mp3" preload="auto"></audio>
   <audio id="loginAudioWrong" src="sounds/Hacked computer- Sound Effect.mp3" preload="auto"></audio>
+
 <script>
 const OWM_API_KEY = '5043108521e5dc1feccf33701c3221bf';
 const PROD1_IMAGES = [
@@ -444,7 +495,10 @@ function updateLocationWeather(){
   });
 }
 // Panels open/close logic
-function openPanel(id){ document.querySelectorAll('.panel').forEach(p=>p.classList.remove('show')); document.getElementById(id).classList.add('show'); }
+function openPanel(id){
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('show'));
+  document.getElementById(id).classList.add('show');
+}
 function closePanel(id){
   const panel = document.getElementById(id);
   panel.classList.remove('show');
@@ -454,8 +508,12 @@ function closePanel(id){
     window.speechSynthesis.cancel();
   }
 }
-document.querySelectorAll('.navItem').forEach(el=>el.addEventListener('click',()=>openPanel(el.getAttribute('aria-controls'))));
-// Reflection typing/stop
+// Click nav items to open panels
+document.querySelectorAll('.navItem').forEach(el=>{
+  el.addEventListener('click',()=>openPanel(el.getAttribute('aria-controls')));
+});
+
+// Reflection typing and speech synthesis
 const reflectionEl = document.getElementById('reflectionText');
 const reflections = [
   `Building this site has been a deep learning experience. ... Overall, the experience emphasizes experimentation, problem-solving, and reflection in ways that are more self-directed, interactive, and personally meaningful than traditional learning environments.`
@@ -464,21 +522,28 @@ let typingTimer = null;
 function typeReflection(text){
   if(typingTimer) clearInterval(typingTimer);
   reflectionEl.textContent='';
-  let i=0;
-  speechSynthesis.cancel();
+  window.speechSynthesis.cancel();
+  // Find female voice and use moderately fast rate
+  const voices = window.speechSynthesis.getVoices();
+  let voice = voices.find(v => v.name.toLowerCase().includes('female') || v.name.toLowerCase().includes('zira') || v.name.toLowerCase().includes('susan') || v.name.toLowerCase().includes('allan')) || voices[0];
   const utter = new SpeechSynthesisUtterance(text);
+  utter.voice = voice;
+  utter.rate = 1.3; // Smooth, fast but clear
   window.speechSynthesis.speak(utter);
-  typingTimer = setInterval(() => {
+  let i = 0;
+  typingTimer = setInterval(()=>{
     if(i < text.length){
       reflectionEl.textContent += text[i]; i++;
     } else {
-      clearInterval(typingTimer); typingTimer = null;
+      clearInterval(typingTimer);
+      typingTimer = null;
     }
-  }, 35);
+  }, 30);
 }
 document.getElementById('navRef').addEventListener('click', () => {
   typeReflection(reflections[0]);
 });
+
 // Productions Lightbox
 const productionImagesMap={0:PROD1_IMAGES};
 let currImages=[],currIndex=0;
@@ -520,6 +585,7 @@ document.getElementById('lbClose').addEventListener('click',()=>{
   lb.classList.remove('show');
   setTimeout(()=>{lb.style.display='none'},350);
 });
+
 // Quotes rotation
 const quotes=[
   "Code is like humor. When you have to explain it, it’s bad.",
@@ -538,7 +604,8 @@ function rotateQuotes(){
     },500);
   },6000);
 }
-// Particle background system
+
+// Particle background system (unchanged)
 (() => {
   const canvas = document.getElementById('hudParticles');
   const ctx = canvas.getContext('2d');
@@ -547,12 +614,10 @@ function rotateQuotes(){
   const particleCount = 70;
   const maxDist = 120;
   let mouse = { x: null, y: null };
-
   function resize() {
     width = canvas.width = window.innerWidth;
     height = canvas.height = window.innerHeight;
   }
-
   class Particle {
     constructor() {
       this.reset();
@@ -567,13 +632,11 @@ function rotateQuotes(){
     update() {
       this.x += this.vx;
       this.y += this.vy;
-
       // Wrap edges
       if (this.x < 0) this.x = width;
       else if (this.x > width) this.x = 0;
       if (this.y < 0) this.y = height;
       else if (this.y > height) this.y = 0;
-
       // Simple repulsion from mouse
       if (mouse.x !== null && mouse.y !== null) {
         let dx = this.x - mouse.x;
@@ -586,7 +649,6 @@ function rotateQuotes(){
           this.vy += force * Math.sin(angle);
         }
       }
-
       // Slow velocity decay to keep smooth drift
       this.vx *= 0.98;
       this.vy *= 0.98;
@@ -598,7 +660,6 @@ function rotateQuotes(){
       ctx.fill();
     }
   }
-
   function connectParticles() {
     for (let i = 0; i < particleCount; i++) {
       for (let j = i + 1; j < particleCount; j++) {
@@ -618,7 +679,6 @@ function rotateQuotes(){
       }
     }
   }
-
   function animate() {
     ctx.clearRect(0, 0, width, height);
     particles.forEach(p => {
@@ -628,7 +688,6 @@ function rotateQuotes(){
     connectParticles();
     requestAnimationFrame(animate);
   }
-
   window.addEventListener('resize', resize);
   window.addEventListener('mousemove', e => {
     mouse.x = e.clientX;
@@ -638,12 +697,71 @@ function rotateQuotes(){
     mouse.x = null;
     mouse.y = null;
   });
-
   // Init
   resize();
   for (let i = 0; i < particleCount; i++) particles.push(new Particle());
   animate();
 })();
+
+// Terminal functionality and commands
+const terminalContainer = document.getElementById('terminalContainer');
+const terminalContent = document.getElementById('terminalContent');
+const terminalInput = document.getElementById('terminalInput');
+const headerToggleTerminal = document.getElementById('headerToggleTerminal');
+
+const panelIds = ['whoPanel', 'refPanel', 'prodPanel', 'resPanel', 'contactPanel'];
+const panelNames = {
+  'whoami': 'whoPanel',
+  'reflection': 'refPanel',
+  'productions': 'prodPanel',
+  'resources': 'resPanel',
+  'contact': 'contactPanel',
+  'back': 'back'
+};
+
+function appendTerminalOutput(text) {
+  terminalContent.textContent += text + "\n";
+  terminalContent.scrollTop = terminalContent.scrollHeight;
+}
+
+function executeCommand(cmd) {
+  const lowerCmd = cmd.toLowerCase().trim();
+  if (lowerCmd === 'back') {
+    // Close all panels
+    panelIds.forEach(id => closePanel(id));
+    appendTerminalOutput("Closed all panels.");
+  } else if (panelNames.hasOwnProperty(lowerCmd)) {
+    const panelId = panelNames[lowerCmd];
+    if (panelId !== 'back') {
+      openPanel(panelId);
+      appendTerminalOutput(`Opened panel: ${lowerCmd}`);
+    }
+  } else if(lowerCmd.length === 0) {
+    // do nothing for empty input
+    return;
+  } else {
+    appendTerminalOutput(`Command not recognized: ${cmd}`);
+  }
+}
+
+// Toggle terminal panel visibility on title click
+headerToggleTerminal.addEventListener('click', () => {
+  if (terminalContainer.style.display === 'flex') {
+    terminalContainer.style.display = 'none';
+  } else {
+    terminalContainer.style.display = 'flex';
+    terminalInput.focus();
+  }
+});
+
+terminalInput.addEventListener('keydown', (e) => {
+  if (e.key === 'Enter') {
+    const cmd = terminalInput.value;
+    appendTerminalOutput(`> ${cmd}`);
+    executeCommand(cmd);
+    terminalInput.value = ''; // clear input
+  }
+});
 </script>
 <img src="images/right_icon1.gif" id="cornerGlobe" alt="Globe Glow" style="display:none; border-radius:50%;">
 </body>
