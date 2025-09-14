@@ -227,6 +227,8 @@ const loginPass = document.getElementById('loginPass');
 const wrongGif = document.getElementById('wrongGifOverlay');
 const loginAudioCorrect = document.getElementById('loginAudioCorrect');
 const loginAudioWrong = document.getElementById('loginAudioWrong');
+const cornerGlobe = document.getElementById('cornerGlobe');
+const hud = document.getElementById('hud');
 
 loginPass.addEventListener('keydown', e => { if(e.key==='Enter') loginBtn.click(); });
 
@@ -234,45 +236,55 @@ loginBtn.addEventListener('click', () => {
   const v = (loginPass.value || '').trim();
 
   if (v === 'mrsmart') {
+    // Hide login overlay
     loginOverlay.style.display = 'none';
-    document.getElementById('cornerGlobe').style.display = 'block';
-    const hud = document.getElementById('hud');
+
+    // Show HUD and globe
+    cornerGlobe.style.display = 'block';
     hud.style.opacity = '1';
     hud.style.visibility = 'visible';
+
     startHud();
     rotateQuotes();
-    updateWeather();
+    updateLocationWeather();
 
+    // Play correct login sound
     loginAudioCorrect.pause();
     loginAudioCorrect.currentTime = 0;
     loginAudioCorrect.volume = 0.7;
-    loginAudioCorrect.play().catch(err=>console.error('Audio failed:',err));
+    loginAudioCorrect.play().catch(err => console.error('Audio failed:', err));
 
   } else {
-    loginPass.value='';
-    loginPass.placeholder='Incorrect — try again';
+    // Reset input
+    loginPass.value = '';
+    loginPass.placeholder = 'Incorrect — try again';
     loginPass.focus();
 
+    // Shake animation
     loginOverlay.animate([
       { transform: 'translateX(-2px)' },
       { transform: 'translateX(2px)' },
       { transform: 'translateX(0)' }
     ], { duration: 120, iterations: 3 });
 
-    wrongGif.style.display='flex';
+    // Show wrong password GIF
+    wrongGif.style.display = 'flex';
 
+    // Play wrong login sound
     loginAudioWrong.pause();
-    loginAudioWrong.currentTime=0;
-    loginAudioWrong.volume=0.7;
-    loginAudioWrong.play().catch(err=>console.error('Audio failed:',err));
+    loginAudioWrong.currentTime = 0;
+    loginAudioWrong.volume = 0.7;
+    loginAudioWrong.play().catch(err => console.error('Audio failed:', err));
 
-    // stop wrong sound after GIF disappears
-    setTimeout(()=>{
-      wrongGif.style.display='none';
-      loginAudioWrong.pause();
-    },5500);
+    // Hide GIF and stop audio after 5.5s
+    setTimeout(() => {
+      wrongGif.style.display = 'none';
+      if(!loginAudioWrong.paused) loginAudioWrong.pause();
+      loginAudioWrong.currentTime = 0;
+    }, 5500);
   }
 });
+
 
 /* ------------------ HUD ------------------ */
 function startHud() {
@@ -285,77 +297,76 @@ function startHud() {
   setInterval(updateTime, 1000);
 }
 
-/* ------------------ Weather ------------------ */
-function updateWeather() {
+/* ------------------ Weather / Coordinates ------------------ */
+function updateLocationWeather() {
   if (!navigator.geolocation) return;
+
   navigator.geolocation.getCurrentPosition(pos => {
     const { latitude, longitude } = pos.coords;
     document.getElementById('hudCoords').textContent = `Coords: ${latitude.toFixed(2)}, ${longitude.toFixed(2)}`;
     fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=${OWM_API_KEY}&units=metric`)
-      .then(r=>r.json())
-      .then(data=>{
+      .then(r => r.json())
+      .then(data => {
         document.getElementById('hudCity').textContent = data.name;
         document.getElementById('hudWeather').textContent = `${data.weather[0].main} ${data.main.temp}°C`;
-      }).catch(err=>console.error(err));
+      })
+      .catch(err => console.error(err));
   });
 }
 
+
 /* ------------------ Panels ------------------ */
 function openPanel(id){
-  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('show'));
-  const panel=document.getElementById(id);
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('show'));
+  const panel = document.getElementById(id);
   panel.classList.add('show');
   panel.scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
 function closePanel(id){
-  const panel=document.getElementById(id);
+  const panel = document.getElementById(id);
   panel.classList.remove('show');
-  if(id==='refPanel'){
+
+  if(id === 'refPanel'){
     if(typingTimer) clearInterval(typingTimer);
-    typingTimer=null;
+    typingTimer = null;
     window.speechSynthesis.cancel();
   }
 }
 
-document.querySelectorAll('.navItem').forEach(el=>{
-  el.addEventListener('click',()=>openPanel(el.getAttribute('aria-controls')));
+document.querySelectorAll('.navItem').forEach(el => {
+  el.addEventListener('click', () => openPanel(el.getAttribute('aria-controls')));
 });
 
-/* ------------------ Reflection typing ------------------ */
-/* ------------------ Reflection typing (Terminal style) ------------------ */
+
+/* ------------------ Reflection Typing ------------------ */
 const reflectionEl = document.getElementById('reflectionText');
 const reflections = [
-`Building this site has been a deep learning experience. Every line of code taught me patience, precision, and creativity. The interplay of HTML, CSS, and JS is like a symphony, and crafting a terminal-inspired UI adds a tactile, immersive feel. The HUD, lightbox, and dynamic panels weren’t just features—they were lessons in modular design and user experience. Integrating geolocation, weather, and audio feedback reinforced real-world coding skills. Ultimately, this project reflects both technical growth and the joy of experimentation.`
+  `Building this site has been a deep learning experience. As I create and structure each section, I notice how I interact differently with coding tools, the browser, and design interfaces compared to traditional classroom learning. 
+Using HTML, CSS, and JavaScript forces me to think in terms of both logic and aesthetics, balancing functionality with appearance. The immediate feedback from the browser—seeing changes live, debugging errors, and watching animations or interactive elements respond—helps me internalize what works and what doesn’t. 
+AI tools have been critical as a guide; they suggest code optimizations, point out mistakes, and sometimes give creative alternatives. 
+
+I also consult online documentation, tutorials, and forums, and occasionally local communities of developers and students to see how they approach similar challenges. These resources, combined with AI guidance, create a learning loop: I try, I get feedback, I adjust, and I reflect. During the process, my emotions fluctuate—frustration appears when things break unexpectedly, curiosity drives me to experiment, and satisfaction comes from solving problems or achieving a visual effect I envisioned. 
+The moment-to-moment learning differs from typical school exercises; it’s hands-on, iterative, and self-directed. There’s no prescribed path; success is measured by functioning code and the coherence of the site itself rather than grades.
+
+Compared to prior learning experiences in school or workshops, this project requires simultaneous attention to multiple layers—technical, visual, and conceptual—making the process more holistic and immersive. Every design decision, from color choices to layout structure, is both a learning opportunity and an expression of creativity. 
+The site acts as both a canvas and a feedback mechanism, reflecting my progress, mistakes, and growth in real time. Overall, the experience emphasizes experimentation, problem-solving, and reflection in ways that are more self-directed, interactive, and personally meaningful than traditional learning environments.`
 ];
 
 let typingTimer = null;
-let cursor = document.createElement('span');
-cursor.className = 'cursor';
-cursor.textContent = ' ';
-reflectionEl.innerHTML = '';
-reflectionEl.appendChild(cursor);
 
-function typeReflection(text) {
+function typeReflection(text){
   if(typingTimer) clearInterval(typingTimer);
-  reflectionEl.innerHTML = '';
-  reflectionEl.appendChild(cursor);
-  let i = 0;
-
-  // Speech
-  window.speechSynthesis.cancel();
+  reflectionEl.textContent='';
+  let i=0;
+  speechSynthesis.cancel();
   const utter = new SpeechSynthesisUtterance(text);
   window.speechSynthesis.speak(utter);
 
   typingTimer = setInterval(() => {
-    if(i < text.length) {
-      // Insert character before cursor
-      cursor.insertAdjacentText('beforebegin', text[i]);
+    if(i < text.length){
+      reflectionEl.textContent += text[i];
       i++;
-
-      // Add slight pause for new lines
-      if(text[i-1]==='\n') cursor.insertAdjacentText('beforebegin','\n');
-
     } else {
       clearInterval(typingTimer);
       typingTimer = null;
@@ -363,17 +374,9 @@ function typeReflection(text) {
   }, 35);
 }
 
-// Trigger typing when reflection panel opens
 document.getElementById('navRef').addEventListener('click', () => {
   typeReflection(reflections[0]);
 });
-
-// Stop typing cleanly if panel is closed
-function stopReflectionTyping(){
-  if(typingTimer) clearInterval(typingTimer);
-  typingTimer = null;
-  window.speechSynthesis.cancel();
-}
 
 
 /* ------------------ Productions Lightbox ------------------ */
@@ -381,6 +384,7 @@ const productionImagesMap={0:PROD1_IMAGES};
 let currImages=[],currIndex=0;
 const lb=document.getElementById('lightbox');
 const lbImg=document.getElementById('lbImage');
+
 document.querySelectorAll('.prodCard').forEach(card=>{
   card.addEventListener('click',()=>{
     const idx=card.dataset.index;
@@ -389,39 +393,42 @@ document.querySelectorAll('.prodCard').forEach(card=>{
     currIndex=0; lbImg.src=currImages[currIndex]; lb.style.display='flex';
   });
 });
-document.getElementById('lbNext').addEventListener('click',()=>{
-  if(!currImages.length) return;
-  currIndex=(currIndex+1)%currImages.length;
-  lbImg.src=currImages[currIndex];
-});
+
 document.getElementById('lbPrev').addEventListener('click',()=>{
   if(!currImages.length) return;
   currIndex=(currIndex-1+currImages.length)%currImages.length;
   lbImg.src=currImages[currIndex];
 });
+
+document.getElementById('lbNext').addEventListener('click',()=>{
+  if(!currImages.length) return;
+  currIndex=(currIndex+1)%currImages.length;
+  lbImg.src=currImages[currIndex];
+});
+
 document.getElementById('lbClose').addEventListener('click',()=>{ lb.style.display='none'; });
 
-/* ------------------ Quote rotation ------------------ */
-const quotes=['Innovation is key.','Coding is an art.','Persistence matters.'];
-let qIndex=0;
+
+/* ------------------ Quotes Rotation ------------------ */
+const quotes=[
+  "Code is like humor. When you have to explain it, it’s bad.",
+  "First, solve the problem. Then, write the code.",
+  "Experience is the name everyone gives to their mistakes."
+];
+const quoteEl=document.getElementById('quote');
+
 function rotateQuotes(){
-  const box=document.querySelector('.quoteBox');
-  if(!box) return;
-  box.style.opacity=0;
-  setTimeout(()=>{
-    box.textContent=quotes[qIndex];
-    box.style.opacity=1;
-    qIndex=(qIndex+1)%quotes.length;
-  },600);
+  let qidx=0;
   setInterval(()=>{
-    box.style.opacity=0;
+    quoteEl.style.opacity=0;
     setTimeout(()=>{
-      box.textContent=quotes[qIndex];
-      box.style.opacity=1;
-      qIndex=(qIndex+1)%quotes.length;
-    },600);
-  },4000);
+      quoteEl.textContent=quotes[qidx];
+      quoteEl.style.opacity=1;
+      qidx=(qidx+1)%quotes.length;
+    },500);
+  },6000);
 }
 </script>
+
 </body>
 </html>
