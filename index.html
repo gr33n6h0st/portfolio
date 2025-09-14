@@ -49,23 +49,21 @@ a:hover {
   );
   opacity: 0.12;
 }
-
-/* Glow animation for most text elements */
+/* glow animation less subtle but not over the top */
 @keyframes hudPulse {
   0%, 100% {
     text-shadow:
-      0 0 4px var(--neon),
-      0 0 9px var(--neon);
+      0 0 5px var(--neon),
+      0 0 11px var(--neon);
     opacity: 1;
   }
   50% {
     text-shadow:
-      0 0 2px var(--hover),
-      0 0 5px var(--hover);
-    opacity: 0.95;
+      0 0 3px var(--hover),
+      0 0 6px var(--hover);
+    opacity: 0.97;
   }
 }
-
 h1,
 h2,
 .headerTitle,
@@ -75,65 +73,213 @@ h2,
 .quoteBox {
   animation: hudPulse 4s infinite alternate;
 }
-
-/* Panel title base style with no glow */
 .panel h2 {
-  text-shadow: none;
   color: var(--neon);
-  transition: color 0.3s ease, text-shadow 0.3s ease;
+  text-shadow: none;
+  transition: text-shadow 0.3s ease, color 0.3s ease;
 }
-
-/* Active panel title neon glow and glitch animation */
 .panel h2.active-glow {
   animation: glitchAnim 2.5s infinite;
-  color: var(--neon);
   text-shadow:
     0 0 8px var(--neon),
     0 0 14px var(--neon),
     0 0 22px var(--neon);
+  color: var(--neon);
 }
-
 @keyframes glitchAnim {
   0%, 100% {
-    opacity: 1;
     text-shadow:
       0 0 8px var(--neon),
       0 0 14px var(--neon),
       0 0 22px var(--neon);
     transform: translate(0,0);
+    opacity: 1;
   }
   20% {
-    opacity: 0.85;
     text-shadow:
       2px 0 8px var(--neon),
-      -2px 0 10px var(--neon);
+      -2px 0 14px var(--neon);
     transform: translate(-1px, 0);
+    opacity: 0.85;
   }
   40% {
-    opacity: 0.9;
     text-shadow:
       -1px 1px 7px var(--neon),
       1px -1px 10px var(--neon);
     transform: translate(1px, 0);
+    opacity: 0.9;
   }
   60% {
-    opacity: 1;
     text-shadow:
       0 0 8px var(--neon),
       0 0 14px var(--neon),
       0 0 22px var(--neon);
     transform: translate(0,0);
+    opacity: 1;
   }
   80% {
-    opacity: 0.8;
     text-shadow:
       1px 0 8px var(--neon),
       -1px 0 14px var(--neon);
     transform: translate(-1px, 0);
+    opacity: 0.8;
   }
 }
-
-/* Panel base styles */
+#cornerGlobe {
+  display: none;
+  position: fixed;
+  top: 12px;
+  right: 12px;
+  width: 120px;
+  height: auto;
+  z-index: 2000;
+  pointer-events: none;
+  -webkit-mask-image: radial-gradient(circle, rgba(0,0,0,1) 85%, rgba(0,0,0,0) 100%);
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  -webkit-mask-size: cover;
+  mask-image: radial-gradient(circle, rgba(0,0,0,1) 85%, rgba(0,0,0,0) 100%);
+  mask-repeat: no-repeat;
+  mask-position: center;
+  mask-size: cover;
+}
+#loginOverlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1200;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(180deg, rgba(0,0,0,0.98), rgba(0,0,0,0.98));
+}
+.login-card {
+  width: 380px;
+  padding: 28px;
+  border-radius: 14px;
+  background: linear-gradient(135deg, rgba(0,229,255,0.04), rgba(0,102,153,0.03));
+  border: 1px solid rgba(0,229,255,0.12);
+  box-shadow: 0 12px 40px rgba(0,0,0,0.5), inset 0 0 10px rgba(0,229,255,0.015);
+  text-align: center;
+}
+.login-card h1 {
+  margin: 0 0 12px;
+  font-size: 20px;
+  color: var(--neon);
+  text-shadow: 0 0 2px var(--neon);
+}
+.login-input {
+  width: 100%;
+  padding: 12px 14px;
+  border-radius: 999px;
+  border: 1px solid rgba(0,229,255,0.12);
+  background: rgba(0,0,0,0.45);
+  color: var(--neon);
+  outline: none;
+  font-size: 14px;
+}
+.login-actions {
+  margin-top: 14px;
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+}
+.btn-primary {
+  padding: 10px 20px;
+  border-radius: 999px;
+  border: none;
+  cursor: pointer;
+  background: linear-gradient(135deg,var(--neon),#00bfff);
+  color: #081018;
+  font-weight: 700;
+}
+.login-sub {
+  margin-top: 10px;
+  font-size: 13px;
+  color: rgba(0,229,255,0.7);
+}
+#hud {
+  position: fixed;
+  left: 18px;
+  top: 12px;
+  z-index: 1100;
+  width: var(--hud-w);
+  background: linear-gradient(180deg, rgba(0,0,0,0.55), rgba(0,0,0,0.35));
+  border-radius: 10px;
+  padding: 10px 12px;
+  border: 1px solid rgba(0,229,255,0.06);
+  box-shadow: 0 15px 40px rgba(0,0,0,0.5);
+  color: var(--neon);
+  font-size: 13px;
+  opacity: 0;
+  visibility: hidden;
+  text-align: left;
+}
+.hud-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  text-align: left;
+  padding: 2px 0 2px 0;
+}
+.hud-row i {
+  min-width: 18px;
+  flex-shrink: 0;
+  vertical-align: middle;
+}
+#main {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 120px 28px 40px;
+  z-index: 500;
+  position: relative;
+}
+.container {
+  max-width: 1100px;
+  width: 100%;
+  display: flex;
+  gap: 28px;
+  align-items: flex-start;
+  margin: 0 auto;
+  position: relative;
+  z-index: 5;
+}
+.leftCol {
+  width: 320px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  align-items: flex-start;
+}
+.headerTitle {
+  font-size: 18px;
+  margin-bottom: 8px;
+  color: var(--neon);
+  cursor: pointer;
+}
+.navItem {
+  width: 100%;
+  padding: 16px 14px;
+  border-radius: 12px;
+  cursor: pointer;
+  background: linear-gradient(180deg, rgba(10,12,14,0.6), rgba(18,20,22,0.55));
+  border: 1px solid rgba(0,229,255,0.04);
+  color: var(--neon);
+  font-weight: 700;
+  transition: all 0.18s ease;
+}
+.navItem:hover {
+  background: linear-gradient(180deg, var(--neon), #00bfff);
+  color: #00111b;
+  transform: translateY(-4px);
+  box-shadow: 0 14px 36px rgba(0,229,255,0.04);
+}
+.rightCol {
+  flex: 1;
+  min-height: 400px;
+}
 .panel {
   display: none;
   background: var(--panel);
@@ -149,190 +295,428 @@ h2,
   opacity: 0;
   transform: translateY(8px);
 }
-
 .panel.show {
   display: block;
   opacity: 1;
   transform: translateY(0);
 }
-
-/* Other essential styles omitted for brevity, use unchanged from previous perfect version 2 */
-/* ... identical to previously shared styles for login, hud, nav, etc. */
-
+#reflectionText {
+  white-space: pre-wrap;
+  font-size: 14px;
+  color: rgba(0,229,255,0.9);
+}
+.cursor {
+  display: inline-block;
+  width: 10px;
+  margin-left: 6px;
+  background: var(--neon);
+  animation: blink 1s steps(2) infinite;
+  vertical-align: middle;
+}
+@keyframes blink {
+  0%, 50% {
+    opacity: 1;
+  }
+  51%, 100% {
+    opacity: 0;
+  }
+}
+.productionsGrid {
+  display: grid;
+  grid-template-columns: repeat(3,1fr);
+  gap: 14px;
+}
+.prodCard {
+  padding: 16px;
+  border-radius: 10px;
+  border: 1px solid rgba(0,229,255,0.05);
+  background: linear-gradient(180deg, rgba(0,0,0,0.5), rgba(12,12,14,0.35));
+  cursor: pointer;
+  transition: all 0.22s ease;
+}
+.prodCard h3 {
+  margin: 0 0 6px;
+  font-size: 15px;
+}
+.prodCard p {
+  margin: 0;
+  color: rgba(0,229,255,0.9);
+  font-size: 13px;
+}
+.prodCard:hover {
+  background: linear-gradient(180deg, var(--neon), #00bfff);
+  color: #001018;
+  transform: translateY(-6px) scale(1.01);
+  box-shadow: 0 22px 50px rgba(0,229,255,0.08);
+}
+.prodCard:hover h3 {
+  color: #001018;
+  text-shadow: none;
+}
+#lightbox {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index:1300;
+  background: rgba(0,0,0,0.96);
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  transition: opacity 0.35s;
+  max-height: 100vh;
+}
+#lightbox.show {
+  display: flex;
+  opacity: 1;
+}
+#lbImage {
+  max-width: 80vw;
+  max-height: 75vh;
+  border: 3px solid var(--neon);
+  border-radius: 8px;
+  box-shadow: 0 0 24px #0af2;
+  background: #000;
+  transition: opacity 0.4s;
+  opacity: 1;
+  display: block;
+  margin: 0 auto;
+}
+.lbControls {
+  margin-top: 22px;
+  display: flex;
+  gap: 18px;
+  justify-content: center;
+  z-index: 10;
+  transition: opacity 0.2s;
+  opacity: 1;
+}
+.lbControls button {
+  width: 70px;
+  height: 30px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  background: var(--neon);
+  color: #001018;
+  font-weight: 700;
+  font-size: 0.95em;
+  transition: background 0.17s, color 0.17s, transform 0.22s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  user-select: none;
+  padding: 0;
+  line-height: 1;
+  box-shadow: 0 0 8px rgba(0,229,255,0.4);
+}
+.lbControls button:hover {
+  background: var(--hover);
+  color: #06222f;
+  transform: translateY(-2px) scale(1.04);
+  box-shadow: 0 0 12px rgba(0,255,179,0.6);
+}
+.backBtn {
+  margin-top: 12px;
+  padding: 8px 12px;
+  border-radius: 8px;
+  background: transparent;
+  border: 1px solid rgba(0,229,255,0.06);
+  color: var(--neon);
+  cursor: pointer;
+  box-shadow: none;
+}
+.backBtn:hover {
+  background: rgba(0,229,255,0.06);
+  color: #001018;
+}
+.quoteBox {
+  margin-top: 40px;
+  text-align: center;
+  font-size: 16px;
+  color: rgba(0,229,255,0.85);
+  transition: opacity 0.6s ease;
+  min-height: 40px;
+}
+#terminalInputWrapper {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100vw;
+  background: linear-gradient(
+    180deg,
+    rgba(0, 0, 0, 0.8),
+    rgba(0, 229, 255, 0.15)
+  );
+  border-top: 1px solid var(--neon);
+  padding: 8px 12px;
+  z-index: 1400;
+  display: none;
+  align-items: center;
+  gap: 10px;
+  backdrop-filter: blur(6px);
+}
+#terminalPrompt {
+  font-weight: 700;
+  color: var(--neon);
+  user-select: none;
+}
+#terminalInput {
+  flex: 1;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid var(--neon);
+  color: var(--neon);
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 14px;
+  line-height: 1.4;
+  padding: 6px 8px;
+  outline-offset: 2px;
+  caret-color: var(--hover);
+  transition: border-color 0.3s ease;
+}
+#terminalInput::placeholder {
+  color: rgba(0,229,255,0.4);
+}
+#terminalInput:focus {
+  border-color: var(--hover);
+}
+/* Particle background canvas */
+#hudParticles {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 0;
+}
+@media (max-width: 980px) {
+  .container {
+    flex-direction: column;
+  }
+  .leftCol {
+    width: 100%;
+    order: 2;
+  }
+  .rightCol {
+    order: 1;
+  }
+  #hud {
+    left: 10px;
+    top: 8px;
+  }
+  .lbControls {
+    margin-top: 14px;
+  }
+  #terminalInputWrapper {
+    padding: 6px 10px;
+  }
+}
+/* Terminal input toggle on clicking Hello World */
+.headerTitle {
+  cursor: pointer;
+}
 </style>
 </head>
 <body>
-  <div class="scanlines" aria-hidden="true"></div>
+<div class="scanlines" aria-hidden="true"></div>
 
-  <!-- Particle background canvas -->
-  <canvas id="hudParticles"></canvas>
+<!-- Particle background canvas -->
+<canvas id="hudParticles"></canvas>
 
-  <!-- LOGIN -->
-  <div id="loginOverlay" role="dialog" aria-label="Login">
-    <div class="login-card" role="document">
-      <h1>Login</h1>
-      <input
-        id="loginPass"
-        class="login-input"
-        type="password"
-        placeholder="Enter password"
-        aria-label="Password"
-      />
-      <div class="login-actions">
-        <button id="loginBtn" class="btn-primary" aria-label="Enter">
-          Enter
-        </button>
-      </div>
-      <div class="login-sub">Enter the terminal</div>
-    </div>
-  </div>
-
-  <!-- HUD -->
-  <div id="hud" aria-live="polite">
-    <div class="hud-row" id="hud-date">
-      <i class="fa-regular fa-calendar"></i>
-      <span id="hud-date-text">Loading date…</span>
-    </div>
-    <div class="hud-row" id="hud-time">
-      <i class="fa-regular fa-clock"></i>
-      <span id="hud-time-text">--:--:--</span>
-    </div>
-    <div class="hud-row" id="hud-loc">
-      <i class="fa-solid fa-location-dot"></i>
-      <span id="hud-city">Toronto</span>
-    </div>
-    <div class="hud-row" id="hud-coords">
-      <i class="fa-solid fa-crosshairs"></i> Coords:
-      <span id="hud-coords-text">—</span>
-    </div>
-    <div class="hud-row" id="hud-weather">
-      <i class="fa-solid fa-cloud-sun"></i>
-      <span id="hud-weather-text">—</span>
-    </div>
-  </div>
-
-  <!-- MAIN -->
-  <main id="main">
-    <div class="container">
-      <!-- LEFT -->
-      <div class="leftCol" aria-hidden="false">
-        <div class="headerTitle">&gt;: ["Hello World..."]</div>
-        <div id="navWho" class="navItem" role="button" tabindex="0" aria-controls="whoPanel">Whoami</div>
-        <div id="navRef" class="navItem" role="button" tabindex="0" aria-controls="refPanel">Reflection</div>
-        <div id="navProd" class="navItem" role="button" tabindex="0" aria-controls="prodPanel">Productions</div>
-        <div id="navRes" class="navItem" role="button" tabindex="0" aria-controls="resPanel">Resources</div>
-        <div id="navContact" class="navItem" role="button" tabindex="0" aria-controls="contactPanel">Contact</div>
-      </div>
-      <div class="rightCol">
-        <!-- PANELS -->
-        <section id="whoPanel" class="panel" role="region" aria-labelledby="navWho">
-          <h2>Whoami</h2>
-          <p><strong>/BrandonSmart</strong><br />:-$ Teachable: ComputerTechnology</p>
-          <button class="backBtn" onclick="closePanel('whoPanel')">← Back</button>
-        </section>
-        <section id="refPanel" class="panel" role="region" aria-labelledby="navRef">
-          <h2>Reflection</h2>
-          <div id="reflectionText" aria-live="polite"></div>
-          <span class="cursor" id="reflectionCursor" aria-hidden="true"></span>
-          <button class="backBtn" onclick="closePanel('refPanel')">← Back</button>
-        </section>
-        <section id="prodPanel" class="panel" role="region" aria-labelledby="navProd">
-          <h2>Productions</h2>
-          <div class="productionsGrid" id="productionsGrid">
-            <div class="prodCard" data-index="0"><h3>Production 1: Power up</h3><p>View Content</p></div>
-            <div class="prodCard" data-index="1"><h3>Production 2: New Literacies Reflection</h3><p>Placeholder</p></div>
-            <div class="prodCard" data-index="2"><h3>Production 3: Critical Algorithmic Literacies and AI</h3><p>Placeholder</p></div>
-            <div class="prodCard" data-index="3"><h3>Production 4: Graphic Novel</h3><p>Placeholder</p></div>
-            <div class="prodCard" data-index="4"><h3>Production 5: On the Way to Video Inquiry</h3><p>Placeholder</p></div>
-            <div class="prodCard" data-index="5"><h3>Production 6: Video Works</h3><p>Placeholder</p></div>
-            <div class="prodCard" data-index="6"><h3>Production 7: Learning Principles</h3><p>Placeholder</p></div>
-            <div class="prodCard" data-index="7"><h3>Production 8: World Building</h3><p>Placeholder</p></div>
-            <div class="prodCard" data-index="8"><h3>Production 9: Twine</h3><p>Placeholder</p></div>
-          </div>
-          <button class="backBtn" onclick="closePanel('prodPanel')">← Back</button>
-        </section>
-        <section id="resPanel" class="panel" role="region" aria-labelledby="navRes">
-          <h2>Resources</h2>
-          <p><a href="https://youtube.com" target="_blank" rel="noopener">YouTube</a></p>
-          <p><a href="https://google.ca" target="_blank" rel="noopener">Google</a></p>
-          <p><a href="https://github.com" target="_blank" rel="noopener">GitHub</a></p>
-          <button class="backBtn" onclick="closePanel('resPanel')">← Back</button>
-        </section>
-        <section id="contactPanel" class="panel" role="region" aria-labelledby="navContact">
-          <h2>Contact</h2>
-          <div class="contact-row">
-            <div class="mail">
-              <i class="fa-solid fa-envelope"></i>&nbsp;
-              <a href="mailto:bsmart@my.yorku.ca">bsmart@my.yorku.ca</a>
-            </div>
-          </div>
-          <button class="backBtn" onclick="closePanel('contactPanel')">← Back</button>
-        </section>
-      </div>
-    </div>
-  </main>
-
-  <!-- Terminal input bar -->
-  <div id="terminalInputWrapper">
-    <div id="terminalPrompt">&gt;</div>
+<!-- LOGIN -->
+<div id="loginOverlay" role="dialog" aria-label="Login">
+  <div class="login-card" role="document">
+    <h1>Login</h1>
     <input
-      type="text"
-      id="terminalInput"
-      aria-label="Terminal command input"
-      placeholder="Type panel name like 'whoami' and press Enter"
-      autocomplete="off"
-      spellcheck="false"
-      autocorrect="off"
-      autocapitalize="off"
+      id="loginPass"
+      class="login-input"
+      type="password"
+      placeholder="Enter password"
+      aria-label="Password"
     />
+    <div class="login-actions">
+      <button id="loginBtn" class="btn-primary" aria-label="Enter">
+        Enter
+      </button>
+    </div>
+    <div class="login-sub">Enter the terminal</div>
   </div>
+</div>
 
-  <!-- LIGHTBOX -->
-  <div id="lightbox" role="dialog" aria-hidden="true" style="display:none">
-    <img id="lbImage" src="" alt="Screenshot" />
-    <div class="lbControls">
-      <button id="lbPrev">Prev</button>
-      <button id="lbNext">Next</button>
-      <button id="lbClose">Close</button>
+<!-- HUD -->
+<div id="hud" aria-live="polite">
+  <div class="hud-row" id="hud-date">
+    <i class="fa-regular fa-calendar"></i>
+    <span id="hud-date-text">Loading date…</span>
+  </div>
+  <div class="hud-row" id="hud-time">
+    <i class="fa-regular fa-clock"></i>
+    <span id="hud-time-text">--:--:--</span>
+  </div>
+  <div class="hud-row" id="hud-loc">
+    <i class="fa-solid fa-location-dot"></i>
+    <span id="hud-city">Toronto</span>
+  </div>
+  <div class="hud-row" id="hud-coords">
+    <i class="fa-solid fa-crosshairs"></i> Coords:
+    <span id="hud-coords-text">—</span>
+  </div>
+  <div class="hud-row" id="hud-weather">
+    <i class="fa-solid fa-cloud-sun"></i>
+    <span id="hud-weather-text">—</span>
+  </div>
+</div>
+
+<!-- MAIN -->
+<main id="main">
+  <div class="container">
+    <!-- LEFT -->
+    <div class="leftCol" aria-hidden="false">
+      <div class="headerTitle">&gt;: ["Hello World..."]</div>
+      <div id="navWho" class="navItem" role="button" tabindex="0" aria-controls="whoPanel">Whoami</div>
+      <div id="navRef" class="navItem" role="button" tabindex="0" aria-controls="refPanel">Reflection</div>
+      <div id="navProd" class="navItem" role="button" tabindex="0" aria-controls="prodPanel">Productions</div>
+      <div id="navRes" class="navItem" role="button" tabindex="0" aria-controls="resPanel">Resources</div>
+      <div id="navContact" class="navItem" role="button" tabindex="0" aria-controls="contactPanel">Contact</div>
+    </div>
+    <div class="rightCol">
+      <!-- PANELS -->
+      <section id="whoPanel" class="panel" role="region" aria-labelledby="navWho">
+        <h2>Whoami</h2>
+        <p><strong>/BrandonSmart</strong><br />:-$ Teachable: ComputerTechnology</p>
+        <button class="backBtn" onclick="closePanel('whoPanel')">← Back</button>
+      </section>
+      <section id="refPanel" class="panel" role="region" aria-labelledby="navRef">
+        <h2>Reflection</h2>
+        <div id="reflectionText" aria-live="polite"></div>
+        <span class="cursor" id="reflectionCursor" aria-hidden="true"></span>
+        <button class="backBtn" onclick="closePanel('refPanel')">← Back</button>
+      </section>
+      <section id="prodPanel" class="panel" role="region" aria-labelledby="navProd">
+        <h2>Productions</h2>
+        <div class="productionsGrid" id="productionsGrid">
+          <div class="prodCard" data-index="0">
+            <h3>Production 1: Power up</h3>
+            <p>View Content</p>
+          </div>
+          <div class="prodCard" data-index="1">
+            <h3>Production 2: New Literacies Reflection</h3>
+            <p>Placeholder</p>
+          </div>
+          <div class="prodCard" data-index="2">
+            <h3>Production 3: Critical Algorithmic Literacies and AI</h3>
+            <p>Placeholder</p>
+          </div>
+          <div class="prodCard" data-index="3">
+            <h3>Production 4: Graphic Novel</h3>
+            <p>Placeholder</p>
+          </div>
+          <div class="prodCard" data-index="4">
+            <h3>Production 5: On the Way to Video Inquiry</h3>
+            <p>Placeholder</p>
+          </div>
+          <div class="prodCard" data-index="5">
+            <h3>Production 6: Video Works</h3>
+            <p>Placeholder</p>
+          </div>
+          <div class="prodCard" data-index="6">
+            <h3>Production 7: Learning Principles</h3>
+            <p>Placeholder</p>
+          </div>
+          <div class="prodCard" data-index="7">
+            <h3>Production 8: World Building</h3>
+            <p>Placeholder</p>
+          </div>
+          <div class="prodCard" data-index="8">
+            <h3>Production 9: Twine</h3>
+            <p>Placeholder</p>
+          </div>
+        </div>
+        <button class="backBtn" onclick="closePanel('prodPanel')">← Back</button>
+      </section>
+      <section id="resPanel" class="panel" role="region" aria-labelledby="navRes">
+        <h2>Resources</h2>
+        <p><a href="https://youtube.com" target="_blank" rel="noopener">YouTube</a></p>
+        <p><a href="https://google.ca" target="_blank" rel="noopener">Google</a></p>
+        <p><a href="https://github.com" target="_blank" rel="noopener">GitHub</a></p>
+        <button class="backBtn" onclick="closePanel('resPanel')">← Back</button>
+      </section>
+      <section id="contactPanel" class="panel" role="region" aria-labelledby="navContact">
+        <h2>Contact</h2>
+        <div class="contact-row">
+          <div class="mail">
+            <i class="fa-solid fa-envelope"></i>&nbsp;
+            <a href="mailto:bsmart@my.yorku.ca">bsmart@my.yorku.ca</a>
+          </div>
+        </div>
+        <button class="backBtn" onclick="closePanel('contactPanel')">← Back</button>
+      </section>
     </div>
   </div>
+</main>
 
-  <!-- Wrong Password GIF Overlay -->
-  <div
-    id="wrongGifOverlay"
-    style="
-      display: none;
-      position: fixed;
-      inset: 0;
-      justify-content: center;
-      align-items: center;
-      background: rgba(0, 0, 0, 0.85);
-      z-index: 1500;
-    "
-  >
-    <img
-      src="images/computer missing GIF.gif"
-      alt="Wrong Password GIF"
-      style="width: 100%; height: 100%; object-fit: cover"
-    />
+<!-- Terminal input bar -->
+<div id="terminalInputWrapper">
+  <div id="terminalPrompt">&gt;</div>
+  <input
+    type="text"
+    id="terminalInput"
+    aria-label="Terminal command input"
+    placeholder="Type panel name like 'whoami' and press Enter"
+    autocomplete="off"
+    spellcheck="false"
+    autocorrect="off"
+    autocapitalize="off"
+  />
+</div>
+
+<!-- LIGHTBOX -->
+<div id="lightbox" role="dialog" aria-hidden="true" style="display:none">
+  <img id="lbImage" src="" alt="Screenshot" />
+  <div class="lbControls">
+    <button id="lbPrev">Prev</button>
+    <button id="lbNext">Next</button>
+    <button id="lbClose">Close</button>
   </div>
+</div>
 
-  <!-- Audio -->
-  <audio id="loginAudioCorrect" src="sounds/BC_Audio.mp3" preload="auto"></audio>
-  <audio
-    id="loginAudioWrong"
-    src="sounds/Hacked computer- Sound Effect.mp3"
-    preload="auto"
-  ></audio>
+<!-- Wrong Password GIF Overlay -->
+<div
+  id="wrongGifOverlay"
+  style="
+    display: none;
+    position: fixed;
+    inset: 0;
+    justify-content: center;
+    align-items: center;
+    background: rgba(0, 0, 0, 0.85);
+    z-index: 1500;
+  "
+>
+  <img
+    src="images/computer missing GIF.gif"
+    alt="Wrong Password GIF"
+    style="width: 100%; height: 100%; object-fit: cover"
+  />
+</div>
+
+<!-- Audio -->
+<audio id="loginAudioCorrect" src="sounds/BC_Audio.mp3" preload="auto"></audio>
+<audio
+  id="loginAudioWrong"
+  src="sounds/Hacked computer- Sound Effect.mp3"
+  preload="auto"
+></audio>
 
 <script>
 const OWM_API_KEY = '5043108521e5dc1feccf33701c3221bf';
 const PROD1_IMAGES = [
-  "images/Screenshot 2025-09-10 130926.png",
-  "images/Screenshot 2025-09-10 123717.png",
-  "images/Screenshot 2025-09-10 115645.png",
-  "images/Screenshot 2025-09-10 114858.png",
-  "images/Screenshot 2025-09-10 114832.png"
+  'images/Screenshot 2025-09-10 130926.png',
+  'images/Screenshot 2025-09-10 123717.png',
+  'images/Screenshot 2025-09-10 115645.png',
+  'images/Screenshot 2025-09-10 114858.png',
+  'images/Screenshot 2025-09-10 114832.png',
 ];
 
 // Login functionality
@@ -345,7 +729,9 @@ const loginAudioWrong = document.getElementById('loginAudioWrong');
 const terminalInputWrapper = document.getElementById('terminalInputWrapper');
 const terminalInput = document.getElementById('terminalInput');
 
-loginPass.addEventListener('keydown', e => { if(e.key==='Enter') loginBtn.click(); });
+loginPass.addEventListener('keydown', (e) => {
+  if (e.key === 'Enter') loginBtn.click();
+});
 loginBtn.addEventListener('click', () => {
   const v = (loginPass.value || '').trim();
   if (v === 'mrsmart') {
@@ -362,7 +748,7 @@ loginBtn.addEventListener('click', () => {
     loginAudioCorrect.volume = 0.7;
     loginAudioCorrect.pause();
     loginAudioCorrect.currentTime = 0;
-    loginAudioCorrect.play().catch(err => console.error('Audio failed:', err));
+    loginAudioCorrect.play().catch((err) => console.error('Audio failed:', err));
   } else {
     loginPass.value = '';
     loginPass.placeholder = 'Incorrect — try again';
@@ -438,20 +824,17 @@ function updateLocationWeather() {
   );
 }
 
-// Panels open/close logic with glow and glitch effect on panel titles
+// Panels open/close logic with glow effect on panel titles only
 function openPanel(id) {
   document.querySelectorAll('.panel').forEach((p) => {
     p.classList.remove('show');
     const h2 = p.querySelector('h2');
     if (h2) h2.classList.remove('active-glow');
   });
-
   document.getElementById(id).classList.add('show');
-  const activePanelTitle = document.getElementById(id).querySelector('h2');
-  if (activePanelTitle) activePanelTitle.classList.add('active-glow');
-
+  const activeTitle = document.getElementById(id).querySelector('h2');
+  if (activeTitle) activeTitle.classList.add('active-glow');
   noPanelContent.style.display = 'none';
-
   if (id === 'refPanel') {
     if (typingTimer) clearInterval(typingTimer);
     typingTimer = null;
@@ -459,28 +842,25 @@ function openPanel(id) {
     typeReflection(text);
   }
 }
-
 function closePanel(id) {
   const panel = document.getElementById(id);
   panel.classList.remove('show');
   const h2 = panel.querySelector('h2');
   if (h2) h2.classList.remove('active-glow');
   noPanelContent.style.display = 'flex';
-
   if (id === 'refPanel') {
     if (typingTimer) clearInterval(typingTimer);
     typingTimer = null;
     window.speechSynthesis.cancel();
   }
 }
-
 document.querySelectorAll('.navItem').forEach((el) =>
   el.addEventListener('click', () => {
     openPanel(el.getAttribute('aria-controls'));
   })
 );
 
-// Reflection typing/stop
+// Reflection typing & speech
 const reflectionEl = document.getElementById('reflectionText');
 const reflections = [
   `Building this site has been a deep learning experience. ... Overall, the experience emphasizes experimentation, problem-solving, and reflection in ways that are more self-directed, interactive, and personally meaningful than traditional learning environments.`,
@@ -561,7 +941,7 @@ document.getElementById('lbClose').addEventListener('click', () => {
   }, 350);
 });
 
-// Quotes rotation
+// Quotes rotation effect
 const quotes = [
   'Code is like humor. When you have to explain it, it’s bad.',
   'First, solve the problem. Then, write the code.',
@@ -580,7 +960,7 @@ function rotateQuotes() {
   }, 6000);
 }
 
-// Particle background system
+// Particle background animation
 (() => {
   const canvas = document.getElementById('hudParticles');
   const ctx = canvas.getContext('2d');
@@ -674,7 +1054,18 @@ function rotateQuotes() {
   animate();
 })();
 
-// Terminal command input logic with back and exit handlers
+// Terminal input toggle on clicking Hello World
+const headerTitle = document.querySelector('.headerTitle');
+headerTitle.addEventListener('click', () => {
+  if (terminalInputWrapper.style.display === 'flex') {
+    terminalInputWrapper.style.display = 'none';
+  } else {
+    terminalInputWrapper.style.display = 'flex';
+    terminalInput.focus();
+  }
+});
+
+// Terminal command input logic with back and exit support
 terminalInput.addEventListener('keydown', (e) => {
   if (e.key === 'Enter') {
     const val = terminalInput.value.trim().toLowerCase();
@@ -690,9 +1081,8 @@ terminalInput.addEventListener('keydown', (e) => {
       res: 'resPanel',
       cont: 'contactPanel',
     };
-
     if (val === 'back') {
-      document.querySelectorAll('.panel').forEach(p => p.classList.remove('show'));
+      document.querySelectorAll('.panel').forEach((p) => p.classList.remove('show'));
       noPanelContent.style.display = 'flex';
       if (window.speechSynthesis) window.speechSynthesis.cancel();
       if (typingTimer) {
@@ -718,7 +1108,6 @@ terminalInput.addEventListener('keydown', (e) => {
   }
 });
 </script>
-
-<img src="images/right_icon0.gif" id="cornerGlobe" alt="Globe Glow" style="display:none; border-radius:50%;" />
+<img src="images/right_icon1.gif" id="cornerGlobe" alt="Globe Glow" style="display:none; border-radius:50%" />
 </body>
 </html>
