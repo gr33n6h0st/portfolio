@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Hello World - Brandon Smart's Portfolio</title>
+<title>Brandon Smart's Portfolio</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet"/>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
@@ -14,89 +14,73 @@
   --panel: rgba(10,12,15,0.9);
   --hover: #00ffb3;
   --hud-w: 260px;
-  --night-neon: #00ff00;
-  --night-bg: #001100;
 }
-/* base styles */
-* {box-sizing: border-box;}
-html,body {
+* {
+  box-sizing: border-box;
+}
+html, body {
   height: 100%;
   margin: 0;
   font-family: 'Share Tech Mono', monospace;
   background: linear-gradient(180deg, #020203, #07080a);
   color: var(--neon);
   -webkit-font-smoothing: antialiased;
-  user-select: none;
-  overflow-x: hidden;
-}
-
-/* Background matrix style */
-#matrix {
-  position: fixed;
-  top: 0; left: 0; width: 100%;
-  height: 100%;
-  z-index: 1;
-  pointer-events: none;
-  background: black;
-  color: var(--neon);
-  font-family: monospace;
-  font-size: 8px;
-  line-height: 8px;
-  overflow: hidden;
-  opacity: 0.08;
-}
-@keyframes fall {
-  0% {transform: translateY(-100%);}
-  100% {transform: translateY(100%);}
-}
-.matrix-column {
-  position: absolute;
-  top: -100%;
-  width: 10px;
-  animation: fall linear infinite;
-  color: var(--neon);
   user-select:none;
 }
-/* Scanline overlay */
-.scanline-overlay {
+a {
+  color: var(--neon);
+  text-decoration: underline;
+  cursor: pointer;
+  user-select: text;
+  transition: color 0.18s ease;
+}
+a:hover, a:focus {
+  color: var(--hover);
+  outline: none;
+}
+.scanlines {
   pointer-events: none;
   position: fixed;
   inset: 0;
-  z-index: 999;
-  background: repeating-linear-gradient(
-    0deg,
-    rgba(0, 229, 255, 0.1) 0,
-    rgba(0, 229, 255, 0.15) 1px,
-    transparent 2px,
-    transparent 3px
-  );
-  opacity: 0.12;
-  mix-blend-mode: screen;
+  z-index: 40;
+  background: repeating-linear-gradient(to bottom, rgba(0,229,255,0.03) 0px, rgba(0,229,255,0.03) 1px, transparent 1px, transparent 3px);
+  opacity: 0.18;
+  filter: brightness(0.9);
+  mask-image: radial-gradient(circle at center, rgba(0,0,0,0) 0%, rgba(0,0,0,0) 70%, rgba(0,0,0,0.85) 100%);
 }
-
-/* GLOBE */
 #cornerGlobe {
+  display: none;
   position: fixed;
   top: 12px;
   right: 12px;
-  width: 120px;
+  width: 120px !important;
   height: 120px;
   border-radius: 50%;
-  z-index: 3002;
+  z-index: 3000;
   pointer-events: none;
   -webkit-mask-image: radial-gradient(circle, rgba(0,0,0,1) 85%, rgba(0,0,0,0) 100%);
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  -webkit-mask-size: cover;
   mask-image: radial-gradient(circle, rgba(0,0,0,1) 85%, rgba(0,0,0,0) 100%);
-  box-shadow: 0 0 20px var(--neon);
+  mask-repeat: no-repeat;
+  mask-position: center;
+  mask-size: cover;
+  box-shadow: 0 0 24px var(--neon);
 }
-
-/* LOGIN same as before */
 #loginOverlay {
-  position: fixed; inset: 0; z-index: 1200;
-  display: flex; align-items: center; justify-content: center;
+  position: fixed;
+  inset: 0;
+  z-index: 1200;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   background: linear-gradient(180deg, rgba(0,0,0,0.98), rgba(0,0,0,0.98));
 }
 .login-card {
-  width: 380px; padding: 28px; border-radius: 14px;
+  width: 380px;
+  padding: 28px;
+  border-radius: 14px;
   background: linear-gradient(135deg, rgba(0,229,255,0.04), rgba(0,102,153,0.03));
   border: 1px solid rgba(0,229,255,0.12);
   box-shadow: 0 18px 60px rgba(0,0,0,0.7), inset 0 0 14px rgba(0,229,255,0.02);
@@ -126,8 +110,15 @@ html,body {
   transition: border-color 0.18s ease;
   user-select: text;
 }
-.login-input:focus { border-color: var(--hover);}
-.login-actions { margin-top: 12px; display:flex; justify-content:center; gap:8px; }
+.login-input:focus {
+  border-color: var(--hover);
+}
+.login-actions {
+  margin-top: 12px;
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+}
 .btn-primary {
   padding: 8px 16px;
   border-radius: 999px;
@@ -141,7 +132,9 @@ html,body {
   box-shadow: 0 0 24px var(--neon);
   user-select:none;
 }
-.btn-primary:hover { background: var(--hover); }
+.btn-primary:hover {
+  background: var(--hover);
+}
 .login-sub {
   margin-top: 20px;
   font-weight: 600;
@@ -149,8 +142,6 @@ html,body {
   font-size: 13px;
   user-select:none;
 }
-
-/* HUD with glow, no network bars */
 #hud {
   position: fixed;
   top: 12px;
@@ -179,56 +170,13 @@ html,body {
   flex-shrink: 0;
   vertical-align: middle;
 }
-
-/* radar animation */
-.radar {
-  position: relative;
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  border: 1.5px solid var(--neon);
-  box-shadow: 0 0 8px var(--neon);
-  overflow: visible;
-  margin-left: auto;
-}
-.radar::before {
-  content: '';
-  position: absolute;
-  top: 50%; left: 50%;
-  width: 140%; height: 140%;
-  background: rgba(0, 229, 255, 0.2);
-  border-radius: 50%;
-  transform: translate(-50%, -50%);
-  animation: pulse 2.5s infinite ease-out;
-}
-.radar::after {
-  content: '';
-  position: absolute;
-  top: 50%; left: 50%;
-  width: 60%; height: 2px;
-  background: var(--neon);
-  border-radius: 2px;
-  transform-origin: left center;
-  animation: sweep 2.5s linear infinite;
-}
-@keyframes pulse {
-  0% { box-shadow: 0 0 6px 6px rgba(0,229,255,0.3);}
-  70% { box-shadow: 0 0 18px 20px rgba(0,229,255,0.0);}
-  100% { box-shadow: 0 0 6px 6px rgba(0,229,255,0.0);}
-}
-@keyframes sweep {
-  0% { transform: translate(-50%, -50%) rotate(0deg);}
-  100% { transform: translate(-50%, -50%) rotate(360deg);}
-}
-
-/* MAIN layouts and style */
 #main {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
-  padding: 120px 28px 60px;
+  padding: 120px 28px 40px;
   z-index: 1000;
 }
 .container {
@@ -275,17 +223,11 @@ html,body {
   color: #00111b;
   transform: translateY(-5px);
   box-shadow: 0 0 20px var(--neon);
-  filter: drop-shadow(0 0 12px var(--neon));
-  transition-delay: 0.1s;
 }
-
-/* rightCol: panels area */
 .rightCol {
   flex: 1;
   min-height: 400px;
 }
-
-/* Panel cards with flicker glitch effect */
 .panel {
   display: none;
   background: var(--panel);
@@ -300,18 +242,10 @@ html,body {
   font-size: 15px;
   letter-spacing: 0.04em;
   z-index: 1150;
-  animation-duration: 1s;
-  animation-fill-mode: forwards;
 }
 .panel.show {
-  animation-name: flickerIn;
+  display: block;
 }
-@keyframes flickerIn {
-  0% {opacity: 0; filter: blur(3px) drop-shadow(0 0 0 #00e5ff);}
-  50% {opacity: 1; filter: drop-shadow(0 0 12px #00e5ff);}
-  100% {opacity: 1; filter: drop-shadow(0 0 6px #00e5ff);}
-}
-
 .panel h2 {
   margin-top: 0;
   margin-bottom: 14px;
@@ -340,11 +274,9 @@ html,body {
   vertical-align: middle;
 }
 @keyframes cursorBlink {
-  0%, 50% { opacity: 1; }
-  51%, 100% { opacity: 0; }
+  0%, 50% {opacity: 1;}
+  51%, 100% {opacity: 0;}
 }
-
-/* productions grid */
 .productionsGrid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -380,10 +312,7 @@ html,body {
 }
 .prodCard:hover h3 {
   color: #001018;
-  filter: drop-shadow(0 0 8px var(--neon));
 }
-
-/* lightbox */
 #lightbox {
   display: none;
   position: fixed;
@@ -445,8 +374,6 @@ html,body {
   color: #06222f;
   transform: translateY(-2px) scale(1.04);
 }
-
-/* back button */
 .backBtn {
   margin-top: 12px;
   padding: 8px 12px;
@@ -461,8 +388,6 @@ html,body {
   background: rgba(0,229,255,0.06);
   color: #001018;
 }
-
-/* quotes */
 .quoteBox {
   margin-top: 40px;
   text-align: center;
@@ -471,26 +396,24 @@ html,body {
   transition: opacity 0.6s ease;
   min-height: 40px;
 }
-
-/* interactive terminal input area fixed at bottom */
+/* Terminal command input bottom */
 #commandLine {
   position: fixed;
   bottom: 0;
   left: 0;
   right: 0;
   background: var(--panel);
-  box-shadow: 0 0 24px var(--neon);
-  padding: 8px 16px;
+  padding: 10px 16px;
   font-family: 'Share Tech Mono', monospace;
   font-size: 14px;
   color: var(--neon);
   display: flex;
   align-items: center;
   z-index: 4000;
+  border-top: 1px solid rgba(0,229,255,0.15);
 }
 #cmdPrompt {
-  color: var(--neon);
-  margin-right: 12px;
+  margin-right: 10px;
   font-weight: 700;
 }
 #cmdInput {
@@ -502,65 +425,8 @@ html,body {
   font-family: inherit;
   font-size: inherit;
   letter-spacing: 0.04em;
+  user-select: text;
 }
-
-/* glowing cursor trail on hover for nav items */
-.navItem:hover::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  border-radius: 12px;
-  box-shadow: 0 0 15px var(--neon);
-  pointer-events: none;
-  animation: pulseGlow 1.8s infinite ease-in-out;
-}
-@keyframes pulseGlow {
-  0%,100% {box-shadow: 0 0 10px var(--neon);}
-  50% {box-shadow: 0 0 24px var(--neon);}
-}
-
-/* night mode toggle button */
-#toggleNight {
-  position: fixed;
-  top: 140px;
-  right: 20px;
-  padding: 8px 16px;
-  background: var(--neon);
-  color: #001018;
-  border: none;
-  border-radius: 9999px;
-  font-weight: 700;
-  cursor: pointer;
-  user-select: none;
-  z-index: 3500;
-  filter: drop-shadow(0 0 5px var(--neon));
-  transition: background 0.3s ease;
-}
-#toggleNight:hover {
-  background: var(--hover);
-}
-.night-mode {
-  --neon: var(--night-neon);
-  background: var(--night-bg) !important;
-  color: var(--night-neon) !important;
-}
-.night-mode #hud {
-  background: rgba(0,17,0,0.9);
-  border-color: rgba(0,255,0,0.15);
-  box-shadow: 0 0 24px var(--neon);
-}
-.night-mode .panel {
-  background: rgba(0,17,0,0.9);
-  border-color: rgba(0,255,0,0.15);
-  box-shadow: 0 0 18px var(--neon);
-}
-.night-mode .btn-primary {
-  background: linear-gradient(135deg, var(--neon), #00ff00);
-  color: #001018;
-  box-shadow: 0 0 18px var(--neon);
-}
-
-/* responsive */
 @media (max-width:980px) {
   .container {
     flex-direction: column;
@@ -581,170 +447,95 @@ html,body {
     width: 100px !important;
     height: 100px;
   }
-  #toggleNight {
-    top: 160px;
-    right: 12px;
-  }
 }
 </style>
 </head>
 <body>
+  <div class="scanlines" aria-hidden="true"></div>
 
-<div id="matrix"></div>
-<div class="scanline-overlay"></div>
-<img src="images/right_icon0.gif" id="cornerGlobe" alt="Globe Glow" style="display:none; border-radius:50%;" />
+  <img src="images/globeglow.gif" id="cornerGlobe" alt="Globe Glow" style="display:none; border-radius:50%;" />
 
-<!-- LOGIN -->
-<div id="loginOverlay" role="dialog" aria-label="Login" aria-modal="true">
-  <div class="login-card" role="document">
-    <h1>Login</h1>
-    <input id="loginPass" class="login-input" type="password" placeholder="Enter password" aria-label="Password" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
-    <div class="login-actions">
-      <button id="loginBtn" class="btn-primary" aria-label="Enter">Enter</button>
-    </div>
-    <div class="login-sub">Enter the terminal</div>
-  </div>
-</div>
-
-<!-- HUD -->
-<div id="hud" aria-live="polite" aria-label="Heads Up Display">
-  <div class="hud-row" id="hud-date"><i class="fa-regular fa-calendar"></i> <span id="hud-date-text">Loading date…</span></div>
-  <div class="hud-row" id="hud-time"><i class="fa-regular fa-clock"></i> <span id="hud-time-text">--:--:--</span></div>
-  <div class="hud-row" id="hud-loc"><i class="fa-solid fa-location-dot"></i> <span id="hud-city">Toronto</span></div>
-  <div class="hud-row" id="hud-coords"><i class="fa-solid fa-crosshairs"></i> Coords: <span id="hud-coords-text">—</span></div>
-  <div class="hud-row" id="hud-weather"><i class="fa-solid fa-cloud-sun"></i> <span id="hud-weather-text">—</span></div>
-  <div class="hud-row">
-    <div class="radar"></div>
-  </div>
-</div>
-
-<!-- NIGHT MODE TOGGLE -->
-<button id="toggleNight" aria-label="Toggle night mode">Toggle Night Mode</button>
-
-<!-- MAIN -->
-<main id="main">
-  <div class="container">
-    <div class="leftCol" aria-hidden="false">
-      <div class="headerTitle">>: ["Hello World..."]</div>
-      <div id="navWho" class="navItem" role="button" tabindex="0" aria-controls="whoPanel">Whoami</div>
-      <div id="navRef" class="navItem" role="button" tabindex="0" aria-controls="refPanel">Reflection</div>
-      <div id="navProd" class="navItem" role="button" tabindex="0" aria-controls="prodPanel">Productions</div>
-      <div id="navRes" class="navItem" role="button" tabindex="0" aria-controls="resPanel">Resources</div>
-      <div id="navContact" class="navItem" role="button" tabindex="0" aria-controls="contactPanel">Contact</div>
-    </div>
-    <div class="rightCol">
-      <section id="whoPanel" class="panel" role="region" aria-labelledby="navWho">
-        <h2>Whoami</h2>
-        <p><strong>/BrandonSmart</strong><br>:-$ Teachable: ComputerTechnology</p>
-        <button class="backBtn" onclick="closePanel('whoPanel')">← Back</button>
-      </section>
-      <section id="refPanel" class="panel" role="region" aria-labelledby="navRef">
-        <h2>Reflection</h2>
-        <div id="reflectionText" aria-live="polite"></div>
-        <span class="cursor" id="reflectionCursor" aria-hidden="true"></span>
-        <button class="backBtn" onclick="closePanel('refPanel')">← Back</button>
-      </section>
-      <section id="prodPanel" class="panel" role="region" aria-labelledby="navProd">
-        <h2>Productions</h2>
-        <div class="productionsGrid" id="productionsGrid">
-          <div class="prodCard" data-index="0"><h3>Production 1: Power up</h3><p>View Content</p></div>
-          <div class="prodCard" data-index="1"><h3>Production 2: New Literacies Reflection</h3><p>Placeholder</p></div>
-          <div class="prodCard" data-index="2"><h3>Production 3: Critical Algorithmic Literacies and AI</h3><p>Placeholder</p></div>
-          <div class="prodCard" data-index="3"><h3>Production 4: Graphic Novel</h3><p>Placeholder</p></div>
-          <div class="prodCard" data-index="4"><h3>Production 5: On the Way to Video Inquiry</h3><p>Placeholder</p></div>
-          <div class="prodCard" data-index="5"><h3>Production 6: Video Works</h3><p>Placeholder</p></div>
-          <div class="prodCard" data-index="6"><h3>Production 7: Learning Principles</h3><p>Placeholder</p></div>
-          <div class="prodCard" data-index="7"><h3>Production 8: World Building</h3><p>Placeholder</p></div>
-          <div class="prodCard" data-index="8"><h3>Production 9: Twine</h3><p>Placeholder</p></div>
-        </div>
-        <button class="backBtn" onclick="closePanel('prodPanel')">← Back</button>
-      </section>
-      <section id="resPanel" class="panel" role="region" aria-labelledby="navRes">
-        <h2>Resources</h2>
-        <p><a href="https://youtube.com" target="_blank" rel="noopener">YouTube</a></p>
-        <p><a href="https://google.ca" target="_blank" rel="noopener">Google</a></p>
-        <p><a href="https://github.com" target="_blank" rel="noopener">GitHub</a></p>
-        <button class="backBtn" onclick="closePanel('resPanel')">← Back</button>
-      </section>
-      <section id="contactPanel" class="panel" role="region" aria-labelledby="navContact">
-        <h2>Contact</h2>
-        <div class="contact-row">
-          <i class="fa-solid fa-envelope"></i> <a href="mailto:bsmart@my.yorku.ca">bsmart@my.yorku.ca</a>
-        </div>
-        <button class="backBtn" onclick="closePanel('contactPanel')">← Back</button>
-      </section>
+  <div id="loginOverlay" role="dialog" aria-label="Login" aria-modal="true">
+    <div class="login-card" role="document">
+      <h1>Login</h1>
+      <input id="loginPass" class="login-input" type="password" placeholder="Enter password" aria-label="Password" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+      <div class="login-actions">
+        <button id="loginBtn" class="btn-primary" aria-label="Enter">Enter</button>
+      </div>
+      <div class="login-sub">Enter the terminal</div>
     </div>
   </div>
 
-  <!-- QUOTES -->
-  <div id="quote" class="quoteBox">Loading inspiration…</div>
-</main>
-
-<!-- TERMINAL input -->
-<div id="commandLine">
-  <div id="cmdPrompt">&gt;</div>
-  <input type="text" id="cmdInput" autocomplete="off" aria-label="Command line input" />
-</div>
-
-<!-- LIGHTBOX -->
-<div id="lightbox" role="dialog" aria-hidden="true" style="display:none;">
-  <img id="lbImage" src="" alt="Screenshot"/>
-  <div class="lbControls">
-    <button id="lbPrev">Prev</button>
-    <button id="lbNext">Next</button>
-    <button id="lbClose">Close</button>
+  <div id="hud" aria-live="polite" aria-label="Heads Up Display">
+    <div class="hud-row" id="hud-date"><i class="fa-regular fa-calendar"></i> <span id="hud-date-text">Loading date…</span></div>
+    <div class="hud-row" id="hud-time"><i class="fa-regular fa-clock"></i> <span id="hud-time-text">--:--:--</span></div>
+    <div class="hud-row" id="hud-loc"><i class="fa-solid fa-location-dot"></i> <span id="hud-city">Toronto</span></div>
+    <div class="hud-row" id="hud-coords"><i class="fa-solid fa-crosshairs"></i> Coords: <span id="hud-coords-text">—</span></div>
+    <div class="hud-row" id="hud-weather"><i class="fa-solid fa-cloud-sun"></i> <span id="hud-weather-text">—</span></div>
   </div>
-</div>
 
-<!-- Wrong Password GIF Overlay -->
-<div id="wrongGifOverlay" style="display:none; position:fixed; inset:0; justify-content:center; align-items:center; background: rgba(0,0,0,0.85); z-index:1500;">
-  <img src="images/computer missing GIF.gif" alt="Wrong Password GIF" style="width:100%; height:100%; object-fit:cover;"/>
-</div>
+  <main id="main">
+    <div class="container">
+      <div class="leftCol" aria-hidden="false">
+        <div class="headerTitle">>: ["Hello World..."]</div>
+        <div id="navWho" class="navItem" role="button" tabindex="0" aria-controls="whoPanel">Whoami</div>
+        <div id="navRef" class="navItem" role="button" tabindex="0" aria-controls="refPanel">Reflection</div>
+        <div id="navProd" class="navItem" role="button" tabindex="0" aria-controls="prodPanel">Productions</div>
+        <div id="navRes" class="navItem" role="button" tabindex="0" aria-controls="resPanel">Resources</div>
+        <div id="navContact" class="navItem" role="button" tabindex="0" aria-controls="contactPanel">Contact</div>
+      </div>
+      <div class="rightCol">
+        <section id="whoPanel" class="panel" role="region" aria-labelledby="navWho">
+          <h2>Whoami</h2>
+          <p><strong>/BrandonSmart</strong><br>:-$ Teachable: ComputerTechnology</p>
+          <button class="backBtn" onclick="closePanel('whoPanel')">← Back</button>
+        </section>
+        <section id="refPanel" class="panel" role="region" aria-labelledby="navRef">
+          <h2>Reflection</h2>
+          <div id="reflectionText" aria-live="polite"></div><span class="cursor" id="reflectionCursor" aria-hidden="true"></span>
+          <button class="backBtn" onclick="closePanel('refPanel')">← Back</button>
+        </section>
+        <section id="prodPanel" class="panel" role="region" aria-labelledby="navProd">
+          <h2>Productions</h2>
+          <div class="productionsGrid" id="productionsGrid">
+            <div class="prodCard" data-index="0"><h3>Production 1: Power up</h3><p>View Content</p></div>
+            <div class="prodCard" data-index="1"><h3>Production 2: New Literacies Reflection</h3><p>Placeholder</p></div>
+            <div class="prodCard" data-index="2"><h3>Production 3: Critical Algorithmic Literacies and AI</h3><p>Placeholder</p></div>
+            <div class="prodCard" data-index="3"><h3>Production 4: Graphic Novel</h3><p>Placeholder</p></div>
+            <div class="prodCard" data-index="4"><h3>Production 5: On the Way to Video Inquiry</h3><p>Placeholder</p></div>
+            <div class="prodCard" data-index="5"><h3>Production 6: Video Works</h3><p>Placeholder</p></div>
+            <div class="prodCard" data-index="6"><h3>Production 7: Learning Principles</h3><p>Placeholder</p></div>
+            <div class="prodCard" data-index="7"><h3>Production 8: World Building</h3><p>Placeholder</p></div>
+            <div class="prodCard" data-index="8"><h3>Production 9: Twine</h3><p>Placeholder</p></div>
+          </div>
+          <button class="backBtn" onclick="closePanel('prodPanel')">← Back</button>
+        </section>
+        <section id="resPanel" class="panel" role="region" aria-labelledby="navRes">
+          <h2>Resources</h2>
+          <p><a href="https://youtube.com" target="_blank" rel="noopener">YouTube</a></p>
+          <p><a href="https://google.ca" target="_blank" rel="noopener">Google</a></p>
+          <p><a href="https://github.com" target="_blank" rel="noopener">GitHub</a></p>
+          <button class="backBtn" onclick="closePanel('resPanel')">← Back</button>
+        </section>
+        <section id="contactPanel" class="panel" role="region" aria-labelledby="navContact">
+          <h2>Contact</h2>
+          <div class="contact-row">
+            <i class="fa-solid fa-envelope"></i> <a href="mailto:bsmart@my.yorku.ca">bsmart@my.yorku.ca</a>
+          </div>
+          <button class="backBtn" onclick="closePanel('contactPanel')">← Back</button>
+        </section>
+      </div>
+    </div>
+    <div id="quote" class="quoteBox">Loading inspiration…</div>
+  </main>
 
-<!-- Audio -->
-<audio id="loginAudioCorrect" src="sounds/BC_Audio.mp3" preload="auto"></audio>
-<audio id="loginAudioWrong" src="sounds/Hacked%20computer-%20Sound%20Effect.mp3" preload="auto"></audio>
-<audio id="keyboardClick" src="sounds/keyboard-click.mp3" preload="auto"></audio>
-
+  <!-- Terminal command input -->
+  <div id="commandLine" role="region" aria-label="Command line input">
+    <div id="cmdPrompt">&gt;</div>
+    <input type="text" id="cmdInput" autocomplete="off" aria-label="Type a command here" />
+  </div>
 <script>
-// Matrix animated background script
-const matrix = document.getElementById('matrix');
-const columns = Math.floor(window.innerWidth / 10);
-const drops = Array(columns).fill(1);
-
-function drawMatrix() {
-  matrix.innerHTML = '';
-  for (let i = 0; i < columns; i++) {
-    const column = document.createElement('div');
-    column.classList.add('matrix-column');
-    column.style.left = (i * 10) + 'px';
-    column.style.animationDuration = (Math.random() * 3 + 2) + 's';
-
-    let content = '';
-    let dropPos = drops[i];
-    for (let j = 0; j < 20; j++) {
-      content += String.fromCharCode(0x30A0 + Math.floor(Math.random() * 96)) + '<br>';
-    }
-    column.innerHTML = content;
-
-    matrix.appendChild(column);
-
-    drops[i]++;
-    if (drops[i] * 10 > window.innerHeight && Math.random() > 0.975) {
-      drops[i] = 0;
-    }
-  }
-}
-window.onload = () => { drawMatrix(); };
-setInterval(drawMatrix, 150);
-
-// Scanline overlay flicker
-const scanlineOverlay = document.querySelector('.scanline-overlay');
-setInterval(() => {
-  scanlineOverlay.style.opacity = 0.1 + Math.random() * 0.1;
-}, 1000 + Math.random() * 1000);
-
-// Login sound and interaction
+  // Keyboard click sound
 const keyClick = document.getElementById('keyboardClick');
 document.querySelectorAll('.navItem').forEach(nav => {
   nav.addEventListener('click', () => {
@@ -864,36 +655,26 @@ function openPanel(id) {
 function closePanel(id) {
   const panel = document.getElementById(id);
   panel.classList.remove('show');
-  if(id === 'refPanel') {
+  if(id==='refPanel') {
     if(typingTimer) clearInterval(typingTimer);
-    typingTimer = null;
+    typingTimer=null;
     window.speechSynthesis.cancel();
   }
 }
 document.querySelectorAll('.navItem').forEach(el => el.addEventListener('click', () => openPanel(el.getAttribute('aria-controls'))));
 
 const reflectionEl = document.getElementById('reflectionText');
-const reflections = [`Building this site has been a deep learning experience. As I create and structure each section, I notice how I interact differently with coding tools, the browser, and design interfaces compared to traditional classroom learning. 
-Using HTML, CSS, and JavaScript forces me to think in terms of both logic and aesthetics, balancing functionality with appearance. The immediate feedback from the browser—seeing changes live, debugging errors, and watching animations or interactive elements respond—helps me internalize what works and what doesn’t. 
-AI tools have been critical as a guide; they suggest code optimizations, point out mistakes, and sometimes give creative alternatives. 
-
-
-I also consult online documentation, tutorials, and forums, and occasionally local communities of developers and students to see how they approach similar challenges. These resources, combined with AI guidance, create a learning loop: I try, I get feedback, I adjust, and I reflect. During the process, my emotions fluctuate—frustration appears when things break unexpectedly, curiosity drives me to experiment, and satisfaction comes from solving problems or achieving a visual effect I envisioned. 
-The moment-to-moment learning differs from typical school exercises; it’s hands-on, iterative, and self-directed. There’s no prescribed path; success is measured by functioning code and the coherence of the site itself rather than grades.
-
-
-Compared to prior learning experiences in school or workshops, this project requires simultaneous attention to multiple layers—technical, visual, and conceptual—making the process more holistic and immersive. Every design decision, from color choices to layout structure, is both a learning opportunity and an expression of creativity. 
-The site acts as both a canvas and a feedback mechanism, reflecting my progress, mistakes, and growth in real time. Overall, the experience emphasizes experimentation, problem-solving, and reflection in ways that are more self-directed, interactive, and personally meaningful than traditional learning environments.`];
+const reflections = [`Your reflection text here...`];
 let typingTimer = null;
 function typeReflection(text) {
-  if (typingTimer) clearInterval(typingTimer);
+  if(typingTimer) clearInterval(typingTimer);
   reflectionEl.textContent = '';
-  let i = 0;
+  let i=0;
   speechSynthesis.cancel();
   const utter = new SpeechSynthesisUtterance(text);
   window.speechSynthesis.speak(utter);
   typingTimer = setInterval(() => {
-    if (i < text.length) {
+    if(i < text.length) {
       reflectionEl.textContent += text[i];
       i++;
     } else {
@@ -904,67 +685,20 @@ function typeReflection(text) {
 }
 document.getElementById('navRef').addEventListener('click', () => typeReflection(reflections[0]));
 
-/* Production Lightbox code */
-const productionImagesMap = {0: PROD1_IMAGES};
-let currImages = [], currIndex = 0;
-const lb = document.getElementById('lightbox');
-const lbImg = document.getElementById('lbImage');
-document.querySelectorAll('.prodCard').forEach(card => {
-  card.addEventListener('click', () => {
-    const idx = card.dataset.index;
-    currImages = productionImagesMap[idx] || [];
-    if(!currImages.length) return;
-    currIndex = 0;
-    lbImg.style.opacity = '0';
-    setTimeout(() => {
-      lbImg.src = currImages[currIndex];
-      setTimeout(() => { lbImg.style.opacity = '1'; }, 60);
-    }, 100);
-    lb.style.display = 'flex';
-    setTimeout(() => lb.classList.add('show'), 12);
-  });
-});
-function updateLbImage() {
-  lbImg.style.opacity = '0';
-  setTimeout(() => {
-    lbImg.src = currImages[currIndex];
-    setTimeout(() => { lbImg.style.opacity = '1'; }, 60);
-  }, 120);
-}
-document.getElementById('lbPrev').addEventListener('click', () => {
-  if(!currImages.length) return;
-  currIndex = (currIndex-1+currImages.length) % currImages.length;
-  updateLbImage();
-});
-document.getElementById('lbNext').addEventListener('click', () => {
-  if(!currImages.length) return;
-  currIndex = (currIndex+1) % currImages.length;
-  updateLbImage();
-});
-document.getElementById('lbClose').addEventListener('click', () => {
-  lb.classList.remove('show');
-  setTimeout(() => { lb.style.display = 'none'; }, 350);
-});
-
-/* Night mode toggle */
-const toggleNight = document.getElementById('toggleNight');
-toggleNight.addEventListener('click', () => {
-  document.body.classList.toggle('night-mode');
-});
-
-/* Command line interactive widget */
+/* Terminal command input */
 const cmdInput = document.getElementById('cmdInput');
-const cmdPrompt = document.getElementById('cmdPrompt');
-
 cmdInput.addEventListener('keydown', e => {
   if(e.key === 'Enter') {
-    const val = cmdInput.value.trim().toLowerCase();
-    if(val === 'whoami') openPanel('whoPanel');
-    else if(val === 'reflection') openPanel('refPanel');
-    else if(val === 'productions') openPanel('prodPanel');
-    else if(val === 'resources') openPanel('resPanel');
-    else if(val === 'contact') openPanel('contactPanel');
-    else alert(`Command not recognized: ${val}`);
+    const cmd=cmdInput.value.trim().toLowerCase();
+    switch(cmd) {
+      case 'whoami': openPanel('whoPanel'); break;
+      case 'reflection': openPanel('refPanel'); break;
+      case 'productions': openPanel('prodPanel'); break;
+      case 'resources': openPanel('resPanel'); break;
+      case 'contact': openPanel('contactPanel'); break;
+      case '': break; // no command
+      default: alert(`Unknown command: ${cmd}`);
+    }
     cmdInput.value = '';
   }
 });
