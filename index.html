@@ -298,21 +298,38 @@ function startHud() {
 }
 
 /* ------------------ Weather / Coordinates ------------------ */
-function updateLocationWeather() {
+async function updateLocationWeather() {
   if (!navigator.geolocation) return;
 
-  navigator.geolocation.getCurrentPosition(pos => {
+  navigator.geolocation.getCurrentPosition(async pos => {
     const { latitude, longitude } = pos.coords;
     document.getElementById('hudCoords').textContent = `Coords: ${latitude.toFixed(2)}, ${longitude.toFixed(2)}`;
-    fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=${OWM_API_KEY}&units=metric`)
-      .then(r => r.json())
-      .then(data => {
-        document.getElementById('hudCity').textContent = data.name;
-        document.getElementById('hudWeather').textContent = `${data.weather[0].main} ${data.main.temp}°C`;
-      })
-      .catch(err => console.error(err));
+
+    try {
+      // 1. Get city & country from OpenWeather
+      const weatherRes = await fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=${OWM_API_KEY}&units=metric`);
+      const weatherData = await weatherRes.json();
+      const city = weatherData.name || '';
+      const countryCode = weatherData.sys?.country || '';
+
+      // 2. Reverse geocode to get state/province
+      const geoRes = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`);
+      const geoData = await geoRes.json();
+      const state = geoData.address.state || geoData.address.county || '';
+
+      // 3. Build full location string
+      const locationString = [city, state, countryCode].filter(Boolean).join(', ');
+
+      // 4. Update HUD
+      document.getElementById('hudCity').textContent = locationString;
+      document.getElementById('hudWeather').textContent = `${weatherData.weather[0].main} ${weatherData.main.temp.toFixed(1)}°C`;
+
+    } catch (err) {
+      console.error('Location/weather error:', err);
+    }
   });
 }
+
 
 
 /* ------------------ Panels ------------------ */
