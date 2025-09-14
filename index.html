@@ -196,8 +196,43 @@ a:hover{color:var(--hover);}
 
 <!-- MAIN (panels and content) -->
 <main id="main">
-<!-- Left / Right columns, panels, lightbox, reflection, productions… (unchanged, same as your code) -->
+  <div class="container">
+    <div class="leftCol">
+      <div class="headerTitle">Navigation</div>
+      <div class="navItem" id="navRef" aria-controls="refPanel">Reflection</div>
+      <div class="navItem" aria-controls="prodPanel">Productions</div>
+    </div>
+
+    <div class="rightCol">
+      <!-- Reflection Panel -->
+      <div class="panel" id="refPanel">
+        <div id="reflectionText"></div>
+      </div>
+
+      <!-- Productions Panel -->
+      <div class="panel" id="prodPanel">
+        <div class="prodCard" data-index="0">
+          <h3>Project 1</h3>
+          <p>Click to view images</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Quote Box -->
+  <div class="quoteBox" id="quote"></div>
+
+  <!-- Lightbox -->
+  <div id="lightbox">
+    <img id="lbImage" src="" alt="Lightbox Image">
+    <div class="lbControls">
+      <button id="lbPrev">Prev</button>
+      <button id="lbNext">Next</button>
+      <button id="lbClose">Close</button>
+    </div>
+  </div>
 </main>
+
 
 <!-- Wrong Password GIF Overlay -->
 <div id="wrongGifOverlay" style="display:none; position:fixed; inset:0; justify-content:center; align-items:center; background: rgba(0,0,0,0.85); z-index:1500;">
