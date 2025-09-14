@@ -22,6 +22,7 @@ html,
 body {
   height: 100%;
   margin: 0;
+  overflow-x: hidden;
   font-family: 'Share Tech Mono', monospace;
   background: linear-gradient(180deg, #020203, #07080a);
   color: var(--neon);
@@ -211,6 +212,7 @@ h1,
   margin: 0 auto;
   position: relative;
   z-index: 5;
+  min-height: 100vh;  
 }
 .leftCol {
   width: 320px;
@@ -244,7 +246,8 @@ h1,
 }
 .rightCol {
   flex: 1;
-  min-height: 400px;
+  min-height: 100vh;
+  overflow-y: auto;
 }
 .panel {
   display: none;
@@ -631,7 +634,7 @@ loginBtn.addEventListener('click', () => {
     const hud = document.getElementById('hud');
     hud.style.opacity = '1';
     hud.style.visibility = 'visible';
-    // Terminal hidden initially; shows on Hello World click
+    // Terminal hidden initially, toggled on Hello World...
     terminalInputWrapper.style.display = 'none';
     startHud();
     rotateQuotes();
@@ -667,7 +670,7 @@ loginBtn.addEventListener('click', () => {
   }
 });
 
-// HUD (time/date)
+// HUD
 function startHud() {
   const timeEl = document.getElementById('hud-time-text');
   const dateEl = document.getElementById('hud-date-text');
@@ -715,8 +718,7 @@ function updateLocationWeather() {
     }
   );
 }
-
-// Panels open/close logic with simple neon glow on panel titles
+// Panels open/close logic with neon glow on panel titles
 function openPanel(id) {
   document.querySelectorAll('.panel').forEach((p) => {
     p.classList.remove('show');
@@ -752,8 +754,7 @@ document.querySelectorAll('.navItem').forEach((el) =>
     openPanel(el.getAttribute('aria-controls'));
   })
 );
-
-// Reflection typing and female voice (fast and smooth)
+// Reflection typing & female voice (fast & smooth)
 const reflectionEl = document.getElementById('reflectionText');
 const reflections = [
   `Building this site has been a deep learning experience. ... Overall, the experience emphasizes experimentation, problem-solving, and reflection in ways that are more self-directed, interactive, and personally meaningful than traditional learning environments.`,
@@ -771,14 +772,14 @@ function typeReflection(text) {
     (voice) =>
       voice.lang.startsWith('en') &&
       (voice.name.toLowerCase().includes('female') ||
-        voice.name.toLowerCase().includes('zira') || // Common female voice names
+        voice.name.toLowerCase().includes('zira') ||
         voice.name.toLowerCase().includes('susan') ||
         voice.name.toLowerCase().includes('heather'))
   );
   if (!femaleVoice) femaleVoice = voices.find((voice) => voice.lang.startsWith('en'));
   if (femaleVoice) utter.voice = femaleVoice;
 
-  utter.rate = 1.3; // Fast but smooth
+  utter.rate = 1.3; // fast & smooth
   window.speechSynthesis.speak(utter);
 
   typingTimer = setInterval(() => {
@@ -792,7 +793,7 @@ function typeReflection(text) {
   }, 28);
 }
 
-// Particle background system
+// Particle background system restored
 (() => {
   const canvas = document.getElementById('hudParticles');
   const ctx = canvas.getContext('2d');
@@ -886,7 +887,7 @@ function typeReflection(text) {
   animate();
 })();
 
-// Terminal "Hello World..." header toggles terminal visibility
+// Terminal toggle on Hello World click
 const headerTitle = document.querySelector('.headerTitle');
 headerTitle.addEventListener('click', () => {
   if (terminalInputWrapper.style.display === 'flex') {
@@ -897,7 +898,7 @@ headerTitle.addEventListener('click', () => {
   }
 });
 
-// Terminal command input with clearing input after Enter key
+// Terminal command input with clearing input after Enter
 terminalInput.addEventListener('keydown', (e) => {
   if(e.key === 'Enter') {
     const val = terminalInput.value.trim().toLowerCase();
@@ -912,7 +913,7 @@ terminalInput.addEventListener('keydown', (e) => {
       prod: 'prodPanel',
       res: 'resPanel',
       cont: 'contactPanel',
-    }
+    };
     if(val === 'back') {
       document.querySelectorAll('.panel').forEach(p=>p.classList.remove('show'));
       if(window.noPanelContent) noPanelContent.style.display = 'flex';
