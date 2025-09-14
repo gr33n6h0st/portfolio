@@ -6,8 +6,8 @@
 <title>Hello World - Brandon Smart's Portfolio</title>
 
 <!-- Fonts + icons -->
-<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
 
 <style>
 :root {
@@ -15,16 +15,11 @@
   --neon-hover: #00ffb3;
   --bg-dark: #030305;
   --panel-bg: rgba(10,12,15,0.85);
-  --cursor-blink-speed: 1s;
   --hud-w: 260px;
   --font-mono: 'Share Tech Mono', monospace;
-  --night-neon: #00ff00;
-  --night-bg: #001100;
 }
-
 * {
   box-sizing: border-box;
-  user-select: none;
 }
 html, body {
   margin: 0; padding: 0;
@@ -33,195 +28,43 @@ html, body {
   color: var(--neon);
   background: linear-gradient(180deg, #020203, #07080a);
   overflow-x: hidden;
-  cursor: none; /* hide default cursor */
   -webkit-font-smoothing: antialiased;
+  user-select: none;
 }
-
-/* Custom blinking block cursor */
-@keyframes cursorBlink {
-  0%, 50% { opacity: 1; }
-  51%, 100% { opacity: 0; }
-}
-#customCursor {
-  position: fixed;
-  width: 12px; height: 20px;
-  background: var(--neon);
-  pointer-events: none;
-  border-radius: 2px;
-  animation: cursorBlink var(--cursor-blink-speed) step-start infinite;
-  z-index: 3000;
-  mix-blend-mode: screen;
-  transform: translate(-50%, -50%);
-}
-
-/* Scanlines + CRT curvature effect */
-.scanlines {
-  pointer-events: none;
-  position: fixed; inset: 0; z-index: 40;
-  background: repeating-linear-gradient(
-    to bottom,
-    rgba(0,229,255,0.03) 0px,
-    rgba(0,229,255,0.03) 1px,
-    transparent 1px,
-    transparent 3px
-  );
-  opacity: 0.18;
-  filter: brightness(0.9);
-  mask-image: radial-gradient(circle at center, rgba(0,0,0,0) 0%, rgba(0,0,0,0) 70%, rgba(0,0,0,0.85) 100%);
-}
-
-/* Glitch Text Effect - Header and Panels */
-.glitch {
-  font-weight: 700;
-  position: relative;
-  color: var(--neon);
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-}
-
-.glitch::before,
-.glitch::after {
-  content: attr(data-text);
-  position: absolute;
-  left: 0; top: 0;
-  width: 100%; height: 100%;
-  opacity: 0.8;
-  color: var(--neon-hover);
-  clip: rect(0, 9999px, 0, 0);
-  animation: glitchAnim 3s infinite linear alternate-reverse;
-}
-
-.glitch::before {
-  animation-delay: -0.3s;
-  color: #00ffcc;
-}
-.glitch::after {
-  animation-delay: 0.3s;
-  color: #00b3ff;
-}
-
-@keyframes glitchAnim {
-  0% {
-    clip: rect(0, 9999px, 0, 0);
-    transform: translate(0);
-  }
-  5% {
-    clip: rect(0, 9999px, 80%, 0);
-    transform: translate(-3px, -2px);
-  }
-  10% {
-    clip: rect(20%, 9999px, 50%, 0);
-    transform: translate(3px, 2px);
-  }
-  20% {
-    clip: rect(50%, 9999px, 70%, 0);
-    transform: translate(-2px, 1px);
-  }
-  30% {
-    clip: rect(0, 9999px, 100%, 0);
-    transform: translate(2px, -1px);
-  }
-  40%,
-  100% {
-    clip: rect(0, 9999px, 0, 0);
-    transform: translate(0);
-  }
-}
-
-/* Font + colors */
 a {
   color: var(--neon);
   text-decoration: none;
   transition: color 0.18s ease;
 }
-a:hover {
-  color: var(--neon-hover);
-}
-
-
-/* HUD */
-#hud {
-  position: fixed;
-  top: 12px; left: 18px;
-  width: var(--hud-w);
-  padding: 12px 14px;
-  border-radius: 10px;
-  background: var(--panel-bg);
-  box-shadow: 0 0 24px var(--neon);
-  font-size: 13px;
-  color: var(--neon);
-  opacity: 0;
-  visibility: hidden;
-  text-align: left;
-  overflow: hidden;
-}
-
-/* Pulsing Radar Sweep */
-@keyframes radarPulse {
-  0% {
-    box-shadow: 0 0 0 0 rgba(0, 229, 255, 0.15), 0 0 6px 3px rgba(0, 229, 255, 0.35);
-  }
-  100% {
-    box-shadow: 0 0 50px 50px rgba(0, 229, 255, 0);
-  }
-}
-#hud::before {
-  content: "";
-  position: absolute;
-  top: 50%; left: 50%;
-  width: 160%; height: 160%;
-  background: radial-gradient(circle at center, rgba(0,229,255,0.2) 0%, transparent 75%);
-  border-radius: 50%;
-  transform: translate(-50%, -50%);
-  animation: radarPulse 2.2s infinite ease-out;
+a:hover { color: var(--neon-hover); }
+.scanlines {
   pointer-events: none;
-  z-index: 1;
+  position: fixed; inset: 0; z-index: 40;
+  background: repeating-linear-gradient(to bottom, rgba(0,229,255,0.03) 0px, rgba(0,229,255,0.03) 1px, transparent 1px, transparent 3px);
+  opacity: 0.18;
+  filter: brightness(0.9);
+  mask-image: radial-gradient(circle at center, rgba(0,0,0,0) 0%, rgba(0,0,0,0) 70%, rgba(0,0,0,0.85) 100%);
 }
 
-.hud-row {
-  position: relative;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 2px 0;
-  z-index: 10;
-}
-.hud-row i {
-  min-width: 18px;
-  flex-shrink: 0;
-  vertical-align: middle;
-}
-
-/* Network Bars */
-.network-bars {
-  display: flex;
-  align-items: flex-end;
-  gap: 3px;
-  margin-top: 6px;
-}
-.network-bars div {
-  width: 4px;
-  background: var(--neon);
-  animation: barPulse 1.5s infinite alternate;
-  border-radius: 2px;
-}
-.network-bars div:nth-child(odd) {
-  animation-delay: 0.1s;
-}
-.network-bars div:nth-child(even) {
-  animation-delay: 0.5s;
-}
-@keyframes barPulse {
-  0% { height: 5px; opacity: 0.4; }
-  100% { height: 18px; opacity: 1; }
-}
-
-/* System diagnostics style */
-.system-diagnostics {
-  font-size: 11px;
-  color: rgba(0, 229, 255, 0.7);
-  margin-top: 8px;
-  font-family: monospace;
+#cornerGlobe {
+  display: none;
+  position: fixed;
+  top: 12px;
+  right: 12px;
+  width: 80px !important; /* smaller fixed size */
+  height: 80px; 
+  border-radius: 50%;
+  z-index: 2000;
+  pointer-events: none;
+  -webkit-mask-image: radial-gradient(circle, rgba(0,0,0,1) 85%, rgba(0,0,0,0) 100%);
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  -webkit-mask-size: cover;
+  mask-image: radial-gradient(circle, rgba(0,0,0,1) 85%, rgba(0,0,0,0) 100%);
+  mask-repeat: no-repeat;
+  mask-position: center;
+  mask-size: cover;
+  box-shadow: 0 0 15px var(--neon);
 }
 
 /* LOGIN */
@@ -245,6 +88,7 @@ a:hover {
   letter-spacing: 0.1em;
   text-transform: uppercase;
   text-shadow: 0 0 5px var(--neon);
+  user-select:none;
 }
 .login-input {
   width: 100%;
@@ -263,36 +107,91 @@ a:hover {
   border-color: var(--neon-hover);
 }
 .login-actions {
-  margin-top: 14px;
+  margin-top: 12px;
   display: flex;
   justify-content: center;
-  gap: 12px;
+  gap: 8px;
 }
 .btn-primary {
-  padding: 10px 24px;
+  padding: 8px 16px; /* smaller padding */
   border-radius: 999px;
   border: none;
   cursor: pointer;
   background: linear-gradient(135deg, var(--neon), #00bfff);
   color: #081018;
   font-weight: 700;
-  font-size: 1em;
+  font-size: 0.85em;
   letter-spacing: 0.1em;
   box-shadow: 0 0 10px var(--neon);
-  transition: background 0.2s ease;
 }
 .btn-primary:hover {
   background: var(--neon-hover);
 }
 
-/* MAIN Content */
+
+/* HUD */
+#hud {
+  position: fixed;
+  top: 12px;
+  left: 18px;
+  width: var(--hud-w);
+  padding: 10px 14px;
+  border-radius: 10px;
+  background: var(--panel-bg);
+  box-shadow: 0 0 24px var(--neon);
+  font-size: 13px;
+  color: var(--neon);
+  opacity: 0;
+  visibility: hidden;
+  text-align: left;
+  overflow: hidden;
+  margin-top: 50px; /* to not overlap nav */
+  z-index: 1100;
+}
+.hud-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 2px 0;
+}
+.hud-row i {
+  min-width: 18px;
+  flex-shrink: 0;
+  vertical-align: middle;
+}
+.network-bars {
+  display: flex;
+  align-items: flex-end;
+  gap: 3px;
+  margin-top: 6px;
+}
+.network-bars div {
+  width: 4px;
+  background: var(--neon);
+  animation: barPulse 1.5s infinite alternate;
+  border-radius: 2px;
+}
+.network-bars div:nth-child(odd) { animation-delay: 0.1s;}
+.network-bars div:nth-child(even) { animation-delay: 0.5s;}
+@keyframes barPulse {
+  0% { height: 5px; opacity: 0.4;}
+  100% { height: 18px; opacity: 1;}
+}
+.system-diagnostics {
+  font-size: 11px;
+  color: rgba(0,229,255,0.7);
+  margin-top: 8px;
+  font-family: monospace;
+}
+
+/* MAIN */
 #main {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
-  padding: 160px 28px 40px;
+  padding: 120px 28px 40px;
   z-index: 500;
 }
 .container {
@@ -303,7 +202,6 @@ a:hover {
   align-items: flex-start;
   margin: 0 auto;
 }
-
 .leftCol {
   width: 320px;
   display: flex;
@@ -321,6 +219,7 @@ a:hover {
   text-shadow: 0 0 8px var(--neon);
   position: relative;
   user-select: none;
+  cursor: pointer;
 }
 .navItem {
   width: 100%;
@@ -374,8 +273,6 @@ a:hover {
   text-transform: uppercase;
   text-shadow: 0 0 8px var(--neon-hover);
 }
-
-/* Glitch effect on panel titles */
 .panel h2.glitch {
   position: relative;
   color: var(--neon);
@@ -403,6 +300,33 @@ a:hover {
   animation-delay: 0.3s;
   color: #00b3ff;
 }
+@keyframes glitchAnim {
+  0% {
+    clip: rect(0, 9999px, 0, 0);
+    transform: translate(0);
+  }
+  5% {
+    clip: rect(0, 9999px, 80%, 0);
+    transform: translate(-3px, -2px);
+  }
+  10% {
+    clip: rect(20%, 9999px, 50%, 0);
+    transform: translate(3px, 2px);
+  }
+  20% {
+    clip: rect(50%, 9999px, 70%, 0);
+    transform: translate(-2px, 1px);
+  }
+  30% {
+    clip: rect(0, 9999px, 100%, 0);
+    transform: translate(2px, -1px);
+  }
+  40%,
+  100% {
+    clip: rect(0, 9999px, 0, 0);
+    transform: translate(0);
+  }
+}
 
 .reflection-typed {
   font-family: monospace;
@@ -420,8 +344,12 @@ a:hover {
   width: 10px;
   margin-left: 6px;
   background: var(--neon);
-  animation: cursorBlink var(--cursor-blink-speed) step-start infinite;
+  animation: cursorBlink 1s step-start infinite;
   vertical-align: middle;
+}
+@keyframes cursorBlink {
+  0%, 50% { opacity: 1; }
+  51%, 100% { opacity: 0; }
 }
 
 /* Productions grid */
@@ -475,7 +403,6 @@ a:hover {
   transition: opacity 0.35s ease;
   opacity: 0;
 }
-
 #lightbox.show {
   display: flex;
   opacity: 1;
@@ -490,39 +417,39 @@ a:hover {
   background: #000;
   transition: opacity 0.4s ease;
   opacity: 1;
+  position: relative;
+  z-index: 2;
 }
 
-/* Lightbox controls fixed to bottom center */
+/* Controls container fixed below the image */
 .lbControls {
   position: absolute;
-  bottom: 40px;
+  bottom: 20px; /* below image a bit */
   left: 50%;
   transform: translateX(-50%);
   display: flex;
-  gap: 18px;
+  gap: 14px;
   justify-content: center;
   z-index: 10;
-  transition: opacity 0.2s ease;
-  opacity: 1;
-}
-
-.lbControls.hide {
-  opacity: 0;
-  pointer-events: none;
+  background: rgba(0, 0, 0, 0.5);
+  padding: 4px 16px;
+  border-radius: 8px;
+  user-select: none;
+  pointer-events: auto;
 }
 
 .lbControls button {
-  min-width: 80px;
-  padding: 10px 18px;
+  min-width: 60px;
+  padding: 6px 14px;
   border-radius: 8px;
   border: none;
   cursor: pointer;
   background: var(--neon);
   color: #001018;
   font-weight: 700;
-  font-size: 1.05em;
-  transition: background 0.17s ease, color 0.17s ease, transform 0.2s ease;
-  letter-spacing: 0.05em;
+  font-size: 0.9em;
+  letter-spacing: 0.06em;
+  transition: background 0.15s ease, color 0.15s ease, transform 0.15s ease;
 }
 .lbControls button:hover {
   background: var(--neon-hover);
@@ -570,6 +497,28 @@ a:hover {
   text-transform: uppercase;
 }
 
+/* Terminal window styles */
+#terminalWindow {
+  position: fixed;
+  top: 60px;
+  left: calc(18px + var(--hud-w) + 40px);
+  right: 40px;
+  bottom: 40px;
+  background: var(--panel-bg);
+  border-radius: 12px;
+  box-shadow: 0 0 48px var(--neon);
+  color: var(--neon);
+  font-family: var(--font-mono);
+  font-size: 14px;
+  overflow-y: auto;
+  padding: 12px 18px;
+  z-index: 1500;
+  display: none; /* hidden initially */
+  white-space: pre-wrap;
+  user-select: text;
+  line-height: 1.4;
+}
+
 /* Responsive */
 @media (max-width: 980px) {
   .container {
@@ -584,151 +533,151 @@ a:hover {
   }
   #hud {
     left: 10px;
-    top: 8px;
+    top: 70px; /* lower for mobile for spacing from header */
   }
-  .lbControls {
-    bottom: 5vw;
+  #terminalWindow {
+    left: 20px;
+    right: 20px;
+    top: 110px;
+    bottom: 40px;
+  }
+  #cornerGlobe {
+    top: 10px;
+    right: 10px;
+    width: 70px !important;
+    height: 70px;
   }
 }
 </style>
 </head>
 <body>
-<div class="scanlines" aria-hidden="true"></div>
+  <div class="scanlines" aria-hidden="true"></div>
 
-<!-- Custom blinking block cursor -->
-<div id="customCursor"></div>
-
-<!-- LOGIN -->
-<div id="loginOverlay" role="dialog" aria-label="Login">
-  <div class="login-card" role="document">
-    <h1 class="glitch" data-text="LOGIN">LOGIN</h1>
-    <input id="loginPass" class="login-input" type="password" placeholder="Enter password" aria-label="Password" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
-    <div class="login-actions">
-      <button id="loginBtn" class="btn-primary" aria-label="Enter">ENTER</button>
-    </div>
-    <div class="login-sub" style="font-size:12px; user-select:none;">Enter the terminal</div>
-  </div>
-</div>
-
-<!-- HUD -->
-<div id="hud" aria-live="polite" aria-label="Heads Up Display">
-  <div class="hud-row" id="hud-date"><i class="fa-regular fa-calendar"></i> <span id="hud-date-text">Loading date…</span></div>
-  <div class="hud-row" id="hud-time"><i class="fa-regular fa-clock"></i> <span id="hud-time-text">--:--:--</span></div>
-  <div class="hud-row" id="hud-loc"><i class="fa-solid fa-location-dot"></i> <span id="hud-city">Toronto</span></div>
-  <div class="hud-row" id="hud-coords"><i class="fa-solid fa-crosshairs"></i> Coords: <span id="hud-coords-text">—</span></div>
-  <div class="hud-row" id="hud-weather"><i class="fa-solid fa-cloud-sun"></i> <span id="hud-weather-text">—</span></div>
-  <!-- Network bars -->
-  <div class="hud-row">
-    <div class="network-bars" aria-label="Network traffic status" role="img">
-      <div></div><div></div><div></div><div></div><div></div>
+  <!-- LOGIN -->
+  <div id="loginOverlay" role="dialog" aria-label="Login">
+    <div class="login-card" role="document">
+      <h1 class="glitch" data-text="LOGIN">LOGIN</h1>
+      <input id="loginPass" class="login-input" type="password" placeholder="Enter password" aria-label="Password" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+      <div class="login-actions">
+        <button id="loginBtn" class="btn-primary" aria-label="Enter">ENTER</button>
+      </div>
+      <div class="login-sub" style="font-size:12px; user-select:none;">Enter the terminal</div>
     </div>
   </div>
-  <!-- System diagnostics -->
-  <div class="system-diagnostics" aria-live="polite">
-    CPU: 62% | MEM: 4.7GB / 8GB | NET: 102 Mbps ↓ 11 Mbps ↑
-  </div>
-</div>
 
-<!-- MAIN -->
-<main id="main">
-  <div class="container">
-    <!-- LEFT -->
-    <div class="leftCol" aria-hidden="false">
-      <div class="headerTitle glitch" data-text="HELLO WORLD...">>: ["Hello World..."]</div>
-      <div id="navWho" class="navItem" role="button" tabindex="0" aria-controls="whoPanel">Whoami</div>
-      <div id="navRef" class="navItem" role="button" tabindex="0" aria-controls="refPanel">Reflection</div>
-      <div id="navProd" class="navItem" role="button" tabindex="0" aria-controls="prodPanel">Productions</div>
-      <div id="navRes" class="navItem" role="button" tabindex="0" aria-controls="resPanel">Resources</div>
-      <div id="navContact" class="navItem" role="button" tabindex="0" aria-controls="contactPanel">Contact</div>
+  <!-- HUD -->
+  <div id="hud" aria-live="polite" aria-label="Heads Up Display">
+    <div class="hud-row" id="hud-date"><i class="fa-regular fa-calendar"></i> <span id="hud-date-text">Loading date…</span></div>
+    <div class="hud-row" id="hud-time"><i class="fa-regular fa-clock"></i> <span id="hud-time-text">--:--:--</span></div>
+    <div class="hud-row" id="hud-loc"><i class="fa-solid fa-location-dot"></i> <span id="hud-city">Toronto</span></div>
+    <div class="hud-row" id="hud-coords"><i class="fa-solid fa-crosshairs"></i> Coords: <span id="hud-coords-text">—</span></div>
+    <div class="hud-row" id="hud-weather"><i class="fa-solid fa-cloud-sun"></i> <span id="hud-weather-text">—</span></div>
+    <div class="hud-row">
+      <div class="network-bars" aria-label="Network traffic status" role="img">
+        <div></div><div></div><div></div><div></div><div></div>
+      </div>
     </div>
-    <!-- RIGHT -->
-    <div class="rightCol">
-      <!-- PANELS -->
-      <section id="whoPanel" class="panel" role="region" aria-labelledby="navWho">
-        <h2 class="glitch" data-text="WHOAMI">Whoami</h2>
-        <!-- ASCII Art Banner -->
-        <pre class="ascii-banner" aria-hidden="true">
-  ____  ____   ___  _   _ 
- |  _ \|  _ \ / _ \| \ | |
- | |_) | |_) | | | |  \| |
- |  _ <|  __/| |_| | |\  |
- |_| \_\_|    \___/|_| \_|
-        </pre>
-        <p><strong>/BrandonSmart</strong><br>:-$ Teachable: ComputerTechnology</p>
-        <button class="backBtn" onclick="closePanel('whoPanel')">← Back</button>
-      </section>
-
-      <section id="refPanel" class="panel" role="region" aria-labelledby="navRef">
-        <h2 class="glitch" data-text="REFLECTION">Reflection</h2>
-        <div id="reflectionText" class="reflection-typed" aria-live="polite"></div><span class="cursor" id="reflectionCursor" aria-hidden="true"></span>
-        <button class="backBtn" onclick="closePanel('refPanel')">← Back</button>
-      </section>
-
-      <section id="prodPanel" class="panel" role="region" aria-labelledby="navProd">
-        <h2 class="glitch" data-text="PRODUCTIONS">Productions</h2>
-        <div class="productionsGrid" id="productionsGrid">
-          <div class="prodCard" data-index="0"><h3>Production 1: Power up</h3><p>View Content</p></div>
-          <div class="prodCard" data-index="1"><h3>Production 2: New Literacies Reflection</h3><p>Placeholder</p></div>
-          <div class="prodCard" data-index="2"><h3>Production 3: Critical Algorithmic Literacies and AI</h3><p>Placeholder</p></div>
-          <div class="prodCard" data-index="3"><h3>Production 4: Graphic Novel</h3><p>Placeholder</p></div>
-          <div class="prodCard" data-index="4"><h3>Production 5: On the Way to Video Inquiry</h3><p>Placeholder</p></div>
-          <div class="prodCard" data-index="5"><h3>Production 6: Video Works</h3><p>Placeholder</p></div>
-          <div class="prodCard" data-index="6"><h3>Production 7: Learning Principles</h3><p>Placeholder</p></div>
-          <div class="prodCard" data-index="7"><h3>Production 8: World Building</h3><p>Placeholder</p></div>
-          <div class="prodCard" data-index="8"><h3>Production 9: Twine</h3><p>Placeholder</p></div>
-        </div>
-        <button class="backBtn" onclick="closePanel('prodPanel')">← Back</button>
-      </section>
-
-      <section id="resPanel" class="panel" role="region" aria-labelledby="navRes">
-        <h2 class="glitch" data-text="RESOURCES">Resources</h2>
-        <p><a href="https://youtube.com" target="_blank" rel="noopener">YouTube</a></p>
-        <p><a href="https://google.ca" target="_blank" rel="noopener">Google</a></p>
-        <p><a href="https://github.com" target="_blank" rel="noopener">GitHub</a></p>
-        <button class="backBtn" onclick="closePanel('resPanel')">← Back</button>
-      </section>
-
-      <section id="contactPanel" class="panel" role="region" aria-labelledby="navContact">
-        <h2 class="glitch" data-text="CONTACT">Contact</h2>
-        <div class="contact-row">
-          <div class="mail"><i class="fa-solid fa-envelope"></i>&nbsp; <a href="mailto:bsmart@my.yorku.ca">bsmart@my.yorku.ca</a></div>
-        </div>
-        <button class="backBtn" onclick="closePanel('contactPanel')">← Back</button>
-      </section>
+    <div class="system-diagnostics" aria-live="polite">
+      CPU: 62% | MEM: 4.7GB / 8GB | NET: 102 Mbps ↓ 11 Mbps ↑
     </div>
   </div>
-  <div id="quote" class="quoteBox" aria-live="polite">Loading inspiration…</div>
-</main>
 
-<!-- LIGHTBOX -->
-<div id="lightbox" role="dialog" aria-hidden="true" style="display:none;">
-  <img id="lbImage" src="" alt="Screenshot">
-  <div class="lbControls">
-    <button id="lbPrev">Prev</button>
-    <button id="lbNext">Next</button>
-    <button id="lbClose">Close</button>
+  <!-- MAIN -->
+  <main id="main">
+    <div class="container">
+      <!-- LEFT -->
+      <div class="leftCol" aria-hidden="false">
+        <div id="headerTitle" class="headerTitle glitch" data-text="HELLO WORLD..." tabindex="0" role="button" aria-pressed="false" aria-describedby="terminalDescription">>: ["Hello World..."]</div>
+      <span id="terminalDescription" class="visually-hidden">Click to open terminal window</span>
+
+        <div id="navWho" class="navItem" role="button" tabindex="0" aria-controls="whoPanel">Whoami</div>
+        <div id="navRef" class="navItem" role="button" tabindex="0" aria-controls="refPanel">Reflection</div>
+        <div id="navProd" class="navItem" role="button" tabindex="0" aria-controls="prodPanel">Productions</div>
+        <div id="navRes" class="navItem" role="button" tabindex="0" aria-controls="resPanel">Resources</div>
+        <div id="navContact" class="navItem" role="button" tabindex="0" aria-controls="contactPanel">Contact</div>
+      </div>
+
+      <!-- RIGHT -->
+      <div class="rightCol">
+        <!-- PANELS -->
+        <section id="whoPanel" class="panel" role="region" aria-labelledby="navWho">
+          <h2 class="glitch" data-text="WHOAMI">Whoami</h2>
+          <!-- ASCII Art Banner changing RPON to BSMART -->
+          <pre class="ascii-banner" aria-hidden="true">
+  ____   ____   _____  __       __
+ |  _ \ |  _ \ | ____| \ \     / /
+ | |_) || |_) ||  _|    \ \   / / 
+ |  _ < |  __/ | |___    \ \ / /  
+ |_| \_\|_|    |_____|    \_/\/   
+          </pre>
+          <p><strong>/BSMART</strong><br>:-$ Teachable: ComputerTechnology</p>
+          <button class="backBtn" onclick="closePanel('whoPanel')">← Back</button>
+        </section>
+        <section id="refPanel" class="panel" role="region" aria-labelledby="navRef">
+          <h2 class="glitch" data-text="REFLECTION">Reflection</h2>
+          <div id="reflectionText" class="reflection-typed" aria-live="polite"></div><span class="cursor" id="reflectionCursor" aria-hidden="true"></span>
+          <button class="backBtn" onclick="closePanel('refPanel')">← Back</button>
+        </section>
+        <section id="prodPanel" class="panel" role="region" aria-labelledby="navProd">
+          <h2 class="glitch" data-text="PRODUCTIONS">Productions</h2>
+          <div class="productionsGrid" id="productionsGrid">
+            <div class="prodCard" data-index="0"><h3>Production 1: Power up</h3><p>View Content</p></div>
+            <div class="prodCard" data-index="1"><h3>Production 2: New Literacies Reflection</h3><p>Placeholder</p></div>
+            <div class="prodCard" data-index="2"><h3>Production 3: Critical Algorithmic Literacies and AI</h3><p>Placeholder</p></div>
+            <div class="prodCard" data-index="3"><h3>Production 4: Graphic Novel</h3><p>Placeholder</p></div>
+            <div class="prodCard" data-index="4"><h3>Production 5: On the Way to Video Inquiry</h3><p>Placeholder</p></div>
+            <div class="prodCard" data-index="5"><h3>Production 6: Video Works</h3><p>Placeholder</p></div>
+            <div class="prodCard" data-index="6"><h3>Production 7: Learning Principles</h3><p>Placeholder</p></div>
+            <div class="prodCard" data-index="7"><h3>Production 8: World Building</h3><p>Placeholder</p></div>
+            <div class="prodCard" data-index="8"><h3>Production 9: Twine</h3><p>Placeholder</p></div>
+          </div>
+          <button class="backBtn" onclick="closePanel('prodPanel')">← Back</button>
+        </section>
+        <section id="resPanel" class="panel" role="region" aria-labelledby="navRes">
+          <h2 class="glitch" data-text="RESOURCES">Resources</h2>
+          <p><a href="https://youtube.com" target="_blank" rel="noopener">YouTube</a></p>
+          <p><a href="https://google.ca" target="_blank" rel="noopener">Google</a></p>
+          <p><a href="https://github.com" target="_blank" rel="noopener">GitHub</a></p>
+          <button class="backBtn" onclick="closePanel('resPanel')">← Back</button>
+        </section>
+        <section id="contactPanel" class="panel" role="region" aria-labelledby="navContact">
+          <h2 class="glitch" data-text="CONTACT">Contact</h2>
+          <div class="contact-row">
+            <div class="mail"><i class="fa-solid fa-envelope"></i>&nbsp; <a href="mailto:bsmart@my.yorku.ca">bsmart@my.yorku.ca</a></div>
+          </div>
+          <button class="backBtn" onclick="closePanel('contactPanel')">← Back</button>
+        </section>
+      </div>
+    </div>
+    <div id="quote" class="quoteBox" aria-live="polite">Loading inspiration…</div>
+  </main>
+
+  <!-- Terminal Window -->
+  <div id="terminalWindow" role="region" aria-label="Terminal window" tabindex="0" style="display:none;"></div>
+
+  <!-- LIGHTBOX -->
+  <div id="lightbox" role="dialog" aria-hidden="true" style="display:none;">
+    <img id="lbImage" src="" alt="Screenshot"/>
+    <div class="lbControls">
+      <button id="lbPrev">Prev</button>
+      <button id="lbNext">Next</button>
+      <button id="lbClose">Close</button>
+    </div>
   </div>
-</div>
 
-<!-- Wrong Password GIF Overlay -->
-<div id="wrongGifOverlay" style="display:none; position:fixed; inset:0; justify-content:center; align-items:center; background: rgba(0,0,0,0.85); z-index:1500;">
-  <img src="images/computer%20missing%20GIF.gif" alt="Wrong Password GIF" style="width:100%; height:100%; object-fit:cover;">
-</div>
+  <!-- Wrong Password GIF Overlay -->
+  <div id="wrongGifOverlay" style="display:none; position:fixed; inset:0; justify-content:center; align-items:center; background: rgba(0,0,0,0.85); z-index:1500;">
+    <img src="images/computer%20missing%20GIF.gif" alt="Wrong Password GIF" style="width:100%; height:100%; object-fit:cover;"/>
+  </div>
 
-<!-- Audio -->
-<audio id="loginAudioCorrect" src="sounds/BC_Audio.mp3" preload="auto"></audio>
-<audio id="loginAudioWrong" src="sounds/Hacked%20computer-%20Sound%20Effect.mp3" preload="auto"></audio>
+  <!-- Audio -->
+  <audio id="loginAudioCorrect" src="sounds/BC_Audio.mp3" preload="auto"></audio>
+  <audio id="loginAudioWrong" src="sounds/Hacked%20computer-%20Sound%20Effect.mp3" preload="auto"></audio>
+  <audio id="keyboardClick" src="sounds/keyboard-click.mp3" preload="auto"></audio>
 
 <script>
-// Custom blinking block cursor
-const cursor = document.getElementById('customCursor');
-window.addEventListener('mousemove', e => {
-  cursor.style.left = e.clientX + 'px';
-  cursor.style.top = e.clientY + 'px';
-});
-
-// Sound effect on navItem click (keyboard style click)
-const keyClick = new Audio("sounds/keyboard-click.mp3");
+// Keyboard click sound
+const keyClick = document.getElementById('keyboardClick');
 document.querySelectorAll('.navItem').forEach(nav => {
   nav.addEventListener('click', () => {
     keyClick.currentTime = 0;
@@ -753,6 +702,7 @@ const loginPass = document.getElementById('loginPass');
 const wrongGif = document.getElementById('wrongGifOverlay');
 const loginAudioCorrect = document.getElementById('loginAudioCorrect');
 const loginAudioWrong = document.getElementById('loginAudioWrong');
+
 loginPass.addEventListener('keydown', e => { if(e.key==='Enter') loginBtn.click(); });
 loginBtn.addEventListener('click', () => {
   const v = (loginPass.value || '').trim();
@@ -806,7 +756,7 @@ function startHud(){
   setInterval(updateHud,1000);
 }
 
-// Weather: Capitalize first letter of description only
+// Weather with first letter capitalized only
 function updateLocationWeather(){
   const cityEl = document.getElementById('hud-city');
   const coordsEl = document.getElementById('hud-coords-text');
@@ -833,7 +783,7 @@ function updateLocationWeather(){
   });
 }
 
-// Panels open/close logic
+// Panel open/close
 function openPanel(id){
   document.querySelectorAll('.panel').forEach(p => p.classList.remove('show'));
   document.getElementById(id).classList.add('show');
@@ -851,7 +801,7 @@ document.querySelectorAll('.navItem').forEach(el => {
   el.addEventListener('click', () => openPanel(el.getAttribute('aria-controls')));
 });
 
-// Reflection typing/stop
+// Reflection typing and speech synthesis
 const reflectionEl = document.getElementById('reflectionText');
 const reflections = [
   `Building this site has been a deep learning experience. As I create and structure each section, I notice how I interact differently with coding tools, the browser, and design interfaces compared to traditional classroom learning. 
@@ -948,9 +898,44 @@ function rotateQuotes(){
     }, 500);
   }, 6000);
 }
+rotateQuotes();
+
+// Hello World click opens terminal window 
+const headerTitle = document.getElementById('headerTitle');
+const terminalWindow = document.getElementById('terminalWindow');
+headerTitle.addEventListener('click', () => {
+  if (terminalWindow.style.display === 'block') {
+    terminalWindow.style.display = 'none';
+  } else {
+    terminalWindow.style.display = 'block';
+    terminalWindow.textContent = '';
+    simulateTerminal();
+  }
+});
+
+// Terminal simulation output text
+const terminalLines = [
+  "Welcome to BSMART terminal",
+  "User: BrandonSmart",
+  "> ls -la",
+  "drwxr-xr-x  15 user  staff   480 Sep 12 14:23 DocumentFolder",
+  "-rw-r--r--   1 user  staff  1234 Sep 12 11:58 portfolio.html",
+  "-rw-r--r--   1 user  staff  5678 Sep 12 09:24 code.js",
+  "> echo 'Hello, welcome!'",
+  "Hello, welcome!",
+  "> "
+];
+
+async function simulateTerminal() {
+  for (let line of terminalLines) {
+    await new Promise(r => setTimeout(r, 650));
+    const div = document.createElement('div');
+    div.textContent = line;
+    terminalWindow.appendChild(div);
+    terminalWindow.scrollTop = terminalWindow.scrollHeight;
+  }
+}
+
 </script>
-
-<img src="images/globeglow.gif" id="cornerGlobe" alt="Globe Glow" style="display:none; border-radius:50%;" />
-
 </body>
 </html>
