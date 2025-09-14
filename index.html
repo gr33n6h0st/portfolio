@@ -330,6 +330,7 @@ h2,
   justify-content: center;
   flex-direction: column;
   transition: opacity 0.35s;
+  max-height: 100vh;
 }
 #lightbox.show {
   display: flex;
@@ -337,13 +338,15 @@ h2,
 }
 #lbImage {
   max-width: 80vw;
-  max-height: 80vh;
+  max-height: 75vh; /* limit max height to reduce container jump */
   border: 3px solid var(--neon);
   border-radius: 8px;
   box-shadow: 0 0 48px #0af2;
   background: #000;
   transition: opacity 0.4s;
   opacity: 1;
+  display: block;
+  margin: 0 auto;
 }
 /* lightbox controls below image, no overlap */
 .lbControls {
@@ -355,23 +358,24 @@ h2,
   transition: opacity 0.2s;
   opacity: 1;
 }
-/* Consistent size for lightbox buttons with centered text */
+/* Consistent size and alignment for lightbox buttons */
 .lbControls button {
-  width: 80px;
-  height: 38px;
+  width: 70px;
+  height: 30px;
   border-radius: 8px;
   border: none;
   cursor: pointer;
   background: var(--neon);
   color: #001018;
   font-weight: 700;
-  font-size: 1em;
+  font-size: 0.95em;
   transition: background 0.17s, color 0.17s, transform 0.22s;
   display: flex;
   align-items: center;
   justify-content: center;
   user-select: none;
   padding: 0;
+  line-height: 1;
 }
 .lbControls button:hover {
   background: var(--hover);
@@ -400,57 +404,7 @@ h2,
   min-height: 40px;
 }
 
-/* Cyber glitch text effect */
-.glitchText {
-  position: relative;
-  color: var(--neon);
-  font-weight: 700;
-  animation: flicker 3s infinite alternate ease-in-out;
-}
-.glitchText::before,
-.glitchText::after {
-  content: attr(data-text);
-  position: absolute;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  opacity: 0.6;
-  clip-path: polygon(0 0, 100% 0, 100% 45%, 0 45%);
-  animation: glitchShift 2.5s infinite alternate ease-in-out;
-  pointer-events: none;
-}
-.glitchText::before {
-  left: 2px;
-  text-shadow: -2px 0 red;
-  animation-delay: 0s;
-}
-.glitchText::after {
-  left: -2px;
-  text-shadow: 2px 0 cyan;
-  clip-path: polygon(0 55%, 100% 55%, 100% 100%, 0 100%);
-  animation-delay: 1.25s;
-}
-@keyframes flicker {
-  0%,
-  100% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0.85;
-  }
-}
-@keyframes glitchShift {
-  0%,
-  100% {
-    transform: translateX(0);
-  }
-  50% {
-    transform: translateX(1.5px);
-  }
-}
-
-/* Terminal input at bottom */
+/* Terminal input at bottom, hidden until login */
 #terminalInputWrapper {
   position: fixed;
   bottom: 0;
@@ -464,7 +418,7 @@ h2,
   border-top: 1px solid var(--neon);
   padding: 8px 12px;
   z-index: 1400;
-  display: flex;
+  display: none; /* hide until login */
   align-items: center;
   gap: 10px;
   backdrop-filter: blur(6px);
@@ -656,7 +610,7 @@ h2,
           role="region"
           aria-labelledby="navProd"
         >
-          <h2 class="glitchText" data-text="Productions">Productions</h2>
+          <h2>Productions</h2>
           <div class="productionsGrid" id="productionsGrid">
             <div class="prodCard" data-index="0">
               <h3>Production 1: Power up</h3>
@@ -809,6 +763,8 @@ const loginPass = document.getElementById('loginPass');
 const wrongGif = document.getElementById('wrongGifOverlay');
 const loginAudioCorrect = document.getElementById('loginAudioCorrect');
 const loginAudioWrong = document.getElementById('loginAudioWrong');
+const terminalInputWrapper = document.getElementById('terminalInputWrapper');
+const terminalInput = document.getElementById('terminalInput');
 loginPass.addEventListener('keydown', (e) => {
   if (e.key === 'Enter') loginBtn.click();
 });
@@ -820,6 +776,7 @@ loginBtn.addEventListener('click', () => {
     const hud = document.getElementById('hud');
     hud.style.opacity = '1';
     hud.style.visibility = 'visible';
+    terminalInputWrapper.style.display = 'flex'; // Show terminal only on login success
     startHud();
     rotateQuotes();
     updateLocationWeather();
@@ -827,7 +784,9 @@ loginBtn.addEventListener('click', () => {
     loginAudioCorrect.volume = 0.7;
     loginAudioCorrect.pause();
     loginAudioCorrect.currentTime = 0;
-    loginAudioCorrect.play().catch((err) => console.error('Audio failed:', err));
+    loginAudioCorrect.play().catch((err) =>
+      console.error('Audio failed:', err)
+    );
   } else {
     loginPass.value = '';
     loginPass.placeholder = 'Incorrect — try again';
@@ -904,6 +863,14 @@ function updateLocationWeather() {
 function openPanel(id) {
   document.querySelectorAll('.panel').forEach((p) => p.classList.remove('show'));
   document.getElementById(id).classList.add('show');
+
+  // Trigger reflection typing and speech if reflection panel
+  if (id === 'refPanel') {
+    if (typingTimer) clearInterval(typingTimer);
+    typingTimer = null;
+    const text = reflections[0];
+    typeReflection(text);
+  }
 }
 function closePanel(id) {
   const panel = document.getElementById(id);
@@ -941,7 +908,7 @@ function typeReflection(text) {
   }, 35);
 }
 document.getElementById('navRef').addEventListener('click', () => {
-  typeReflection(reflections[0]);
+  openPanel('refPanel');
 });
 // Productions Lightbox
 const productionImagesMap = { 0: PROD1_IMAGES };
@@ -975,6 +942,15 @@ function updateLbImage() {
     }, 60);
   }, 120);
 }
+// Fix lightbox button size and stable layout
+function fixLightboxBtnLayout() {
+  // Force container height stable to max image height
+  const lbContainer = document.getElementById('lightbox');
+  lbContainer.style.maxHeight = '90vh'; // keep within viewport
+  // This combined with fixed button sizes and image max-height stops shifts
+}
+fixLightboxBtnLayout();
+
 document.getElementById('lbPrev').addEventListener('click', () => {
   if (!currImages.length) return;
   currIndex = (currIndex - 1 + currImages.length) % currImages.length;
@@ -1119,7 +1095,6 @@ function rotateQuotes() {
 })();
 
 // Terminal command input logic
-const terminalInput = document.getElementById('terminalInput');
 terminalInput.addEventListener('keydown', (e) => {
   if (e.key === 'Enter') {
     const val = terminalInput.value.trim().toLowerCase();
@@ -1144,9 +1119,10 @@ terminalInput.addEventListener('keydown', (e) => {
 });
 </script>
 <img
-  src="images/right_icon0.gif"
+  src="images/right_icon2.gif"
   id="cornerGlobe"
   alt="Globe Glow"
-  style="display: none; border-radius: 50%" />
+  style="display: none; border-radius: 50%"
+/>
 </body>
 </html>
