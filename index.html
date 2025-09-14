@@ -980,6 +980,31 @@ terminalInput.addEventListener('keydown', (e) => {
       terminalInput.blur();
     }
   }
+terminalInput.addEventListener('keydown', (e) => {
+  if (e.key === 'Enter') {
+    const val = terminalInput.value.trim().toLowerCase();
+    const panelMap = { /*...*/ };
+    if (val === 'back') {
+      // close all panels
+      document.querySelectorAll('.panel').forEach(p => p.classList.remove('show'));
+      terminalInput.value = '';
+      terminalInput.blur();
+      return;
+    }
+    if (val === 'exit') {
+      terminalInput.value = '';
+      terminalInput.blur();
+      window.close();
+      return;
+    }
+    if (panelMap[val]) {
+      openPanel(panelMap[val]);
+      terminalInput.value = '';
+      terminalInput.blur();
+    }
+  }
+});
+
 });
 </script>
 <img src="images/right_icon1.gif" id="cornerGlobe" alt="Globe Glow" style="display:none; border-radius:50%;">
