@@ -455,8 +455,8 @@ h2,
   border-color: var(--hover);
 }
 
-/* Triangular mesh deformation canvas behind content */
-#triangleMeshCanvas {
+/* Particle background canvas */
+#hudParticles {
   position: fixed;
   top: 0;
   left: 0;
@@ -491,159 +491,172 @@ h2,
 </style>
 </head>
 <body>
-<div class="scanlines" aria-hidden="true"></div>
+  <div class="scanlines" aria-hidden="true"></div>
 
-<!-- Triangular mesh deformation background -->
-<canvas id="triangleMeshCanvas"></canvas>
+  <!-- Particle background canvas -->
+  <canvas id="hudParticles"></canvas>
 
-<!-- LOGIN -->
-<div id="loginOverlay" role="dialog" aria-label="Login">
-  <div class="login-card" role="document">
-    <h1>Login</h1>
-    <input id="loginPass" class="login-input" type="password" placeholder="Enter password" aria-label="Password" />
-    <div class="login-actions">
-      <button id="loginBtn" class="btn-primary" aria-label="Enter">Enter</button>
-    </div>
-    <div class="login-sub">Enter the terminal</div>
-  </div>
-</div>
-
-<!-- HUD -->
-<div id="hud" aria-live="polite">
-  <div class="hud-row" id="hud-date">
-    <i class="fa-regular fa-calendar"></i>
-    <span id="hud-date-text">Loading date…</span>
-  </div>
-  <div class="hud-row" id="hud-time">
-    <i class="fa-regular fa-clock"></i>
-    <span id="hud-time-text">--:--:--</span>
-  </div>
-  <div class="hud-row" id="hud-loc">
-    <i class="fa-solid fa-location-dot"></i>
-    <span id="hud-city">Toronto</span>
-  </div>
-  <div class="hud-row" id="hud-coords">
-    <i class="fa-solid fa-crosshairs"></i> Coords:
-    <span id="hud-coords-text">—</span>
-  </div>
-  <div class="hud-row" id="hud-weather">
-    <i class="fa-solid fa-cloud-sun"></i>
-    <span id="hud-weather-text">—</span>
-  </div>
-</div>
-
-<!-- MAIN -->
-<main id="main">
-  <div class="container">
-    <!-- LEFT -->
-    <div class="leftCol" aria-hidden="false">
-      <div class="headerTitle">&gt;: ["Hello World..."]</div>
-      <div id="navWho" class="navItem" role="button" tabindex="0" aria-controls="whoPanel">Whoami</div>
-      <div id="navRef" class="navItem" role="button" tabindex="0" aria-controls="refPanel">Reflection</div>
-      <div id="navProd" class="navItem" role="button" tabindex="0" aria-controls="prodPanel">Productions</div>
-      <div id="navRes" class="navItem" role="button" tabindex="0" aria-controls="resPanel">Resources</div>
-      <div id="navContact" class="navItem" role="button" tabindex="0" aria-controls="contactPanel">Contact</div>
-    </div>
-    <div class="rightCol">
-      <!-- PANELS -->
-      <section id="whoPanel" class="panel" role="region" aria-labelledby="navWho">
-        <h2>Whoami</h2>
-        <p><strong>/BrandonSmart</strong><br>:-$ Teachable: ComputerTechnology</p>
-        <button class="backBtn" onclick="closePanel('whoPanel')">← Back</button>
-      </section>
-      <section id="refPanel" class="panel" role="region" aria-labelledby="navRef">
-        <h2>Reflection</h2>
-        <div id="reflectionText" aria-live="polite"></div><span class="cursor" id="reflectionCursor" aria-hidden="true"></span>
-        <button class="backBtn" onclick="closePanel('refPanel')">← Back</button>
-      </section>
-      <section id="prodPanel" class="panel" role="region" aria-labelledby="navProd">
-        <h2>Productions</h2>
-        <div class="productionsGrid" id="productionsGrid">
-          <div class="prodCard" data-index="0"><h3>Production 1: Power up</h3><p>View Content</p></div>
-          <div class="prodCard" data-index="1"><h3>Production 2: New Literacies Reflection</h3><p>Placeholder</p></div>
-          <div class="prodCard" data-index="2"><h3>Production 3: Critical Algorithmic Literacies and AI</h3><p>Placeholder</p></div>
-          <div class="prodCard" data-index="3"><h3>Production 4: Graphic Novel</h3><p>Placeholder</p></div>
-          <div class="prodCard" data-index="4"><h3>Production 5: On the Way to Video Inquiry</h3><p>Placeholder</p></div>
-          <div class="prodCard" data-index="5"><h3>Production 6: Video Works</h3><p>Placeholder</p></div>
-          <div class="prodCard" data-index="6"><h3>Production 7: Learning Principles</h3><p>Placeholder</p></div>
-          <div class="prodCard" data-index="7"><h3>Production 8: World Building</h3><p>Placeholder</p></div>
-          <div class="prodCard" data-index="8"><h3>Production 9: Twine</h3><p>Placeholder</p></div>
-        </div>
-        <button class="backBtn" onclick="closePanel('prodPanel')">← Back</button>
-      </section>
-      <section id="resPanel" class="panel" role="region" aria-labelledby="navRes">
-        <h2>Resources</h2>
-        <p><a href="https://youtube.com" target="_blank" rel="noopener">YouTube</a></p>
-        <p><a href="https://google.ca" target="_blank" rel="noopener">Google</a></p>
-        <p><a href="https://github.com" target="_blank" rel="noopener">GitHub</a></p>
-        <button class="backBtn" onclick="closePanel('resPanel')">← Back</button>
-      </section>
-      <section id="contactPanel" class="panel" role="region" aria-labelledby="navContact">
-        <h2>Contact</h2>
-        <div class="contact-row"><div class="mail"><i class="fa-solid fa-envelope"></i>&nbsp; <a href="mailto:bsmart@my.yorku.ca">bsmart@my.yorku.ca</a></div></div>
-        <button class="backBtn" onclick="closePanel('contactPanel')">← Back</button>
-      </section>
+  <!-- LOGIN -->
+  <div id="loginOverlay" role="dialog" aria-label="Login">
+    <div class="login-card" role="document">
+      <h1>Login</h1>
+      <input
+        id="loginPass"
+        class="login-input"
+        type="password"
+        placeholder="Enter password"
+        aria-label="Password"
+      />
+      <div class="login-actions">
+        <button id="loginBtn" class="btn-primary" aria-label="Enter">
+          Enter
+        </button>
+      </div>
+      <div class="login-sub">Enter the terminal</div>
     </div>
   </div>
-  <div id="quote" class="quoteBox">Loading inspiration…</div>
-</main>
-<!-- Terminal input bar -->
-<div id="terminalInputWrapper">
-  <div id="terminalPrompt">&gt;</div>
-  <input
-    type="text"
-    id="terminalInput"
-    aria-label="Terminal command input"
-    placeholder="Type panel name like 'whoami' and press Enter"
-    autocomplete="off"
-    spellcheck="false"
-    autocorrect="off"
-    autocapitalize="off"
-  />
-</div>
-<!-- LIGHTBOX -->
-<div id="lightbox" role="dialog" aria-hidden="true" style="display:none">
-  <img id="lbImage" src="" alt="Screenshot" />
-  <div class="lbControls">
-    <button id="lbPrev">Prev</button>
-    <button id="lbNext">Next</button>
-    <button id="lbClose">Close</button>
+
+  <!-- HUD -->
+  <div id="hud" aria-live="polite">
+    <div class="hud-row" id="hud-date">
+      <i class="fa-regular fa-calendar"></i>
+      <span id="hud-date-text">Loading date…</span>
+    </div>
+    <div class="hud-row" id="hud-time">
+      <i class="fa-regular fa-clock"></i>
+      <span id="hud-time-text">--:--:--</span>
+    </div>
+    <div class="hud-row" id="hud-loc">
+      <i class="fa-solid fa-location-dot"></i>
+      <span id="hud-city">Toronto</span>
+    </div>
+    <div class="hud-row" id="hud-coords">
+      <i class="fa-solid fa-crosshairs"></i> Coords:
+      <span id="hud-coords-text">—</span>
+    </div>
+    <div class="hud-row" id="hud-weather">
+      <i class="fa-solid fa-cloud-sun"></i>
+      <span id="hud-weather-text">—</span>
+    </div>
   </div>
-</div>
-<!-- Wrong Password GIF Overlay -->
-<div
-  id="wrongGifOverlay"
-  style="
-    display: none;
-    position: fixed;
-    inset: 0;
-    justify-content: center;
-    align-items: center;
-    background: rgba(0, 0, 0, 0.85);
-    z-index: 1500;
-  "
->
-  <img
-    src="images/computer missing GIF.gif"
-    alt="Wrong Password GIF"
-    style="width: 100%; height: 100%; object-fit: cover"
-  />
-</div>
-<!-- Audio -->
-<audio id="loginAudioCorrect" src="sounds/BC_Audio.mp3" preload="auto"></audio>
-<audio
-  id="loginAudioWrong"
-  src="sounds/Hacked computer- Sound Effect.mp3"
-  preload="auto"
-></audio>
+
+  <!-- MAIN -->
+  <main id="main">
+    <div class="container">
+      <!-- LEFT -->
+      <div class="leftCol" aria-hidden="false">
+        <div class="headerTitle">&gt;: ["Hello World..."]</div>
+        <div id="navWho" class="navItem" role="button" tabindex="0" aria-controls="whoPanel">Whoami</div>
+        <div id="navRef" class="navItem" role="button" tabindex="0" aria-controls="refPanel">Reflection</div>
+        <div id="navProd" class="navItem" role="button" tabindex="0" aria-controls="prodPanel">Productions</div>
+        <div id="navRes" class="navItem" role="button" tabindex="0" aria-controls="resPanel">Resources</div>
+        <div id="navContact" class="navItem" role="button" tabindex="0" aria-controls="contactPanel">Contact</div>
+      </div>
+      <div class="rightCol">
+        <!-- PANELS -->
+        <section id="whoPanel" class="panel" role="region" aria-labelledby="navWho">
+          <h2>Whoami</h2>
+          <p><strong>/BrandonSmart</strong><br />:-$ Teachable: ComputerTechnology</p>
+          <button class="backBtn" onclick="closePanel('whoPanel')">← Back</button>
+        </section>
+        <section id="refPanel" class="panel" role="region" aria-labelledby="navRef">
+          <h2>Reflection</h2>
+          <div id="reflectionText" aria-live="polite"></div>
+          <span class="cursor" id="reflectionCursor" aria-hidden="true"></span>
+          <button class="backBtn" onclick="closePanel('refPanel')">← Back</button>
+        </section>
+        <section id="prodPanel" class="panel" role="region" aria-labelledby="navProd">
+          <h2>Productions</h2>
+          <div class="productionsGrid" id="productionsGrid">
+            <div class="prodCard" data-index="0"><h3>Production 1: Power up</h3><p>View Content</p></div>
+            <div class="prodCard" data-index="1"><h3>Production 2: New Literacies Reflection</h3><p>Placeholder</p></div>
+            <div class="prodCard" data-index="2"><h3>Production 3: Critical Algorithmic Literacies and AI</h3><p>Placeholder</p></div>
+            <div class="prodCard" data-index="3"><h3>Production 4: Graphic Novel</h3><p>Placeholder</p></div>
+            <div class="prodCard" data-index="4"><h3>Production 5: On the Way to Video Inquiry</h3><p>Placeholder</p></div>
+            <div class="prodCard" data-index="5"><h3>Production 6: Video Works</h3><p>Placeholder</p></div>
+            <div class="prodCard" data-index="6"><h3>Production 7: Learning Principles</h3><p>Placeholder</p></div>
+            <div class="prodCard" data-index="7"><h3>Production 8: World Building</h3><p>Placeholder</p></div>
+            <div class="prodCard" data-index="8"><h3>Production 9: Twine</h3><p>Placeholder</p></div>
+          </div>
+          <button class="backBtn" onclick="closePanel('prodPanel')">← Back</button>
+        </section>
+        <section id="resPanel" class="panel" role="region" aria-labelledby="navRes">
+          <h2>Resources</h2>
+          <p><a href="https://youtube.com" target="_blank" rel="noopener">YouTube</a></p>
+          <p><a href="https://google.ca" target="_blank" rel="noopener">Google</a></p>
+          <p><a href="https://github.com" target="_blank" rel="noopener">GitHub</a></p>
+          <button class="backBtn" onclick="closePanel('resPanel')">← Back</button>
+        </section>
+        <section id="contactPanel" class="panel" role="region" aria-labelledby="navContact">
+          <h2>Contact</h2>
+          <div class="contact-row"><div class="mail"><i class="fa-solid fa-envelope"></i>&nbsp; <a href="mailto:bsmart@my.yorku.ca">bsmart@my.yorku.ca</a></div></div>
+          <button class="backBtn" onclick="closePanel('contactPanel')">← Back</button>
+        </section>
+      </div>
+    </div>
+    <div id="quote" class="quoteBox">Loading inspiration…</div>
+  </main>
+
+  <!-- Terminal input bar -->
+  <div id="terminalInputWrapper">
+    <div id="terminalPrompt">&gt;</div>
+    <input
+      type="text"
+      id="terminalInput"
+      aria-label="Terminal command input"
+      placeholder="Type panel name like 'whoami' and press Enter"
+      autocomplete="off"
+      spellcheck="false"
+      autocorrect="off"
+      autocapitalize="off"
+    />
+  </div>
+
+  <!-- LIGHTBOX -->
+  <div id="lightbox" role="dialog" aria-hidden="true" style="display:none">
+    <img id="lbImage" src="" alt="Screenshot" />
+    <div class="lbControls">
+      <button id="lbPrev">Prev</button>
+      <button id="lbNext">Next</button>
+      <button id="lbClose">Close</button>
+    </div>
+  </div>
+
+  <!-- Wrong Password GIF Overlay -->
+  <div
+    id="wrongGifOverlay"
+    style="
+      display: none;
+      position: fixed;
+      inset: 0;
+      justify-content: center;
+      align-items: center;
+      background: rgba(0, 0, 0, 0.85);
+      z-index: 1500;
+    "
+  >
+    <img
+      src="images/computer missing GIF.gif"
+      alt="Wrong Password GIF"
+      style="width: 100%; height: 100%; object-fit: cover"
+    />
+  </div>
+
+  <!-- Audio -->
+  <audio id="loginAudioCorrect" src="sounds/BC_Audio.mp3" preload="auto"></audio>
+  <audio
+    id="loginAudioWrong"
+    src="sounds/Hacked computer- Sound Effect.mp3"
+    preload="auto"
+  ></audio>
 <script>
 const OWM_API_KEY = '5043108521e5dc1feccf33701c3221bf';
 const PROD1_IMAGES = [
-  'images/Screenshot 2025-09-10 130926.png',
-  'images/Screenshot 2025-09-10 123717.png',
-  'images/Screenshot 2025-09-10 115645.png',
-  'images/Screenshot 2025-09-10 114858.png',
-  'images/Screenshot 2025-09-10 114832.png',
+  "images/Screenshot 2025-09-10 130926.png",
+  "images/Screenshot 2025-09-10 123717.png",
+  "images/Screenshot 2025-09-10 115645.png",
+  "images/Screenshot 2025-09-10 114858.png",
+  "images/Screenshot 2025-09-10 114832.png"
 ];
 // Login functionality
 const loginOverlay = document.getElementById('loginOverlay');
@@ -750,9 +763,7 @@ function closePanel(id){
     window.speechSynthesis.cancel();
   }
 }
-/* Add click event for nav */
 document.querySelectorAll('.navItem').forEach(el=>el.addEventListener('click',()=>openPanel(el.getAttribute('aria-controls'))));
-
 // Reflection typing/stop
 const reflectionEl = document.getElementById('reflectionText');
 const reflections = [
@@ -777,7 +788,6 @@ function typeReflection(text){
 document.getElementById('navRef').addEventListener('click', () => {
   openPanel('refPanel');
 });
-
 // Productions Lightbox
 const productionImagesMap={0:PROD1_IMAGES};
 let currImages=[],currIndex=0;
@@ -842,6 +852,111 @@ function rotateQuotes(){
     },500);
   },6000);
 }
+// Particle background system
+(() => {
+  const canvas = document.getElementById('hudParticles');
+  const ctx = canvas.getContext('2d');
+  let width, height;
+  let particles = [];
+  const particleCount = 70;
+  const maxDist = 120;
+  let mouse = { x: null, y: null };
+
+  function resize() {
+    width = canvas.width = window.innerWidth;
+    height = canvas.height = window.innerHeight;
+  }
+
+  class Particle {
+    constructor() {
+      this.reset();
+    }
+    reset() {
+      this.x = Math.random() * width;
+      this.y = Math.random() * height;
+      this.vx = (Math.random() - 0.5) * 0.15;
+      this.vy = (Math.random() - 0.5) * 0.15;
+      this.size = Math.random() * 1.6 + 0.6;
+    }
+    update() {
+      this.x += this.vx;
+      this.y += this.vy;
+
+      // Wrap edges
+      if (this.x < 0) this.x = width;
+      else if (this.x > width) this.x = 0;
+      if (this.y < 0) this.y = height;
+      else if (this.y > height) this.y = 0;
+
+      // Simple repulsion from mouse
+      if (mouse.x !== null && mouse.y !== null) {
+        let dx = this.x - mouse.x;
+        let dy = this.y - mouse.y;
+        let dist = Math.sqrt(dx*dx + dy*dy);
+        if (dist < 100) {
+          let angle = Math.atan2(dy, dx);
+          let force = (100 - dist) * 0.002;
+          this.vx += force * Math.cos(angle);
+          this.vy += force * Math.sin(angle);
+        }
+      }
+
+      // Slow velocity decay to keep smooth drift
+      this.vx *= 0.98;
+      this.vy *= 0.98;
+    }
+    draw() {
+      ctx.beginPath();
+      ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+      ctx.fillStyle = 'rgba(0, 229, 255, 0.3)';
+      ctx.fill();
+    }
+  }
+
+  function connectParticles() {
+    for (let i = 0; i < particleCount; i++) {
+      for (let j = i + 1; j < particleCount; j++) {
+        let p1 = particles[i];
+        let p2 = particles[j];
+        let dx = p1.x - p2.x;
+        let dy = p1.y - p2.y;
+        let dist = Math.sqrt(dx*dx + dy*dy);
+        if (dist < maxDist) {
+          ctx.strokeStyle = `rgba(0, 229, 255, ${0.09 * (1 - dist / maxDist)})`;
+          ctx.lineWidth = 1;
+          ctx.beginPath();
+          ctx.moveTo(p1.x, p1.y);
+          ctx.lineTo(p2.x, p2.y);
+          ctx.stroke();
+        }
+      }
+    }
+  }
+
+  function animate() {
+    ctx.clearRect(0, 0, width, height);
+    particles.forEach(p => {
+      p.update();
+      p.draw();
+    });
+    connectParticles();
+    requestAnimationFrame(animate);
+  }
+
+  window.addEventListener('resize', resize);
+  window.addEventListener('mousemove', e => {
+    mouse.x = e.clientX;
+    mouse.y = e.clientY;
+  });
+  window.addEventListener('mouseout', () => {
+    mouse.x = null;
+    mouse.y = null;
+  });
+
+  resize();
+  for (let i = 0; i < particleCount; i++) particles.push(new Particle());
+  animate();
+})();
 
 // Terminal command input logic
 terminalInput.addEventListener('keydown', (e) => {
@@ -866,136 +981,7 @@ terminalInput.addEventListener('keydown', (e) => {
     }
   }
 });
-
-
-// Triangular mesh deformation background implementation
-(() => {
-  const canvas = document.getElementById('triangleMeshCanvas');
-  const ctx = canvas.getContext('2d');
-  let width, height;
-
-  // Mesh parameters
-  const rows = 20;
-  const cols = 30;
-  const spacingX =  window.innerWidth / cols;
-  const spacingY =  window.innerHeight / rows;
-  let vertices = [];
-  let baseVertices = [];
-  const maxWarp = 20; // max deformation from base vertices
-  let mouse = { x: null, y: null };
-
-  function resize() {
-    width = canvas.width = window.innerWidth;
-    height = canvas.height = window.innerHeight;
-  }
-
-  // Build grid vertices
-  function generateVertices() {
-    vertices = [];
-    baseVertices = [];
-    for (let y = 0; y <= rows; y++) {
-      for (let x = 0; x <= cols; x++) {
-        const px = x * spacingX;
-        const py = y * spacingY;
-        vertices.push({x: px, y: py, ox: px, oy: py}); // current pos and original pos (ox, oy)
-        baseVertices.push({x: px, y: py});
-      }
-    }
-  }
-
-  // Helper to get vertex index
-  function vertIndex(x, y) {
-    return y * (cols + 1) + x;
-  }
-
-  function updateVertices() {
-    if (mouse.x === null) {
-      // relax vertices back to original if no mouse
-      vertices.forEach(v => {
-        v.x += (v.ox - v.x) * 0.1;
-        v.y += (v.oy - v.y) * 0.1;
-      });
-      return;
-    }
-    vertices.forEach(v => {
-      const dx = v.ox - mouse.x;
-      const dy = v.oy - mouse.y;
-      const distSq = dx*dx + dy*dy;
-      if (distSq < 150*150) {
-        const dist = Math.sqrt(distSq);
-        const force = (150 - dist)/150 * maxWarp;
-        // Calculate angle for deformation away from cursor
-        const angle = Math.atan2(dy, dx);
-        const targetX = v.ox + Math.cos(angle) * force;
-        const targetY = v.oy + Math.sin(angle) * force;
-        v.x += (targetX - v.x) * 0.15;
-        v.y += (targetY - v.y) * 0.15;
-      } else {
-        // Relax back
-        v.x += (v.ox - v.x) * 0.1;
-        v.y += (v.oy - v.y) * 0.1;
-      }
-    });
-  }
-
-  function drawMesh() {
-    ctx.clearRect(0, 0, width, height);
-    ctx.strokeStyle = 'rgba(0, 229, 255, 0.2)';
-    ctx.lineWidth = 1;
-
-    for (let y = 0; y < rows; y++) {
-      for (let x = 0; x < cols; x++) {
-        const v1 = vertices[vertIndex(x, y)];
-        const v2 = vertices[vertIndex(x + 1, y)];
-        const v3 = vertices[vertIndex(x, y + 1)];
-        const v4 = vertices[vertIndex(x + 1, y + 1)];
-
-        // Draw two triangles per grid cell
-        ctx.beginPath();
-        ctx.moveTo(v1.x, v1.y);
-        ctx.lineTo(v2.x, v2.y);
-        ctx.lineTo(v3.x, v3.y);
-        ctx.closePath();
-        ctx.stroke();
-
-        ctx.beginPath();
-        ctx.moveTo(v4.x, v4.y);
-        ctx.lineTo(v2.x, v2.y);
-        ctx.lineTo(v3.x, v3.y);
-        ctx.closePath();
-        ctx.stroke();
-      }
-    }
-  }
-
-  function animate() {
-    updateVertices();
-    drawMesh();
-    requestAnimationFrame(animate);
-  }
-
-  window.addEventListener('resize', () => {
-    resize();
-    generateVertices();
-  });
-
-  window.addEventListener('mousemove', e => {
-    mouse.x = e.clientX;
-    mouse.y = e.clientY;
-  });
-
-  window.addEventListener('mouseout', () => {
-    mouse.x = null;
-    mouse.y = null;
-  });
-
-  resize();
-  generateVertices();
-  animate();
-})();
 </script>
-
-<img src="images/right_icon1.gif" id="cornerGlobe" alt="Globe Glow" style="display:none; border-radius:50%;">
-
+<img src="images/orb4.gif" id="cornerGlobe" alt="Globe Glow" style="display:none; border-radius:50%;">
 </body>
 </html>
