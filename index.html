@@ -1,282 +1,309 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Hello World - Brandon Smart's Portfolio</title>
-  <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-  <style>
-    :root {
-      --neon: #00e5ff;
-      --hover: #00ffb3;
-      --panel-bg: rgba(10,12,15,0.9);
-      --hud-width: 260px;
-    }
-    * {
-      box-sizing: border-box;
-    }
-    html, body {
-      margin: 0;
-      height: 100%;
-      overflow-x: hidden;
-      font-family: 'Share Tech Mono', monospace;
-      background: linear-gradient(180deg, #020203, #07080a);
-      color: var(--neon);
-      -webkit-font-smoothing: antialiased;
-    }
-    a {
-      color: var(--neon);
-      text-decoration: none;
-      transition: color 0.2s ease;
-    }
-    a:hover {
-      color: var(--hover);
-    }
-    .scanlines {
-      pointer-events: none;
-      position: fixed;
-      inset: 0;
-      z-index: 40;
-      background: repeating-linear-gradient(to bottom,
-        rgba(0, 229, 255, 0.03) 0px,
-        rgba(0, 229, 255, 0.03) 1px,
-        transparent 1px,
-        transparent 3px);
-      opacity: 0.12;
-    }
-    /* Glow animation */
-    @keyframes hudPulse {
-      0%, 100% {
-        text-shadow:
-          0 0 4px var(--neon),
-          0 0 9px var(--neon);
-        opacity: 1;
-      }
-      50% {
-        text-shadow:
-          0 0 2px var(--hover),
-          0 0 5px var(--hover);
-        opacity: 0.95;
-      }
-    }
-    h1,
-    .headerTitle,
-    .navItem,
-    #reflectionText,
-    .hud-row,
-    .quoteBox {
-      animation: hudPulse 4s infinite alternate;
-    }
-    /* Layout */
-    #main {
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: flex-start;
-      padding: 120px 28px 40px;
-      position: relative;
-      z-index: 500;
-    }
-    .container {
-      width: 100%;
-      max-width: 1100px;
-      min-height: 100vh;
-      display: flex;
-      gap: 28px;
-      margin: 0 auto;
-      align-items: flex-start;
-      position: relative;
-      z-index: 5;
-    }
-    .leftCol {
-      width: 320px;
-      display: flex;
-      flex-direction: column;
-      gap: 18px;
-      align-items: flex-start;
-    }
-    .rightCol {
-      flex-grow: 1;
-      min-height: 100vh;
-      overflow-y: auto;
-    }
-    .headerTitle {
-      font-size: 18px;
-      color: var(--neon);
-      cursor: pointer;
-      margin-bottom: 8px;
-    }
-    .navItem {
-      width: 100%;
-      padding: 16px 14px;
-      border-radius: 12px;
-      cursor: pointer;
-      background: linear-gradient(180deg, rgba(10,12,14,0.6), rgba(18,20,22,0.55));
-      border: 1px solid rgba(0,229,255,0.04);
-      font-weight: 700;
-      color: var(--neon);
-      transition: all 0.18s ease;
-    }
-    .navItem:hover {
-      background: linear-gradient(180deg, var(--neon), #00bfff);
-      color: #00111b;
-      transform: translateY(-4px);
-      box-shadow: 0 14px 36px rgba(0,229,255,0.04);
-    }
-    /* Panels */
-    .panel {
-      display: none;
-      background: var(--panel-bg);
-      border-radius: 12px;
-      padding: 20px;
-      border: 1px solid rgba(0,229,255,0.04);
-      box-shadow: 0 15px 40px rgba(0,0,0,0.5);
-      max-height: 70vh;
-      overflow-y: auto;
-      transition: opacity 0.35s ease, transform 0.35s ease;
-      opacity: 0;
-      transform: translateY(8px);
-      position: relative;
-      z-index: 1150;
-    }
-    .panel.show {
-      display: block;
-      opacity: 1;
-      transform: translateY(0);
-    }
-    .panel h2 {
-      color: var(--neon);
-      font-weight: 700;
-      margin-top: 0;
-      text-shadow:
-        0 0 6px var(--neon),
-        0 0 14px var(--neon),
-        0 0 22px var(--neon);
-      transition: text-shadow 0.3s ease;
-    }
-    .panel h2.active-glow {
-      text-shadow:
-        0 0 12px var(--hover),
-        0 0 24px var(--hover),
-        0 0 40px var(--hover);
-    }
-    #reflectionText {
-      white-space: pre-wrap;
-      font-size: 14px;
-      color: rgba(0,229,255,0.9);
-    }
-    .cursor {
-      display: inline-block;
-      width: 10px;
-      margin-left: 6px;
-      background: var(--neon);
-      animation: blink 1s steps(2) infinite;
-      vertical-align: middle;
-    }
-    @keyframes blink {
-      0%, 50% {
-        opacity: 1;
-      }
-      51%, 100% {
-        opacity: 0;
-      }
-    }
-    .productionsGrid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 14px;
-    }
-    .prodCard {
-      padding: 16px;
-      border-radius: 10px;
-      border: 1px solid rgba(0,229,255,0.05);
-      background: linear-gradient(180deg, rgba(0,0,0,0.5), rgba(12,12,14,0.35));
-      cursor: pointer;
-      transition: all 0.22s ease;
-    }
-    .prodCard h3 {
-      margin: 0 0 6px;
-      font-size: 15px;
-    }
-    .prodCard p {
-      margin: 0;
-      font-size: 13px;
-      color: rgba(0,229,255,0.9);
-    }
-    .prodCard:hover {
-      background: linear-gradient(180deg, var(--neon), #00bfff);
-      color: #001018;
-      transform: translateY(-6px) scale(1.01);
-      box-shadow: 0 22px 50px rgba(0,229,255,0.08);
-    }
-    .prodCard:hover h3 {
-      color: #001018;
-      text-shadow: none;
-    }
-    /* Terminal */
-    #terminalInputWrapper {
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      width: 100vw;
-      background: linear-gradient(180deg, rgba(0,0,0,0.8), rgba(0,229,255,0.15));
-      border-top: 1px solid var(--neon);
-      padding: 8px 12px;
-      z-index: 1400;
-      display: none;
-      align-items: center;
-      gap: 10px;
-      backdrop-filter: blur(6px);
-    }
-    #terminalPrompt {
-      font-weight: 700;
-      color: var(--neon);
-      user-select: none;
-    }
-    #terminalInput {
-      flex: 1;
-      background: transparent;
-      border: none;
-      border-bottom: 1px solid var(--neon);
-      color: var(--neon);
-      font-family: 'Share Tech Mono', monospace;
-      font-size: 14px;
-      line-height: 1.4;
-      padding: 6px 8px;
-      outline-offset: 2px;
-      caret-color: var(--hover);
-      transition: border-color 0.3s ease;
-    }
-    #terminalInput::placeholder {
-      color: rgba(0,229,255,0.4);
-    }
-    #terminalInput:focus {
-      border-color: var(--hover);
-    }
-    /* Particle canvas */
-    #hudParticles {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      pointer-events: none;
-      z-index: 0;
-    }
-    .scanlines {
-      pointer-events: none;
-      position: fixed;
-      inset: 0;
-      z-index: 40;
-      background: repeating-linear-gradient(to bottom,
-        rgba(0,229,255,0.03) 0px,
-        rgba(0,229,255,0.03) 1px,
-        transparent 1px,
-        transparent 3px);
-      opacity: 0.12;
-    }
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Hello World - Brandon Smart's Portfolio</title>
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+<style>
+:root {
+  --neon: #00e5ff;
+  --hover: #00ffb3;
+  --panel-bg: rgba(10,12,15,0.9);
+  --hud-width: 260px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html, body {
+  margin: 0;
+  height: 100%;
+  overflow-x: hidden;
+  font-family: 'Share Tech Mono', monospace;
+  background: linear-gradient(180deg, #020203, #07080a);
+  color: var(--neon);
+  -webkit-font-smoothing: antialiased;
+}
+
+a {
+  color: var(--neon);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+a:hover {
+  color: var(--hover);
+}
+
+/* Particle background scanlines */
+.scanlines {
+  pointer-events: none;
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  background: repeating-linear-gradient(to bottom,
+    rgba(0,229,255,0.03) 0px,
+    rgba(0,229,255,0.03) 1px,
+    transparent 1px,
+    transparent 3px);
+  opacity: 0.12;
+}
+
+/* Glow animation */
+@keyframes hudPulse {
+  0%, 100% {
+    text-shadow:
+      0 0 4px var(--neon),
+      0 0 9px var(--neon);
+    opacity: 1;
+  }
+  50% {
+    text-shadow:
+      0 0 2px var(--hover),
+      0 0 5px var(--hover);
+    opacity: 0.95;
+  }
+}
+
+h1, .headerTitle, .navItem, #reflectionText, .hud-row, .quoteBox {
+  animation: hudPulse 4s infinite alternate;
+}
+
+/* Layout */
+
+#main {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 120px 28px 40px;
+  position: relative;
+  z-index: 500;
+}
+
+.container {
+  width: 100%;
+  max-width: 1100px;
+  min-height: 100vh;
+  display: flex;
+  gap: 28px;
+  margin: 0 auto;
+  align-items: flex-start;
+  position: relative;
+  z-index: 5;
+}
+
+.leftCol {
+  width: 320px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  align-items: flex-start;
+}
+
+.rightCol {
+  flex-grow: 1;
+  min-height: 100vh;
+  overflow-y: auto;
+}
+
+/* Navigation and interactive elements */
+
+.headerTitle {
+  font-size: 18px;
+  color: var(--neon);
+  cursor: pointer;
+  margin-bottom: 8px;
+  user-select: none;
+}
+
+.navItem {
+  width: 100%;
+  padding: 16px 14px;
+  border-radius: 12px;
+  cursor: pointer;
+  background: linear-gradient(180deg, rgba(10,12,14,0.6), rgba(18,20,22,0.55));
+  border: 1px solid rgba(0,229,255,0.04);
+  font-weight: 700;
+  color: var(--neon);
+  transition: all 0.18s ease;
+}
+
+.navItem:hover {
+  background: linear-gradient(180deg, var(--neon), #00bfff);
+  color: #00111b;
+  transform: translateY(-4px);
+  box-shadow: 0 14px 36px rgba(0,229,255,0.04);
+}
+
+/* Panels */
+
+.panel {
+  display: none;
+  background: var(--panel-bg);
+  border-radius: 12px;
+  padding: 20px;
+  border: 1px solid rgba(0,229,255,0.04);
+  box-shadow: 0 15px 40px rgba(0,0,0,0.5);
+  max-height: 70vh;
+  overflow-y: auto;
+  transition: opacity 0.35s ease, transform 0.35s ease;
+  opacity: 0;
+  transform: translateY(8px);
+  position: relative;
+  z-index: 1150;
+}
+
+.panel.show {
+  display: block;
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.panel h2 {
+  color: var(--neon);
+  font-weight: 700;
+  margin-top: 0;
+  text-shadow:
+    0 0 6px var(--neon),
+    0 0 14px var(--neon),
+    0 0 22px var(--neon);
+  transition: text-shadow 0.3s ease;
+}
+
+.panel h2.active-glow {
+  text-shadow:
+    0 0 12px var(--hover),
+    0 0 24px var(--hover),
+    0 0 40px var(--hover);
+}
+
+/* Reflection */
+
+#reflectionText {
+  white-space: pre-wrap;
+  font-size: 14px;
+  color: rgba(0,229,255,0.9);
+}
+
+.cursor {
+  display: inline-block;
+  width: 10px;
+  margin-left: 6px;
+  background: var(--neon);
+  animation: blink 1s steps(2) infinite;
+  vertical-align: middle;
+}
+
+@keyframes blink {
+  0%, 50% {
+    opacity: 1;
+  }
+  51%, 100% {
+    opacity: 0;
+  }
+}
+
+/* Productions grid */
+
+.productionsGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+}
+
+.prodCard {
+  padding: 16px;
+  border-radius: 10px;
+  border: 1px solid rgba(0,229,255,0.05);
+  background: linear-gradient(180deg, rgba(0,0,0,0.5), rgba(12,12,14,0.35));
+  cursor: pointer;
+  transition: all 0.22s ease;
+}
+
+.prodCard h3 {
+  margin: 0 0 6px;
+  font-size: 15px;
+}
+
+.prodCard p {
+  margin: 0;
+  font-size: 13px;
+  color: rgba(0,229,255,0.9);
+}
+
+.prodCard:hover {
+  background: linear-gradient(180deg, var(--neon), #00bfff);
+  color: #001018;
+  transform: translateY(-6px) scale(1.01);
+  box-shadow: 0 22px 50px rgba(0,229,255,0.08);
+}
+
+.prodCard:hover h3 {
+  color: #001018;
+  text-shadow: none;
+}
+
+/* Terminal */
+
+#terminalInputWrapper {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100vw;
+  background: linear-gradient(180deg, rgba(0,0,0,0.8), rgba(0,229,255,0.15));
+  border-top: 1px solid var(--neon);
+  padding: 8px 12px;
+  z-index: 1400;
+  display: none;
+  align-items: center;
+  gap: 10px;
+  backdrop-filter: blur(6px);
+}
+
+#terminalPrompt {
+  font-weight: 700;
+  color: var(--neon);
+  user-select: none;
+}
+
+#terminalInput {
+  flex: 1;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid var(--neon);
+  color: var(--neon);
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 14px;
+  line-height: 1.4;
+  padding: 6px 8px;
+  outline-offset: 2px;
+  caret-color: var(--hover);
+  transition: border-color 0.3s ease;
+}
+
+#terminalInput::placeholder {
+  color: rgba(0,229,255,0.4);
+}
+
+#terminalInput:focus {
+  border-color: var(--hover);
+}
+
+/* Particle canvas */
+
+#hudParticles {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 0;
+}
   </style>
 </head>
 <body>
@@ -454,7 +481,6 @@
         const hud = document.getElementById('hud');
         hud.style.opacity = '1';
         hud.style.visibility = 'visible';
-        // Terminal hidden initially; toggle on Hello World click
         terminalInputWrapper.style.display = 'none';
         startHud();
         rotateQuotes();
@@ -709,7 +735,7 @@
       animate();
     })();
 
-    // Terminal toggle on Hello World... click
+    // Terminal toggle on Hello World click
     const headerTitle = document.querySelector('.headerTitle');
     headerTitle.addEventListener('click', () => {
       if (terminalInputWrapper.style.display === 'flex') {
@@ -720,7 +746,7 @@
       }
     });
 
-    // Terminal input clears on Enter key with panel open/close logic
+    // Terminal input clears on submit, open/close panels
     terminalInput.addEventListener('keydown', (e) => {
       if (e.key === 'Enter') {
         const val = terminalInput.value.trim().toLowerCase();
@@ -737,8 +763,8 @@
           cont: 'contactPanel',
         };
         if (val === 'back') {
-          document.querySelectorAll('.panel').forEach((p) => p.classList.remove('show'));
-          if(window.noPanelContent) noPanelContent.style.display = 'flex';
+          document.querySelectorAll('.panel').forEach(p => p.classList.remove('show'));
+          if (window.noPanelContent) noPanelContent.style.display = 'flex';
           if (window.speechSynthesis) window.speechSynthesis.cancel();
           if (typingTimer) {
             clearInterval(typingTimer);
