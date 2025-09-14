@@ -5,8 +5,8 @@
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <title>Hello World - Brandon Smart's Portfolio</title>
 <!-- Fonts + icons -->
-<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
 <style>
 :root {
   --neon: #00e5ff;
@@ -15,41 +15,91 @@
   --hover: #00ffb3;
   --hud-w: 260px;
 }
-* { box-sizing: border-box }
-html, body {
+* {
+  box-sizing: border-box;
+}
+html,
+body {
   height: 100%;
   margin: 0;
+  overflow-x: hidden;
   font-family: 'Share Tech Mono', monospace;
   background: linear-gradient(180deg, #020203, #07080a);
   color: var(--neon);
   -webkit-font-smoothing: antialiased;
 }
-a { color: var(--neon); text-decoration: none; transition: color .18s ease; }
-a:hover { color: var(--hover); }
+a {
+  color: var(--neon);
+  text-decoration: none;
+  transition: color 0.18s ease;
+}
+a:hover {
+  color: var(--hover);
+}
 .scanlines {
   pointer-events: none;
-  position: fixed; inset: 0; z-index: 40;
+  position: fixed;
+  inset: 0;
+  z-index: 40;
   background: repeating-linear-gradient(
     to bottom,
-    rgba(0,229,255,0.03) 0px,
-    rgba(0,229,255,0.03) 1px,
-    transparent 1px, transparent 3px
+    rgba(0, 229, 255, 0.03) 0px,
+    rgba(0, 229, 255, 0.03) 1px,
+    transparent 1px,
+    transparent 3px
   );
   opacity: 0.12;
 }
-/* subtle flicker HUD text animation */
+/* Glow animation for main text */
 @keyframes hudPulse {
-  0%, 100% { text-shadow: 0 0 4px var(--neon), 0 0 8px var(--neon); opacity:1 }
-  50% { text-shadow: 0 0 2px var(--hover), 0 0 5px var(--hover); opacity:0.96 }
+  0%, 100% {
+    text-shadow:
+      0 0 4px var(--neon),
+      0 0 9px var(--neon);
+    opacity: 1;
+  }
+  50% {
+    text-shadow:
+      0 0 2px var(--hover),
+      0 0 5px var(--hover);
+    opacity: 0.95;
+  }
 }
-h1, h2, .headerTitle, .navItem, #reflectionText, .hud-row, .quoteBox {
-  animation: hudPulse 3.5s infinite alternate;
+h1,
+.headerTitle,
+.navItem,
+#reflectionText,
+.hud-row,
+.quoteBox {
+  animation: hudPulse 4s infinite alternate;
+}
+/* Simple neon glow for panel titles */
+.panel h2 {
+  color: var(--neon);
+  text-shadow:
+    0 0 6px var(--neon),
+    0 0 14px var(--neon),
+    0 0 22px var(--neon);
+  font-weight: 700;
+  user-select: none;
+  margin-top: 0;
+  transition: text-shadow 0.3s ease;
+}
+.panel h2.active-glow {
+  text-shadow:
+    0 0 12px var(--hover),
+    0 0 24px var(--hover),
+    0 0 40px var(--hover);
 }
 #cornerGlobe {
   display: none;
   position: fixed;
-  top: 12px; right: 12px; width: 120px;
-  height: auto; z-index: 2000; pointer-events: none;
+  top: 12px;
+  right: 12px;
+  width: 120px;
+  height: auto;
+  z-index: 2000;
+  pointer-events: none;
   -webkit-mask-image: radial-gradient(circle, rgba(0,0,0,1) 85%, rgba(0,0,0,0) 100%);
   -webkit-mask-repeat: no-repeat;
   -webkit-mask-position: center;
@@ -60,37 +110,74 @@ h1, h2, .headerTitle, .navItem, #reflectionText, .hud-row, .quoteBox {
   mask-size: cover;
 }
 #loginOverlay {
-  position: fixed; inset: 0; z-index: 1200;
-  display: flex; align-items: center; justify-content: center;
+  position: fixed;
+  inset: 0;
+  z-index: 1200;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   background: linear-gradient(180deg, rgba(0,0,0,0.98), rgba(0,0,0,0.98));
 }
 .login-card {
-  width: 380px; padding: 28px; border-radius: 14px;
+  width: 380px;
+  padding: 28px;
+  border-radius: 14px;
   background: linear-gradient(135deg, rgba(0,229,255,0.04), rgba(0,102,153,0.03));
   border: 1px solid rgba(0,229,255,0.12);
-  box-shadow: 0 18px 60px rgba(0,0,0,0.7), inset 0 0 14px rgba(0,229,255,0.02);
+  box-shadow: 0 12px 40px rgba(0,0,0,0.5), inset 0 0 10px rgba(0,229,255,0.015);
   text-align: center;
 }
-.login-card h1 { margin:0 0 12px; font-size:20px; color:var(--neon); }
+.login-card h1 {
+  margin: 0 0 12px;
+  font-size: 20px;
+  color: var(--neon);
+  text-shadow: 0 0 2px var(--neon);
+}
 .login-input {
-  width: 100%; padding: 12px 14px; border-radius: 999px;
+  width: 100%;
+  padding: 12px 14px;
+  border-radius: 999px;
   border: 1px solid rgba(0,229,255,0.12);
-  background: rgba(0,0,0,0.45); color: var(--neon); outline: none; font-size: 14px;
+  background: rgba(0,0,0,0.45);
+  color: var(--neon);
+  outline: none;
+  font-size: 14px;
 }
-.login-actions { margin-top: 14px; display: flex; justify-content: center; gap: 12px; }
+.login-actions {
+  margin-top: 14px;
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+}
 .btn-primary {
-  padding: 10px 20px; border-radius: 999px; border: none; cursor: pointer;
+  padding: 10px 20px;
+  border-radius: 999px;
+  border: none;
+  cursor: pointer;
   background: linear-gradient(135deg,var(--neon),#00bfff);
-  color: #081018; font-weight: 700;
+  color: #081018;
+  font-weight: 700;
 }
-.login-sub { margin-top: 10px; font-size: 13px; color: rgba(0,229,255,0.7); }
+.login-sub {
+  margin-top: 10px;
+  font-size: 13px;
+  color: rgba(0,229,255,0.7);
+}
 #hud {
-  position: fixed; left: 18px; top: 12px; z-index: 1100;
+  position: fixed;
+  left: 18px;
+  top: 12px;
+  z-index: 1100;
   width: var(--hud-w);
   background: linear-gradient(180deg, rgba(0,0,0,0.55), rgba(0,0,0,0.35));
-  border-radius: 10px; padding: 10px 12px; border:1px solid rgba(0,229,255,0.06);
-  box-shadow: 0 8px 40px rgba(0,0,0,0.6); color:var(--neon); font-size:13px;
-  opacity:0; visibility:hidden;
+  border-radius: 10px;
+  padding: 10px 12px;
+  border: 1px solid rgba(0,229,255,0.06);
+  box-shadow: 0 15px 40px rgba(0,0,0,0.5);
+  color: var(--neon);
+  font-size: 13px;
+  opacity: 0;
+  visibility: hidden;
   text-align: left;
 }
 .hud-row {
@@ -105,61 +192,163 @@ h1, h2, .headerTitle, .navItem, #reflectionText, .hud-row, .quoteBox {
   flex-shrink: 0;
   vertical-align: middle;
 }
-#main { min-height:100vh; display:flex; flex-direction:column; align-items:center; justify-content:flex-start; padding:120px 28px 40px; z-index:500; }
-.container { max-width:1100px; width:100%; display:flex; gap:28px; align-items:flex-start; margin: 0 auto; }
-.leftCol { width:320px; display:flex; flex-direction:column; gap:18px; align-items:flex-start; }
-.headerTitle { font-size:18px; margin-bottom:8px; color:var(--neon); }
+#main {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 120px 28px 40px;
+  z-index: 500;
+  position: relative;
+}
+.container {
+  max-width: 1100px;
+  width: 100%;
+  display: flex;
+  gap: 28px;
+  align-items: flex-start;
+  margin: 0 auto;
+  position: relative;
+  z-index: 5;
+  min-height: 100vh;  
+}
+.leftCol {
+  width: 320px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  align-items: flex-start;
+}
+.headerTitle {
+  font-size: 18px;
+  margin-bottom: 8px;
+  color: var(--neon);
+  cursor: pointer;
+}
 .navItem {
-  width:100%; padding:16px 14px; border-radius:12px; cursor:pointer;
+  width: 100%;
+  padding: 16px 14px;
+  border-radius: 12px;
+  cursor: pointer;
   background: linear-gradient(180deg, rgba(10,12,14,0.6), rgba(18,20,22,0.55));
-  border:1px solid rgba(0,229,255,0.04); color:var(--neon); font-weight:700;
-  transition: all .18s ease;
+  border: 1px solid rgba(0,229,255,0.04);
+  color: var(--neon);
+  font-weight: 700;
+  transition: all 0.18s ease;
 }
 .navItem:hover {
   background: linear-gradient(180deg, var(--neon), #00bfff);
-  color:#00111b;
-  transform:translateY(-4px);
-  box-shadow:0 16px 40px rgba(0,229,255,0.06);
+  color: #00111b;
+  transform: translateY(-4px);
+  box-shadow: 0 14px 36px rgba(0,229,255,0.04);
 }
-.rightCol { flex:1; min-height:400px; }
+.rightCol {
+  flex: 1;
+  min-height: 100vh;
+  overflow-y: auto;
+}
 .panel {
-  display:none; background:var(--panel); border-radius:12px; padding:20px; border:1px solid rgba(0,229,255,0.04);
-  box-shadow: 0 20px 60px rgba(0,0,0,0.7);
-  position:relative; z-index:1150; max-height:70vh; overflow:auto;
-  transition: opacity .35s ease, transform .35s ease;
-  opacity:0; transform: translateY(8px);
+  display: none;
+  background: var(--panel);
+  border-radius: 12px;
+  padding: 20px;
+  border: 1px solid rgba(0,229,255,0.04);
+  box-shadow: 0 15px 40px rgba(0,0,0,0.5);
+  position: relative;
+  z-index: 1150;
+  max-height: 70vh;
+  overflow: auto;
+  transition: opacity 0.35s ease, transform 0.35s ease;
+  opacity: 0;
+  transform: translateY(8px);
 }
-.panel.show { display:block; opacity:1; transform: translateY(0); }
-#reflectionText { white-space:pre-wrap; font-size:14px; color:rgba(0,229,255,0.95);}
-.cursor { display:inline-block; width:10px; margin-left:6px; background:var(--neon); animation:blink 1s steps(2) infinite; vertical-align:middle; }
-@keyframes blink{0%,50%{opacity:1}51%,100%{opacity:0}}
-.productionsGrid { display:grid; grid-template-columns:repeat(3,1fr); gap:14px; }
+.panel.show {
+  display: block;
+  opacity: 1;
+  transform: translateY(0);
+}
+#reflectionText {
+  white-space: pre-wrap;
+  font-size: 14px;
+  color: rgba(0,229,255,0.9);
+}
+.cursor {
+  display: inline-block;
+  width: 10px;
+  margin-left: 6px;
+  background: var(--neon);
+  animation: blink 1s steps(2) infinite;
+  vertical-align: middle;
+}
+@keyframes blink {
+  0%, 50% {
+    opacity: 1;
+  }
+  51%, 100% {
+    opacity: 0;
+  }
+}
+.productionsGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+}
 .prodCard {
-  padding:16px; border-radius:10px; border:1px solid rgba(0,229,255,0.05);
+  padding: 16px;
+  border-radius: 10px;
+  border: 1px solid rgba(0,229,255,0.05);
   background: linear-gradient(180deg, rgba(0,0,0,0.5), rgba(12,12,14,0.35));
-  cursor:pointer; transition: all .22s ease;
+  cursor: pointer;
+  transition: all 0.22s ease;
 }
-.prodCard h3 { margin:0 0 6px; font-size:15px;}
-.prodCard p { margin:0; color:rgba(0,229,255,0.9); font-size:13px;}
-.prodCard:hover { background: linear-gradient(180deg, var(--neon), #00bfff); color:#001018; transform:translateY(-6px) scale(1.01); box-shadow:0 22px 50px rgba(0,229,255,0.08);}
-.prodCard:hover h3{ color:#001018; text-shadow:none;}
+.prodCard h3 {
+  margin: 0 0 6px;
+  font-size: 15px;
+}
+.prodCard p {
+  margin: 0;
+  color: rgba(0,229,255,0.9);
+  font-size: 13px;
+}
+.prodCard:hover {
+  background: linear-gradient(180deg, var(--neon), #00bfff);
+  color: #001018;
+  transform: translateY(-6px) scale(1.01);
+  box-shadow: 0 22px 50px rgba(0,229,255,0.08);
+}
+.prodCard:hover h3 {
+  color: #001018;
+  text-shadow: none;
+}
 #lightbox {
-  display:none; position:fixed; inset:0; z-index:1300;
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 1300;
   background: rgba(0,0,0,0.96);
-  align-items: center; justify-content: center;
+  align-items: center;
+  justify-content: center;
   flex-direction: column;
   transition: opacity 0.35s;
+  max-height: 100vh;
 }
-#lightbox.show { display:flex; opacity:1;}
+#lightbox.show {
+  display: flex;
+  opacity: 1;
+}
 #lbImage {
-  max-width:80vw; max-height:80vh;
-  border:3px solid var(--neon); border-radius:8px;
-  box-shadow: 0 0 48px #0af2;
+  max-width: 80vw;
+  max-height: 75vh;
+  border: 3px solid var(--neon);
+  border-radius: 8px;
+  box-shadow: 0 0 24px #0af2;
   background: #000;
   transition: opacity 0.4s;
   opacity: 1;
+  display: block;
+  margin: 0 auto;
 }
-/* lightbox controls below image, not overlapping */
 .lbControls {
   margin-top: 22px;
   display: flex;
@@ -169,27 +358,45 @@ h1, h2, .headerTitle, .navItem, #reflectionText, .hud-row, .quoteBox {
   transition: opacity 0.2s;
   opacity: 1;
 }
-.lbControls.hide {
-  opacity: 0;
-  pointer-events: none;
-}
 .lbControls button {
-  min-width:90px;
-  padding: 12px 20px;
+  width: 70px;
+  height: 30px;
   border-radius: 8px;
   border: none;
   cursor: pointer;
   background: var(--neon);
   color: #001018;
   font-weight: 700;
-  font-size: 1.05em;
+  font-size: 0.95em;
   transition: background 0.17s, color 0.17s, transform 0.22s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  user-select: none;
+  padding: 0;
+  line-height: 1;
+  box-shadow: 0 0 8px rgba(0,229,255,0.4);
 }
 .lbControls button:hover {
-  background:var(--hover); color:#06222f; transform:translateY(-2px) scale(1.04);
+  background: var(--hover);
+  color: #06222f;
+  transform: translateY(-2px) scale(1.04);
+  box-shadow: 0 0 12px rgba(0,255,179,0.6);
 }
-.backBtn { margin-top:12px; padding:8px 12px; border-radius:8px; background:transparent; border:1px solid rgba(0,229,255,0.06); color:var(--neon); cursor:pointer; }
-.backBtn:hover { background:rgba(0,229,255,0.06); color:#001018; }
+.backBtn {
+  margin-top: 12px;
+  padding: 8px 12px;
+  border-radius: 8px;
+  background: transparent;
+  border: 1px solid rgba(0,229,255,0.06);
+  color: var(--neon);
+  cursor: pointer;
+  box-shadow: none;
+}
+.backBtn:hover {
+  background: rgba(0,229,255,0.06);
+  color: #001018;
+}
 .quoteBox {
   margin-top: 40px;
   text-align: center;
@@ -198,118 +405,213 @@ h1, h2, .headerTitle, .navItem, #reflectionText, .hud-row, .quoteBox {
   transition: opacity 0.6s ease;
   min-height: 40px;
 }
-@media (max-width:980px){
-  .container{flex-direction:column;}
-  .leftCol{width:100%; order:2;}
-  .rightCol{order:1;}
-  #hud{left:10px; top:8px;}
-  .lbControls { margin-top: 14px; }
+#terminalInputWrapper {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100vw;
+  background: linear-gradient(180deg, rgba(0,0,0,0.8), rgba(0,229,255,0.15));
+  border-top: 1px solid var(--neon);
+  padding: 8px 12px;
+  z-index: 1400;
+  display: none;
+  align-items: center;
+  gap: 10px;
+  backdrop-filter: blur(6px);
+}
+#terminalPrompt {
+  font-weight: 700;
+  color: var(--neon);
+  user-select: none;
+}
+#terminalInput {
+  flex: 1;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid var(--neon);
+  color: var(--neon);
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 14px;
+  line-height: 1.4;
+  padding: 6px 8px;
+  outline-offset: 2px;
+  caret-color: var(--hover);
+  transition: border-color 0.3s ease;
+}
+#terminalInput::placeholder {
+  color: rgba(0,229,255,0.4);
+}
+#terminalInput:focus {
+  border-color: var(--hover);
 }
 </style>
 </head>
 <body>
-  <div class="scanlines" aria-hidden="true"></div>
-  <!-- LOGIN -->
-  <div id="loginOverlay" role="dialog" aria-label="Login">
-    <div class="login-card" role="document">
-      <h1>Login</h1>
-      <input id="loginPass" class="login-input" type="password" placeholder="Enter password" aria-label="Password">
-      <div class="login-actions">
-        <button id="loginBtn" class="btn-primary" aria-label="Enter">Enter</button>
-      </div>
-      <div class="login-sub">Enter the terminal</div>
+<div class="scanlines" aria-hidden="true"></div>
+
+<!-- Particle background canvas -->
+<canvas id="hudParticles"></canvas>
+
+<!-- LOGIN -->
+<div id="loginOverlay" role="dialog" aria-label="Login">
+  <div class="login-card" role="document">
+    <h1>Login</h1>
+    <input id="loginPass" class="login-input" type="password" placeholder="Enter password" aria-label="Password" />
+    <div class="login-actions">
+      <button id="loginBtn" class="btn-primary" aria-label="Enter">Enter</button>
     </div>
+    <div class="login-sub">Enter the terminal</div>
   </div>
-  <!-- HUD -->
-  <div id="hud" aria-live="polite">
-    <div class="hud-row" id="hud-date"><i class="fa-regular fa-calendar"></i> <span id="hud-date-text">Loading date…</span></div>
-    <div class="hud-row" id="hud-time"><i class="fa-regular fa-clock"></i> <span id="hud-time-text">--:--:--</span></div>
-    <div class="hud-row" id="hud-loc"><i class="fa-solid fa-location-dot"></i> <span id="hud-city">Toronto</span></div>
-    <div class="hud-row" id="hud-coords"><i class="fa-solid fa-crosshairs"></i> Coords: <span id="hud-coords-text">—</span></div>
-    <div class="hud-row" id="hud-weather"><i class="fa-solid fa-cloud-sun"></i> <span id="hud-weather-text">—</span></div>
+</div>
+
+<!-- HUD -->
+<div id="hud" aria-live="polite">
+  <div class="hud-row" id="hud-date">
+    <i class="fa-regular fa-calendar"></i>
+    <span id="hud-date-text">Loading date…</span>
   </div>
-  <!-- MAIN -->
-  <main id="main">
-    <div class="container">
-      <!-- LEFT -->
-      <div class="leftCol" aria-hidden="false">
-        <div class="headerTitle">>: ["Hello World..."]</div>
-        <div id="navWho" class="navItem" role="button" tabindex="0" aria-controls="whoPanel">Whoami</div>
-        <div id="navRef" class="navItem" role="button" tabindex="0" aria-controls="refPanel">Reflection</div>
-        <div id="navProd" class="navItem" role="button" tabindex="0" aria-controls="prodPanel">Productions</div>
-        <div id="navRes" class="navItem" role="button" tabindex="0" aria-controls="resPanel">Resources</div>
-        <div id="navContact" class="navItem" role="button" tabindex="0" aria-controls="contactPanel">Contact</div>
-      </div>
-      <div class="rightCol">
-        <!-- PANELS -->
-        <section id="whoPanel" class="panel" role="region" aria-labelledby="navWho">
-          <h2>Whoami</h2>
-          <p><strong>/BrandonSmart</strong><br>:-$ Teachable: ComputerTechnology</p>
-          <button class="backBtn" onclick="closePanel('whoPanel')">← Back</button>
-        </section>
-        <section id="refPanel" class="panel" role="region" aria-labelledby="navRef">
-          <h2>Reflection</h2>
-          <div id="reflectionText" aria-live="polite"></div><span class="cursor" id="reflectionCursor" aria-hidden="true"></span>
-          <button class="backBtn" onclick="closePanel('refPanel')">← Back</button>
-        </section>
-        <section id="prodPanel" class="panel" role="region" aria-labelledby="navProd">
-          <h2>Productions</h2>
-          <div class="productionsGrid" id="productionsGrid">
-            <div class="prodCard" data-index="0"><h3>Production 1: Power up</h3><p>View Content</p></div>
-            <div class="prodCard" data-index="1"><h3>Production 2: New Literacies Reflection</h3><p>Placeholder</p></div>
-            <div class="prodCard" data-index="2"><h3>Production 3: Critical Algorithmic Literacies and AI</h3><p>Placeholder</p></div>
-            <div class="prodCard" data-index="3"><h3>Production 4: Graphic Novel</h3><p>Placeholder</p></div>
-            <div class="prodCard" data-index="4"><h3>Production 5: On the Way to Video Inquiry</h3><p>Placeholder</p></div>
-            <div class="prodCard" data-index="5"><h3>Production 6: Video Works</h3><p>Placeholder</p></div>
-            <div class="prodCard" data-index="6"><h3>Production 7: Learning Principles</h3><p>Placeholder</p></div>
-            <div class="prodCard" data-index="7"><h3>Production 8: World Building</h3><p>Placeholder</p></div>
-            <div class="prodCard" data-index="8"><h3>Production 9: Twine</h3><p>Placeholder</p></div>
+  <div class="hud-row" id="hud-time">
+    <i class="fa-regular fa-clock"></i>
+    <span id="hud-time-text">--:--:--</span>
+  </div>
+  <div class="hud-row" id="hud-loc">
+    <i class="fa-solid fa-location-dot"></i>
+    <span id="hud-city">Toronto</span>
+  </div>
+  <div class="hud-row" id="hud-coords">
+    <i class="fa-solid fa-crosshairs"></i> Coords:
+    <span id="hud-coords-text">—</span>
+  </div>
+  <div class="hud-row" id="hud-weather">
+    <i class="fa-solid fa-cloud-sun"></i>
+    <span id="hud-weather-text">—</span>
+  </div>
+</div>
+
+<!-- MAIN -->
+<main id="main">
+  <div class="container">
+    <!-- LEFT -->
+    <div class="leftCol" aria-hidden="false">
+      <div class="headerTitle" tabindex="0" aria-label="Toggle terminal">&gt;: ["Hello World..."]</div>
+      <div id="navWho" class="navItem" role="button" tabindex="0" aria-controls="whoPanel">Whoami</div>
+      <div id="navRef" class="navItem" role="button" tabindex="0" aria-controls="refPanel">Reflection</div>
+      <div id="navProd" class="navItem" role="button" tabindex="0" aria-controls="prodPanel">Productions</div>
+      <div id="navRes" class="navItem" role="button" tabindex="0" aria-controls="resPanel">Resources</div>
+      <div id="navContact" class="navItem" role="button" tabindex="0" aria-controls="contactPanel">Contact</div>
+    </div>
+    <div class="rightCol">
+      <!-- PANELS -->
+      <section id="whoPanel" class="panel" role="region" aria-labelledby="navWho">
+        <h2>Whoami</h2>
+        <p><strong>/BrandonSmart</strong><br />:-$ Teachable: ComputerTechnology</p>
+        <button class="backBtn" onclick="closePanel('whoPanel')">← Back</button>
+      </section>
+      <section id="refPanel" class="panel" role="region" aria-labelledby="navRef">
+        <h2>Reflection</h2>
+        <div id="reflectionText" aria-live="polite"></div>
+        <span class="cursor" id="reflectionCursor" aria-hidden="true"></span>
+        <button class="backBtn" onclick="closePanel('refPanel')">← Back</button>
+      </section>
+      <section id="prodPanel" class="panel" role="region" aria-labelledby="navProd">
+        <h2>Productions</h2>
+        <div class="productionsGrid" id="productionsGrid">
+          <div class="prodCard" data-index="0"><h3>Production 1: Power up</h3><p>View Content</p></div>
+          <div class="prodCard" data-index="1"><h3>Production 2: New Literacies Reflection</h3><p>Placeholder</p></div>
+          <div class="prodCard" data-index="2"><h3>Production 3: Critical Algorithmic Literacies and AI</h3><p>Placeholder</p></div>
+          <div class="prodCard" data-index="3"><h3>Production 4: Graphic Novel</h3><p>Placeholder</p></div>
+          <div class="prodCard" data-index="4"><h3>Production 5: On the Way to Video Inquiry</h3><p>Placeholder</p></div>
+          <div class="prodCard" data-index="5"><h3>Production 6: Video Works</h3><p>Placeholder</p></div>
+          <div class="prodCard" data-index="6"><h3>Production 7: Learning Principles</h3><p>Placeholder</p></div>
+          <div class="prodCard" data-index="7"><h3>Production 8: World Building</h3><p>Placeholder</p></div>
+          <div class="prodCard" data-index="8"><h3>Production 9: Twine</h3><p>Placeholder</p></div>
+        </div>
+        <button class="backBtn" onclick="closePanel('prodPanel')">← Back</button>
+      </section>
+      <section id="resPanel" class="panel" role="region" aria-labelledby="navRes">
+        <h2>Resources</h2>
+        <p><a href="https://youtube.com" target="_blank" rel="noopener">YouTube</a></p>
+        <p><a href="https://google.ca" target="_blank" rel="noopener">Google</a></p>
+        <p><a href="https://github.com" target="_blank" rel="noopener">GitHub</a></p>
+        <button class="backBtn" onclick="closePanel('resPanel')">← Back</button>
+      </section>
+      <section id="contactPanel" class="panel" role="region" aria-labelledby="navContact">
+        <h2>Contact</h2>
+        <div class="contact-row">
+          <div class="mail">
+            <i class="fa-solid fa-envelope"></i>&nbsp;
+            <a href="mailto:bsmart@my.yorku.ca">bsmart@my.yorku.ca</a>
           </div>
-          <button class="backBtn" onclick="closePanel('prodPanel')">← Back</button>
-        </section>
-        <section id="resPanel" class="panel" role="region" aria-labelledby="navRes">
-          <h2>Resources</h2>
-          <p><a href="https://youtube.com" target="_blank" rel="noopener">YouTube</a></p>
-          <p><a href="https://google.ca" target="_blank" rel="noopener">Google</a></p>
-          <p><a href="https://github.com" target="_blank" rel="noopener">GitHub</a></p>
-          <button class="backBtn" onclick="closePanel('resPanel')">← Back</button>
-        </section>
-        <section id="contactPanel" class="panel" role="region" aria-labelledby="navContact">
-          <h2>Contact</h2>
-          <div class="contact-row">
-            <div class="mail"><i class="fa-solid fa-envelope"></i>&nbsp; <a href="mailto:bsmart@my.yorku.ca">bsmart@my.yorku.ca</a></div>
-          </div>
-          <button class="backBtn" onclick="closePanel('contactPanel')">← Back</button>
-        </section>
-      </div>
-    </div>
-    <div id="quote" class="quoteBox">Loading inspiration…</div>
-  </main>
-  <!-- LIGHTBOX -->
-  <div id="lightbox" role="dialog" aria-hidden="true" style="display:none">
-    <img id="lbImage" src="" alt="Screenshot">
-    <div class="lbControls">
-      <button id="lbPrev">Prev</button>
-      <button id="lbNext">Next</button>
-      <button id="lbClose">Close</button>
+        </div>
+        <button class="backBtn" onclick="closePanel('contactPanel')">← Back</button>
+      </section>
     </div>
   </div>
-  <!-- Wrong Password GIF Overlay -->
-  <div id="wrongGifOverlay" style="display:none; position:fixed; inset:0; justify-content:center; align-items:center; background: rgba(0,0,0,0.85); z-index:1500;">
-    <img src="images/computer missing GIF.gif" alt="Wrong Password GIF" style="width:100%; height:100%; object-fit:cover;">
+</main>
+
+<!-- Terminal input bar -->
+<div id="terminalInputWrapper" style="display:none;">
+  <div id="terminalPrompt">&gt;</div>
+  <input
+    type="text"
+    id="terminalInput"
+    aria-label="Terminal command input"
+    placeholder="Type panel name like 'whoami' and press Enter"
+    autocomplete="off"
+    spellcheck="false"
+    autocorrect="off"
+    autocapitalize="off"
+  />
+</div>
+
+<!-- LIGHTBOX -->
+<div id="lightbox" role="dialog" aria-hidden="true" style="display:none">
+  <img id="lbImage" src="" alt="Screenshot" />
+  <div class="lbControls">
+    <button id="lbPrev">Prev</button>
+    <button id="lbNext">Next</button>
+    <button id="lbClose">Close</button>
   </div>
-  <!-- Audio -->
-  <audio id="loginAudioCorrect" src="sounds/BC_Audio.mp3" preload="auto"></audio>
-  <audio id="loginAudioWrong" src="sounds/Hacked computer- Sound Effect.mp3" preload="auto"></audio>
+</div>
+
+<!-- Wrong Password GIF Overlay -->
+<div
+  id="wrongGifOverlay"
+  style="
+    display: none;
+    position: fixed;
+    inset: 0;
+    justify-content: center;
+    align-items: center;
+    background: rgba(0, 0, 0, 0.85);
+    z-index: 1500;
+  "
+>
+  <img
+    src="images/computer missing GIF.gif"
+    alt="Wrong Password GIF"
+    style="width: 100%; height: 100%; object-fit: cover"
+  />
+</div>
+
+<!-- Audio -->
+<audio id="loginAudioCorrect" src="sounds/BC_Audio.mp3" preload="auto"></audio>
+<audio
+  id="loginAudioWrong"
+  src="sounds/Hacked computer- Sound Effect.mp3"
+  preload="auto"
+></audio>
+
 <script>
 const OWM_API_KEY = '5043108521e5dc1feccf33701c3221bf';
 const PROD1_IMAGES = [
-  "images/Screenshot 2025-09-10 130926.png",
-  "images/Screenshot 2025-09-10 123717.png",
-  "images/Screenshot 2025-09-10 115645.png",
-  "images/Screenshot 2025-09-10 114858.png",
-  "images/Screenshot 2025-09-10 114832.png"
+  'images/Screenshot 2025-09-10 130926.png',
+  'images/Screenshot 2025-09-10 123717.png',
+  'images/Screenshot 2025-09-10 115645.png',
+  'images/Screenshot 2025-09-10 114858.png',
+  'images/Screenshot 2025-09-10 114832.png',
 ];
+
 // Login functionality
 const loginOverlay = document.getElementById('loginOverlay');
 const loginBtn = document.getElementById('loginBtn');
@@ -317,7 +619,12 @@ const loginPass = document.getElementById('loginPass');
 const wrongGif = document.getElementById('wrongGifOverlay');
 const loginAudioCorrect = document.getElementById('loginAudioCorrect');
 const loginAudioWrong = document.getElementById('loginAudioWrong');
-loginPass.addEventListener('keydown', e => { if(e.key==='Enter') loginBtn.click(); });
+const terminalInputWrapper = document.getElementById('terminalInputWrapper');
+const terminalInput = document.getElementById('terminalInput');
+
+loginPass.addEventListener('keydown', (e) => {
+  if (e.key === 'Enter') loginBtn.click();
+});
 loginBtn.addEventListener('click', () => {
   const v = (loginPass.value || '').trim();
   if (v === 'mrsmart') {
@@ -326,6 +633,8 @@ loginBtn.addEventListener('click', () => {
     const hud = document.getElementById('hud');
     hud.style.opacity = '1';
     hud.style.visibility = 'visible';
+    // Terminal hidden initially; toggle on Hello World click
+    terminalInputWrapper.style.display = 'none';
     startHud();
     rotateQuotes();
     updateLocationWeather();
@@ -333,22 +642,25 @@ loginBtn.addEventListener('click', () => {
     loginAudioCorrect.volume = 0.7;
     loginAudioCorrect.pause();
     loginAudioCorrect.currentTime = 0;
-    loginAudioCorrect.play().catch(err => console.error('Audio failed:', err));
+    loginAudioCorrect.play().catch((err) => console.error('Audio failed:', err));
   } else {
     loginPass.value = '';
     loginPass.placeholder = 'Incorrect — try again';
     loginPass.focus();
-    loginOverlay.animate([
-      { transform: 'translateX(-2px)' },
-      { transform: 'translateX(2px)' },
-      { transform: 'translateX(0)' }
-    ], { duration: 120, iterations: 3 });
+    loginOverlay.animate(
+      [
+        { transform: 'translateX(-2px)' },
+        { transform: 'translateX(2px)' },
+        { transform: 'translateX(0)' },
+      ],
+      { duration: 120, iterations: 3 }
+    );
     wrongGif.style.display = 'flex';
     loginAudioWrong.muted = false;
     loginAudioWrong.volume = 0.7;
     loginAudioWrong.pause();
     loginAudioWrong.currentTime = 0;
-    loginAudioWrong.play().catch(err => console.error('Audio failed:', err));
+    loginAudioWrong.play().catch((err) => console.error('Audio failed:', err));
     setTimeout(() => {
       wrongGif.style.display = 'none';
       loginAudioWrong.pause();
@@ -356,140 +668,280 @@ loginBtn.addEventListener('click', () => {
     }, 2200);
   }
 });
-// HUD (time/date)
-function startHud(){
+
+// HUD
+function startHud() {
   const timeEl = document.getElementById('hud-time-text');
   const dateEl = document.getElementById('hud-date-text');
-  function updateHud(){
+  function updateHud() {
     const now = new Date();
     timeEl.textContent = now.toLocaleTimeString();
     dateEl.textContent = now.toDateString();
   }
   updateHud();
-  setInterval(updateHud,1000);
+  setInterval(updateHud, 1000);
 }
+
 // Weather
-function updateLocationWeather(){
+function updateLocationWeather() {
   const cityEl = document.getElementById('hud-city');
   const coordsEl = document.getElementById('hud-coords-text');
   const weatherEl = document.getElementById('hud-weather-text');
-  if(!navigator.geolocation){ coordsEl.textContent='Unavailable'; weatherEl.textContent='Unavailable'; return; }
-  navigator.geolocation.getCurrentPosition(async pos => {
-    const {latitude, longitude} = pos.coords;
-    coordsEl.textContent = `${latitude.toFixed(4)}, ${longitude.toFixed(4)}`;
-    try{
-      const res = await fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=${OWM_API_KEY}&units=metric`);
-      const data = await res.json();
-      cityEl.textContent = data.name || 'Unknown';
-      let desc = data.weather[0].description;
-      desc = desc.charAt(0).toUpperCase() + desc.slice(1);
-      weatherEl.textContent = `${desc}, ${data.main.temp.toFixed(1)}°C`;
-    } catch(e){
-      weatherEl.textContent='Weather unavailable';
-      console.error(e);
+  if (!navigator.geolocation) {
+    coordsEl.textContent = 'Unavailable';
+    weatherEl.textContent = 'Unavailable';
+    return;
+  }
+  navigator.geolocation.getCurrentPosition(
+    async (pos) => {
+      const { latitude, longitude } = pos.coords;
+      coordsEl.textContent = `${latitude.toFixed(4)}, ${longitude.toFixed(4)}`;
+      try {
+        const res = await fetch(
+          `https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=${OWM_API_KEY}&units=metric`
+        );
+        const data = await res.json();
+        cityEl.textContent = data.name || 'Unknown';
+        let desc = data.weather[0].description;
+        desc = desc.charAt(0).toUpperCase() + desc.slice(1);
+        weatherEl.textContent = `${desc}, ${data.main.temp.toFixed(1)}°C`;
+      } catch (e) {
+        weatherEl.textContent = 'Weather unavailable';
+        console.error(e);
+      }
+    },
+    (err) => {
+      coordsEl.textContent = 'Denied';
+      weatherEl.textContent = 'Weather unavailable';
+      console.error(err);
     }
-  }, err => {
-    coordsEl.textContent='Denied';
-    weatherEl.textContent='Weather unavailable';
-    console.error(err);
-  });
+  );
 }
-// Panels open/close logic
-function openPanel(id){ document.querySelectorAll('.panel').forEach(p=>p.classList.remove('show')); document.getElementById(id).classList.add('show'); }
-function closePanel(id){
+
+// Panels open/close logic with neon glow on panel titles
+function openPanel(id) {
+  document.querySelectorAll('.panel').forEach((p) => {
+    p.classList.remove('show');
+    const h2 = p.querySelector('h2');
+    if (h2) h2.classList.remove('active-glow');
+  });
+  document.getElementById(id).classList.add('show');
+  const activeTitle = document.getElementById(id).querySelector('h2');
+  if (activeTitle) activeTitle.classList.add('active-glow');
+  if(window.noPanelContent) noPanelContent.style.display = 'none';
+
+  if (id === 'refPanel') {
+    if (typingTimer) clearInterval(typingTimer);
+    typingTimer = null;
+    typeReflection(reflections[0]);
+  }
+}
+function closePanel(id) {
   const panel = document.getElementById(id);
   panel.classList.remove('show');
-  if(id === 'refPanel'){
-    if(typingTimer) clearInterval(typingTimer);
+  const h2 = panel.querySelector('h2');
+  if (h2) h2.classList.remove('active-glow');
+  if(window.noPanelContent) noPanelContent.style.display = 'flex';
+
+  if (id === 'refPanel') {
+    if (typingTimer) clearInterval(typingTimer);
     typingTimer = null;
     window.speechSynthesis.cancel();
   }
 }
-document.querySelectorAll('.navItem').forEach(el=>el.addEventListener('click',()=>openPanel(el.getAttribute('aria-controls'))));
-// Reflection typing/stop
+document.querySelectorAll('.navItem').forEach((el) =>
+  el.addEventListener('click', () => {
+    openPanel(el.getAttribute('aria-controls'));
+  })
+);
+
+// Reflection typing & female voice (fast & smooth)
 const reflectionEl = document.getElementById('reflectionText');
 const reflections = [
-  `Building this site has been a deep learning experience. ... Overall, the experience emphasizes experimentation, problem-solving, and reflection in ways that are more self-directed, interactive, and personally meaningful than traditional learning environments.`
+  `Building this site has been a deep learning experience. ... Overall, the experience emphasizes experimentation, problem-solving, and reflection in ways that are more self-directed, interactive, and personally meaningful than traditional learning environments.`,
 ];
 let typingTimer = null;
-function typeReflection(text){
-  if(typingTimer) clearInterval(typingTimer);
-  reflectionEl.textContent='';
-  let i=0;
-  speechSynthesis.cancel();
+function typeReflection(text) {
+  if (typingTimer) clearInterval(typingTimer);
+  reflectionEl.textContent = '';
+  let i = 0;
+  window.speechSynthesis.cancel();
+
   const utter = new SpeechSynthesisUtterance(text);
+  const voices = window.speechSynthesis.getVoices();
+  let femaleVoice = voices.find(
+    (voice) =>
+      voice.lang.startsWith('en') &&
+      (voice.name.toLowerCase().includes('female') ||
+        voice.name.toLowerCase().includes('zira') ||
+        voice.name.toLowerCase().includes('susan') ||
+        voice.name.toLowerCase().includes('heather'))
+  );
+  if (!femaleVoice) femaleVoice = voices.find((voice) => voice.lang.startsWith('en'));
+  if (femaleVoice) utter.voice = femaleVoice;
+
+  utter.rate = 1.3; // fast & smooth
   window.speechSynthesis.speak(utter);
+
   typingTimer = setInterval(() => {
-    if(i < text.length){
-      reflectionEl.textContent += text[i]; i++;
+    if (i < text.length) {
+      reflectionEl.textContent += text[i];
+      i++;
     } else {
-      clearInterval(typingTimer); typingTimer = null;
+      clearInterval(typingTimer);
+      typingTimer = null;
     }
-  }, 35);
+  }, 28);
 }
-document.getElementById('navRef').addEventListener('click', () => {
-  typeReflection(reflections[0]);
-});
-// Productions Lightbox
-const productionImagesMap={0:PROD1_IMAGES};
-let currImages=[],currIndex=0;
-const lb=document.getElementById('lightbox');
-const lbImg=document.getElementById('lbImage');
-document.querySelectorAll('.prodCard').forEach(card=>{
-  card.addEventListener('click',()=>{
-    const idx=card.dataset.index;
-    currImages=productionImagesMap[idx]||[];
-    if(!currImages.length) return;
-    currIndex=0; 
-    lbImg.style.opacity='0';
-    setTimeout(()=>{
-      lbImg.src=currImages[currIndex];
-      setTimeout(()=>{lbImg.style.opacity='1';},60);
-    },100);
-    lb.style.display='flex';
-    setTimeout(()=>lb.classList.add('show'),12);
+
+// Particle background system restored
+(() => {
+  const canvas = document.getElementById('hudParticles');
+  const ctx = canvas.getContext('2d');
+  let width, height;
+  let particles = [];
+  const particleCount = 70;
+  const maxDist = 120;
+  let mouse = { x: null, y: null };
+  function resize() {
+    width = canvas.width = window.innerWidth;
+    height = canvas.height = window.innerHeight;
+  }
+  class Particle {
+    constructor() {
+      this.reset();
+    }
+    reset() {
+      this.x = Math.random() * width;
+      this.y = Math.random() * height;
+      this.vx = (Math.random() - 0.5) * 0.15;
+      this.vy = (Math.random() - 0.5) * 0.15;
+      this.size = Math.random() * 1.6 + 0.6;
+    }
+    update() {
+      this.x += this.vx;
+      this.y += this.vy;
+      if (this.x < 0) this.x = width;
+      else if (this.x > width) this.x = 0;
+      if (this.y < 0) this.y = height;
+      else if (this.y > height) this.y = 0;
+      if (mouse.x !== null && mouse.y !== null) {
+        let dx = this.x - mouse.x;
+        let dy = this.y - mouse.y;
+        let dist = Math.sqrt(dx * dx + dy * dy);
+        if (dist < 100) {
+          let angle = Math.atan2(dy, dx);
+          let force = (100 - dist) * 0.002;
+          this.vx += force * Math.cos(angle);
+          this.vy += force * Math.sin(angle);
+        }
+      }
+      this.vx *= 0.98;
+      this.vy *= 0.98;
+    }
+    draw() {
+      ctx.beginPath();
+      ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+      ctx.fillStyle = 'rgba(0, 229, 255, 0.3)';
+      ctx.fill();
+    }
+  }
+  function connectParticles() {
+    for (let i = 0; i < particleCount; i++) {
+      for (let j = i + 1; j < particleCount; j++) {
+        let p1 = particles[i];
+        let p2 = particles[j];
+        let dx = p1.x - p2.x;
+        let dy = p1.y - p2.y;
+        let dist = Math.sqrt(dx * dx + dy * dy);
+        if (dist < maxDist) {
+          ctx.strokeStyle = `rgba(0, 229, 255, ${0.09 * (1 - dist / maxDist)})`;
+          ctx.lineWidth = 1;
+          ctx.beginPath();
+          ctx.moveTo(p1.x, p1.y);
+          ctx.lineTo(p2.x, p2.y);
+          ctx.stroke();
+        }
+      }
+    }
+  }
+  function animate() {
+    ctx.clearRect(0, 0, width, height);
+    particles.forEach((p) => {
+      p.update();
+      p.draw();
+    });
+    connectParticles();
+    requestAnimationFrame(animate);
+  }
+  window.addEventListener('resize', resize);
+  window.addEventListener('mousemove', (e) => {
+    mouse.x = e.clientX;
+    mouse.y = e.clientY;
   });
+  window.addEventListener('mouseout', () => {
+    mouse.x = null;
+    mouse.y = null;
+  });
+  resize();
+  for (let i = 0; i < particleCount; i++) particles.push(new Particle());
+  animate();
+})();
+
+// Terminal toggle on Hello World... header click
+const headerTitle = document.querySelector('.headerTitle');
+headerTitle.addEventListener('click', () => {
+  if (terminalInputWrapper.style.display === 'flex') {
+    terminalInputWrapper.style.display = 'none';
+  } else {
+    terminalInputWrapper.style.display = 'flex';
+    terminalInput.focus();
+  }
 });
-function updateLbImage(){
-  lbImg.style.opacity='0';
-  setTimeout(()=>{
-    lbImg.src=currImages[currIndex];
-    setTimeout(()=>{lbImg.style.opacity='1';},60);
-  },120);
-}
-document.getElementById('lbPrev').addEventListener('click',()=>{
-  if(!currImages.length)return;
-  currIndex=(currIndex-1+currImages.length)%currImages.length;
-  updateLbImage();
+
+// Terminal input clear after Enter key with panel opening etc.
+terminalInput.addEventListener('keydown', (e) => {
+  if (e.key === 'Enter') {
+    const val = terminalInput.value.trim().toLowerCase();
+    const panelMap = {
+      whoami: 'whoPanel',
+      reflection: 'refPanel',
+      productions: 'prodPanel',
+      resources: 'resPanel',
+      contact: 'contactPanel',
+      who: 'whoPanel',
+      ref: 'refPanel',
+      prod: 'prodPanel',
+      res: 'resPanel',
+      cont: 'contactPanel',
+    };
+    if (val === 'back') {
+      document.querySelectorAll('.panel').forEach((p) => p.classList.remove('show'));
+      if(window.noPanelContent) noPanelContent.style.display = 'flex';
+      if (window.speechSynthesis) window.speechSynthesis.cancel();
+      if (typingTimer) {
+        clearInterval(typingTimer);
+        typingTimer = null;
+      }
+      terminalInput.value = '';
+      terminalInput.blur();
+      return;
+    }
+    if (val === 'exit') {
+      terminalInput.value = '';
+      terminalInput.blur();
+      window.open('', '_self');
+      window.close();
+      return;
+    }
+    if (panelMap[val]) {
+      openPanel(panelMap[val]);
+      terminalInput.value = '';
+      terminalInput.blur();
+    }
+  }
 });
-document.getElementById('lbNext').addEventListener('click',()=>{
-  if(!currImages.length)return;
-  currIndex=(currIndex+1)%currImages.length;
-  updateLbImage();
-});
-document.getElementById('lbClose').addEventListener('click',()=>{
-  lb.classList.remove('show');
-  setTimeout(()=>{lb.style.display='none'},350);
-});
-// Quotes rotation
-const quotes=[
-  "Code is like humor. When you have to explain it, it’s bad.",
-  "First, solve the problem. Then, write the code.",
-  "Experience is the name everyone gives to their mistakes."
-];
-const quoteEl=document.getElementById('quote');
-function rotateQuotes(){
-  let qidx=0;
-  setInterval(()=>{
-    quoteEl.style.opacity=0;
-    setTimeout(()=>{
-      quoteEl.textContent=quotes[qidx];
-      quoteEl.style.opacity=1;
-      qidx=(qidx+1)%quotes.length;
-    },500);
-  },6000);
-}
 </script>
-<img src="images/right_icon0.gif" id="cornerGlobe" alt="Globe Glow" style="display:none; border-radius:50%;">
+<img src="images/right_icon1.gif" id="cornerGlobe" alt="Globe Glow" style="display:none; border-radius:50%" />
 </body>
 </html>
