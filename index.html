@@ -60,8 +60,8 @@ a:hover, a:focus {
   position: fixed;
   top: 12px;
   right: 12px;
-  width: 100px !important;
-  height: 100px;
+  width: 120px !important;
+  height: 120px;
   border-radius: 50%;
   z-index: 3000;
   pointer-events: none;
@@ -73,7 +73,7 @@ a:hover, a:focus {
   mask-repeat: no-repeat;
   mask-position: center;
   mask-size: cover;
-  box-shadow: 0 0 15px var(--neon);
+  box-shadow: 0 0 24px var(--neon);
 }
 
 /* LOGIN */
@@ -137,7 +137,7 @@ a:hover, a:focus {
   font-weight: 700;
   font-size: 0.85em;
   letter-spacing: 0.1em;
-  box-shadow: 0 0 10px var(--neon);
+  box-shadow: 0 0 24px var(--neon);
 }
 .btn-primary:hover {
   background: var(--hover);
@@ -150,16 +150,17 @@ a:hover, a:focus {
   user-select: none;
 }
 
-/* HUD moved to top with no glow */
+/* HUD moved top with glow to match panels */
 #hud {
   position: fixed;
   top: 12px;
   left: 18px;
   width: var(--hud-w);
   padding: 10px 14px;
-  border-radius: 10px;
+  border-radius: 12px;
   background: var(--panel);
   border: 1px solid rgba(0,229,255,0.15);
+  box-shadow: 0 0 24px var(--neon);
   font-size: 13px;
   color: var(--neon);
   opacity: 0;
@@ -180,7 +181,7 @@ a:hover, a:focus {
   vertical-align: middle;
 }
 
-/* network bars as a small widget */
+/* network bars */
 .network-bars {
   display: flex;
   align-items: flex-end;
@@ -205,12 +206,8 @@ a:hover, a:focus {
   height: 10px;
 }
 @keyframes barPulse {
-  0% {
-    opacity: 0.4;
-  }
-  100% {
-    opacity: 1;
-  }
+  0% { opacity: 0.4; }
+  100% { opacity: 1; }
 }
 
 /* MAIN */
@@ -322,12 +319,8 @@ a:hover, a:focus {
   vertical-align: middle;
 }
 @keyframes cursorBlink {
-  0%, 50% {
-    opacity: 1;
-  }
-  51%, 100% {
-    opacity: 0;
-  }
+  0%, 50% { opacity: 1; }
+  51%, 100% { opacity: 0; }
 }
 
 /* productions grid */
@@ -473,130 +466,131 @@ a:hover, a:focus {
   #hud {
     left: 10px;
     top: 12px;
+    width: 220px;
   }
   #cornerGlobe {
     top: 10px;
     right: 10px;
-    width: 80px !important;
-    height: 80px;
+    width: 100px !important;
+    height: 100px;
   }
 }
 </style>
 </head>
 <body>
-<div class="scanlines" aria-hidden="true"></div>
+  <div class="scanlines" aria-hidden="true"></div>
 
-<!-- LOGIN -->
-<div id="loginOverlay" role="dialog" aria-label="Login" aria-modal="true">
-  <div class="login-card" role="document">
-    <h1>Login</h1>
-    <input id="loginPass" class="login-input" type="password" placeholder="Enter password" aria-label="Password" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
-    <div class="login-actions">
-      <button id="loginBtn" class="btn-primary" aria-label="Enter">Enter</button>
-    </div>
-    <div class="login-sub">Enter the terminal</div>
-  </div>
-</div>
-
-<!-- HUD -->
-<div id="hud" aria-live="polite" aria-label="Heads Up Display">
-  <div class="hud-row" id="hud-date"><i class="fa-regular fa-calendar"></i> <span id="hud-date-text">Loading date…</span></div>
-  <div class="hud-row" id="hud-time"><i class="fa-regular fa-clock"></i> <span id="hud-time-text">--:--:--</span></div>
-  <div class="hud-row" id="hud-loc"><i class="fa-solid fa-location-dot"></i> <span id="hud-city">Toronto</span></div>
-  <div class="hud-row" id="hud-coords"><i class="fa-solid fa-crosshairs"></i> Coords: <span id="hud-coords-text">—</span></div>
-  <div class="hud-row" id="hud-weather"><i class="fa-solid fa-cloud-sun"></i> <span id="hud-weather-text">—</span></div>
-  <div class="hud-row">
-    <div class="network-bars" aria-label="Network traffic status" role="img">
-      <div></div><div></div><div></div><div></div><div></div>
-    </div>
-  </div>
-</div>
-
-<!-- MAIN -->
-<main id="main">
-  <div class="container">
-    <!-- LEFT -->
-    <div class="leftCol" aria-hidden="false">
-      <div class="headerTitle">>: ["Hello World..."]</div>
-      <div id="navWho" class="navItem" role="button" tabindex="0" aria-controls="whoPanel">Whoami</div>
-      <div id="navRef" class="navItem" role="button" tabindex="0" aria-controls="refPanel">Reflection</div>
-      <div id="navProd" class="navItem" role="button" tabindex="0" aria-controls="prodPanel">Productions</div>
-      <div id="navRes" class="navItem" role="button" tabindex="0" aria-controls="resPanel">Resources</div>
-      <div id="navContact" class="navItem" role="button" tabindex="0" aria-controls="contactPanel">Contact</div>
-    </div>
-
-    <!-- RIGHT -->
-    <div class="rightCol">
-      <!-- PANELS -->
-      <section id="whoPanel" class="panel" role="region" aria-labelledby="navWho">
-        <h2>Whoami</h2>
-        <p><strong>/BrandonSmart</strong><br>:-$ Teachable: ComputerTechnology</p>
-        <button class="backBtn" onclick="closePanel('whoPanel')">← Back</button>
-      </section>
-
-      <section id="refPanel" class="panel" role="region" aria-labelledby="navRef">
-        <h2>Reflection</h2>
-        <div id="reflectionText" aria-live="polite"></div><span class="cursor" id="reflectionCursor" aria-hidden="true"></span>
-        <button class="backBtn" onclick="closePanel('refPanel')">← Back</button>
-      </section>
-
-      <section id="prodPanel" class="panel" role="region" aria-labelledby="navProd">
-        <h2>Productions</h2>
-        <div class="productionsGrid" id="productionsGrid">
-          <div class="prodCard" data-index="0"><h3>Production 1: Power up</h3><p>View Content</p></div>
-          <div class="prodCard" data-index="1"><h3>Production 2: New Literacies Reflection</h3><p>Placeholder</p></div>
-          <div class="prodCard" data-index="2"><h3>Production 3: Critical Algorithmic Literacies and AI</h3><p>Placeholder</p></div>
-          <div class="prodCard" data-index="3"><h3>Production 4: Graphic Novel</h3><p>Placeholder</p></div>
-          <div class="prodCard" data-index="4"><h3>Production 5: On the Way to Video Inquiry</h3><p>Placeholder</p></div>
-          <div class="prodCard" data-index="5"><h3>Production 6: Video Works</h3><p>Placeholder</p></div>
-          <div class="prodCard" data-index="6"><h3>Production 7: Learning Principles</h3><p>Placeholder</p></div>
-          <div class="prodCard" data-index="7"><h3>Production 8: World Building</h3><p>Placeholder</p></div>
-          <div class="prodCard" data-index="8"><h3>Production 9: Twine</h3><p>Placeholder</p></div>
-        </div>
-        <button class="backBtn" onclick="closePanel('prodPanel')">← Back</button>
-      </section>
-
-      <section id="resPanel" class="panel" role="region" aria-labelledby="navRes">
-        <h2>Resources</h2>
-        <p><a href="https://youtube.com" target="_blank" rel="noopener">YouTube</a></p>
-        <p><a href="https://google.ca" target="_blank" rel="noopener">Google</a></p>
-        <p><a href="https://github.com" target="_blank" rel="noopener">GitHub</a></p>
-        <button class="backBtn" onclick="closePanel('resPanel')">← Back</button>
-      </section>
-
-      <section id="contactPanel" class="panel" role="region" aria-labelledby="navContact">
-        <h2>Contact</h2>
-        <div class="contact-row">
-          <i class="fa-solid fa-envelope"></i> <a href="mailto:bsmart@my.yorku.ca">bsmart@my.yorku.ca</a>
-        </div>
-        <button class="backBtn" onclick="closePanel('contactPanel')">← Back</button>
-      </section>
+  <!-- LOGIN -->
+  <div id="loginOverlay" role="dialog" aria-label="Login" aria-modal="true">
+    <div class="login-card" role="document">
+      <h1>Login</h1>
+      <input id="loginPass" class="login-input" type="password" placeholder="Enter password" aria-label="Password" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+      <div class="login-actions">
+        <button id="loginBtn" class="btn-primary" aria-label="Enter">Enter</button>
+      </div>
+      <div class="login-sub">Enter the terminal</div>
     </div>
   </div>
 
-  <!-- QUOTES -->
-  <div id="quote" class="quoteBox">Loading inspiration…</div>
-</main>
-
-<!-- LIGHTBOX -->
-<div id="lightbox" role="dialog" aria-hidden="true" style="display:none;">
-  <img id="lbImage" src="" alt="Screenshot"/>
-  <div class="lbControls">
-    <button id="lbPrev">Prev</button>
-    <button id="lbNext">Next</button>
-    <button id="lbClose">Close</button>
+  <!-- HUD -->
+  <div id="hud" aria-live="polite" aria-label="Heads Up Display">
+    <div class="hud-row" id="hud-date"><i class="fa-regular fa-calendar"></i> <span id="hud-date-text">Loading date…</span></div>
+    <div class="hud-row" id="hud-time"><i class="fa-regular fa-clock"></i> <span id="hud-time-text">--:--:--</span></div>
+    <div class="hud-row" id="hud-loc"><i class="fa-solid fa-location-dot"></i> <span id="hud-city">Toronto</span></div>
+    <div class="hud-row" id="hud-coords"><i class="fa-solid fa-crosshairs"></i> Coords: <span id="hud-coords-text">—</span></div>
+    <div class="hud-row" id="hud-weather"><i class="fa-solid fa-cloud-sun"></i> <span id="hud-weather-text">—</span></div>
+    <div class="hud-row">
+      <div class="network-bars" aria-label="Network traffic status" role="img">
+        <div></div><div></div><div></div><div></div><div></div>
+      </div>
+    </div>
   </div>
-</div>
 
-<!-- Wrong Password GIF Overlay -->
-<div id="wrongGifOverlay" style="display:none; position:fixed; inset:0; justify-content:center; align-items:center; background: rgba(0,0,0,0.85); z-index:1500;">
-  <img src="images/computer%20missing%20GIF.gif" alt="Wrong Password GIF" style="width:100%; height:100%; object-fit:cover;"/>
-</div>
+  <!-- MAIN -->
+  <main id="main">
+    <div class="container">
+      <!-- LEFT -->
+      <div class="leftCol" aria-hidden="false">
+        <div class="headerTitle">>: ["Hello World..."]</div>
+        <div id="navWho" class="navItem" role="button" tabindex="0" aria-controls="whoPanel">Whoami</div>
+        <div id="navRef" class="navItem" role="button" tabindex="0" aria-controls="refPanel">Reflection</div>
+        <div id="navProd" class="navItem" role="button" tabindex="0" aria-controls="prodPanel">Productions</div>
+        <div id="navRes" class="navItem" role="button" tabindex="0" aria-controls="resPanel">Resources</div>
+        <div id="navContact" class="navItem" role="button" tabindex="0" aria-controls="contactPanel">Contact</div>
+      </div>
 
-<!-- Audio -->
-<audio id="loginAudioCorrect" src="sounds/BC_Audio.mp3" preload="auto"></audio>
-<audio id="loginAudioWrong" src="sounds/Hacked%20computer-%20Sound%20Effect.mp3" preload="auto"></audio>
-<audio id="keyboardClick" src="sounds/keyboard-click.mp3" preload="auto"></audio>
+      <!-- RIGHT -->
+      <div class="rightCol">
+        <!-- PANELS -->
+        <section id="whoPanel" class="panel" role="region" aria-labelledby="navWho">
+          <h2>Whoami</h2>
+          <p><strong>/BrandonSmart</strong><br>:-$ Teachable: ComputerTechnology</p>
+          <button class="backBtn" onclick="closePanel('whoPanel')">← Back</button>
+        </section>
+
+        <section id="refPanel" class="panel" role="region" aria-labelledby="navRef">
+          <h2>Reflection</h2>
+          <div id="reflectionText" aria-live="polite"></div><span class="cursor" id="reflectionCursor" aria-hidden="true"></span>
+          <button class="backBtn" onclick="closePanel('refPanel')">← Back</button>
+        </section>
+
+        <section id="prodPanel" class="panel" role="region" aria-labelledby="navProd">
+          <h2>Productions</h2>
+          <div class="productionsGrid" id="productionsGrid">
+            <div class="prodCard" data-index="0"><h3>Production 1: Power up</h3><p>View Content</p></div>
+            <div class="prodCard" data-index="1"><h3>Production 2: New Literacies Reflection</h3><p>Placeholder</p></div>
+            <div class="prodCard" data-index="2"><h3>Production 3: Critical Algorithmic Literacies and AI</h3><p>Placeholder</p></div>
+            <div class="prodCard" data-index="3"><h3>Production 4: Graphic Novel</h3><p>Placeholder</p></div>
+            <div class="prodCard" data-index="4"><h3>Production 5: On the Way to Video Inquiry</h3><p>Placeholder</p></div>
+            <div class="prodCard" data-index="5"><h3>Production 6: Video Works</h3><p>Placeholder</p></div>
+            <div class="prodCard" data-index="6"><h3>Production 7: Learning Principles</h3><p>Placeholder</p></div>
+            <div class="prodCard" data-index="7"><h3>Production 8: World Building</h3><p>Placeholder</p></div>
+            <div class="prodCard" data-index="8"><h3>Production 9: Twine</h3><p>Placeholder</p></div>
+          </div>
+          <button class="backBtn" onclick="closePanel('prodPanel')">← Back</button>
+        </section>
+
+        <section id="resPanel" class="panel" role="region" aria-labelledby="navRes">
+          <h2>Resources</h2>
+          <p><a href="https://youtube.com" target="_blank" rel="noopener">YouTube</a></p>
+          <p><a href="https://google.ca" target="_blank" rel="noopener">Google</a></p>
+          <p><a href="https://github.com" target="_blank" rel="noopener">GitHub</a></p>
+          <button class="backBtn" onclick="closePanel('resPanel')">← Back</button>
+        </section>
+
+        <section id="contactPanel" class="panel" role="region" aria-labelledby="navContact">
+          <h2>Contact</h2>
+          <div class="contact-row">
+            <i class="fa-solid fa-envelope"></i> <a href="mailto:bsmart@my.yorku.ca">bsmart@my.yorku.ca</a>
+          </div>
+          <button class="backBtn" onclick="closePanel('contactPanel')">← Back</button>
+        </section>
+      </div>
+    </div>
+
+    <!-- QUOTES -->
+    <div id="quote" class="quoteBox">Loading inspiration…</div>
+  </main>
+
+  <!-- LIGHTBOX -->
+  <div id="lightbox" role="dialog" aria-hidden="true" style="display:none;">
+    <img id="lbImage" src="" alt="Screenshot"/>
+    <div class="lbControls">
+      <button id="lbPrev">Prev</button>
+      <button id="lbNext">Next</button>
+      <button id="lbClose">Close</button>
+    </div>
+  </div>
+
+  <!-- Wrong Password GIF Overlay -->
+  <div id="wrongGifOverlay" style="display:none; position:fixed; inset:0; justify-content:center; align-items:center; background: rgba(0,0,0,0.85); z-index:1500;">
+    <img src="images/computer%20missing%20GIF.gif" alt="Wrong Password GIF" style="width:100%; height:100%; object-fit:cover;"/>
+  </div>
+
+  <!-- Audio -->
+  <audio id="loginAudioCorrect" src="sounds/BC_Audio.mp3" preload="auto"></audio>
+  <audio id="loginAudioWrong" src="sounds/Hacked%20computer-%20Sound%20Effect.mp3" preload="auto"></audio>
+  <audio id="keyboardClick" src="sounds/keyboard-click.mp3" preload="auto"></audio>
 
 <script>
 // Keyboard click sound
@@ -626,9 +620,7 @@ const wrongGif = document.getElementById('wrongGifOverlay');
 const loginAudioCorrect = document.getElementById('loginAudioCorrect');
 const loginAudioWrong = document.getElementById('loginAudioWrong');
 
-loginPass.addEventListener('keydown', e => {
-  if (e.key === 'Enter') loginBtn.click();
-});
+loginPass.addEventListener('keydown', e => { if (e.key === 'Enter') loginBtn.click(); });
 
 loginBtn.addEventListener('click', () => {
   const v = (loginPass.value || '').trim();
@@ -641,7 +633,6 @@ loginBtn.addEventListener('click', () => {
     startHud();
     rotateQuotes();
     updateLocationWeather();
-
     loginAudioCorrect.muted = false;
     loginAudioCorrect.volume = 0.7;
     loginAudioCorrect.pause();
