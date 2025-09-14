@@ -49,16 +49,19 @@ a:hover {
   );
   opacity: 0.12;
 }
-/* subtle flicker HUD text animation */
+/* toned down glowing text shadows globally */
 @keyframes hudPulse {
-  0%,
-  100% {
-    text-shadow: 0 0 4px var(--neon), 0 0 8px var(--neon);
+  0%, 100% {
+    text-shadow:
+      0 0 2px var(--neon),
+      0 0 4px var(--neon);
     opacity: 1;
   }
   50% {
-    text-shadow: 0 0 2px var(--hover), 0 0 5px var(--hover);
-    opacity: 0.96;
+    text-shadow:
+      0 0 1.5px var(--hover),
+      0 0 3px var(--hover);
+    opacity: 0.92;
   }
 }
 h1,
@@ -115,14 +118,14 @@ h2,
     rgba(0, 102, 153, 0.03)
   );
   border: 1px solid rgba(0, 229, 255, 0.12);
-  box-shadow: 0 18px 60px rgba(0, 0, 0, 0.7),
-    inset 0 0 14px rgba(0, 229, 255, 0.02);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5), inset 0 0 10px rgba(0, 229, 255, 0.015);
   text-align: center;
 }
 .login-card h1 {
   margin: 0 0 12px;
   font-size: 20px;
   color: var(--neon);
+  text-shadow: 0 0 2px var(--neon);
 }
 .login-input {
   width: 100%;
@@ -168,7 +171,7 @@ h2,
   border-radius: 10px;
   padding: 10px 12px;
   border: 1px solid rgba(0, 229, 255, 0.06);
-  box-shadow: 0 8px 40px rgba(0, 0, 0, 0.6);
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5);
   color: var(--neon);
   font-size: 13px;
   opacity: 0;
@@ -238,7 +241,7 @@ h2,
   background: linear-gradient(180deg, var(--neon), #00bfff);
   color: #00111b;
   transform: translateY(-4px);
-  box-shadow: 0 16px 40px rgba(0, 229, 255, 0.06);
+  box-shadow: 0 14px 36px rgba(0, 229, 255, 0.04);
 }
 .rightCol {
   flex: 1;
@@ -250,7 +253,7 @@ h2,
   border-radius: 12px;
   padding: 20px;
   border: 1px solid rgba(0, 229, 255, 0.04);
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.7);
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5);
   position: relative;
   z-index: 1150;
   max-height: 70vh;
@@ -267,7 +270,7 @@ h2,
 #reflectionText {
   white-space: pre-wrap;
   font-size: 14px;
-  color: rgba(0, 229, 255, 0.95);
+  color: rgba(0, 229, 255, 0.9);
 }
 .cursor {
   display: inline-block;
@@ -338,17 +341,17 @@ h2,
 }
 #lbImage {
   max-width: 80vw;
-  max-height: 75vh; /* limit max height to reduce container jump */
+  max-height: 75vh; /* limit max height for stability */
   border: 3px solid var(--neon);
   border-radius: 8px;
-  box-shadow: 0 0 48px #0af2;
+  box-shadow: 0 0 24px #0af2; /* reduced glow */
   background: #000;
   transition: opacity 0.4s;
   opacity: 1;
   display: block;
   margin: 0 auto;
 }
-/* lightbox controls below image, no overlap */
+/* lightbox controls below image */
 .lbControls {
   margin-top: 22px;
   display: flex;
@@ -358,7 +361,7 @@ h2,
   transition: opacity 0.2s;
   opacity: 1;
 }
-/* Consistent size and alignment for lightbox buttons */
+/* simpler smaller consistent buttons */
 .lbControls button {
   width: 70px;
   height: 30px;
@@ -376,11 +379,13 @@ h2,
   user-select: none;
   padding: 0;
   line-height: 1;
+  box-shadow: 0 0 8px rgba(0, 229, 255, 0.4); /* lighter glow */
 }
 .lbControls button:hover {
   background: var(--hover);
   color: #06222f;
   transform: translateY(-2px) scale(1.04);
+  box-shadow: 0 0 12px rgba(0, 255, 179, 0.6);
 }
 .backBtn {
   margin-top: 12px;
@@ -390,6 +395,7 @@ h2,
   border: 1px solid rgba(0, 229, 255, 0.06);
   color: var(--neon);
   cursor: pointer;
+  box-shadow: none; /* Remove glow */
 }
 .backBtn:hover {
   background: rgba(0, 229, 255, 0.06);
@@ -944,13 +950,10 @@ function updateLbImage() {
 }
 // Fix lightbox button size and stable layout
 function fixLightboxBtnLayout() {
-  // Force container height stable to max image height
   const lbContainer = document.getElementById('lightbox');
-  lbContainer.style.maxHeight = '90vh'; // keep within viewport
-  // This combined with fixed button sizes and image max-height stops shifts
+  lbContainer.style.maxHeight = '90vh';
 }
 fixLightboxBtnLayout();
-
 document.getElementById('lbPrev').addEventListener('click', () => {
   if (!currImages.length) return;
   currIndex = (currIndex - 1 + currImages.length) % currImages.length;
@@ -1119,7 +1122,7 @@ terminalInput.addEventListener('keydown', (e) => {
 });
 </script>
 <img
-  src="images/right_icon2.gif"
+  src="images/right_icon3.gif"
   id="cornerGlobe"
   alt="Globe Glow"
   style="display: none; border-radius: 50%"
