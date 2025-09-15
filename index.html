@@ -158,7 +158,6 @@
     color: var(--neon);
     font-size: 13px;
   }
-  /* Fix content pushed under HUD */
   #main {
     position: relative;
     z-index: 500;
@@ -389,74 +388,6 @@
     text-shadow: 0 0 6px var(--neon), 0 0 14px var(--neon),
       0 0 18px var(--neon), 0 0 32px var(--neon);
   }
-  /* Terminal styles */
-  #terminalContainer {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    background: var(--panel);
-    max-height: 200px;
-    border-top: 1px solid rgba(0, 229, 255, 0.3);
-    display: none;
-    flex-direction: column;
-    z-index: 2000;
-    font-size: 14px;
-    color: var(--neon);
-    font-family: "Share Tech Mono", monospace;
-    user-select: text;
-    padding: 10px 20px;
-    box-sizing: border-box;
-  }
-  #terminalContent {
-    flex: 1;
-    overflow-y: auto;
-    white-space: pre-wrap;
-    margin-bottom: 6px;
-    min-height: 80px;
-  }
-  #terminalInputContainer {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
-  #terminalPrompt {
-    flex-shrink: 0;
-  }
-  #terminalInput {
-    flex: 1;
-    background: transparent;
-    border: none;
-    border-bottom: 1px solid var(--neon);
-    color: var(--neon);
-    font-family: "Share Tech Mono", monospace;
-    font-size: 14px;
-    outline: none;
-    padding: 6px 10px;
-    caret-color: var(--neon);
-  }
-  #terminalInput::placeholder {
-    color: rgba(0, 229, 255, 0.4);
-  }
-  @media (max-width: 980px) {
-    .container {
-      flex-direction: column;
-    }
-    .leftCol {
-      width: 100%;
-      order: 2;
-    }
-    .rightCol {
-      order: 1;
-    }
-    #hud {
-      left: 10px;
-      top: 8px;
-    }
-    .lbControls {
-      margin-top: 14px;
-    }
-  }
 </style>
 </head>
 <body>
@@ -631,9 +562,7 @@
         >
           <h2>Resources</h2>
           <p>
-            <a href="https://youtube.com" target="_blank" rel="noopener"
-              >YouTube</a
-            >
+            <a href="https://youtube.com" target="_blank" rel="noopener">YouTube</a>
           </p>
           <p>
             <a href="https://google.ca" target="_blank" rel="noopener">Google</a>
@@ -662,7 +591,7 @@
     </div>
     <div id="quote" class="quoteBox">Loading inspiration…</div>
   </main>
-  <!-- Terminal panel -->
+  <!-- Terminal -->
   <div id="terminalContainer" role="region" aria-label="Terminal interface">
     <div id="terminalContent" aria-live="polite" aria-atomic="false"></div>
     <div id="terminalInputContainer">
@@ -676,7 +605,7 @@
       />
     </div>
   </div>
-  <!-- LIGHTBOX -->
+  <!-- Lightbox -->
   <div
     id="lightbox"
     role="dialog"
@@ -690,7 +619,7 @@
       <button id="lbClose">Close</button>
     </div>
   </div>
-  <!-- Wrong Password GIF Overlay -->
+  <!-- Wrong Password GIF -->
   <div
     id="wrongGifOverlay"
     style="
@@ -717,20 +646,28 @@
     preload="auto"
   ></audio>
   <script>
-    const OWM_API_KEY = "5043108521e5dc1feccf33701c3221bf";
-    const PROD1_IMAGES = [
-      "images/Screenshot 2025-09-10 130926.png",
-      "images/Screenshot 2025-09-10 123717.png",
-      "images/Screenshot 2025-09-10 115645.png",
-      "images/Screenshot 2025-09-10 114858.png",
-      "images/Screenshot 2025-09-10 114832.png",
-    ];
+    // Terminal toggle elements
+    const headerToggleTerminal = document.getElementById("headerToggleTerminal");
+    const terminalContainer = document.getElementById("terminalContainer");
+    const terminalInput = document.getElementById("terminalInput");
+
+    headerToggleTerminal.addEventListener("click", () => {
+      if (terminalContainer.style.display === "flex") {
+        terminalContainer.style.display = "none";
+      } else {
+        terminalContainer.style.display = "flex";
+        terminalInput.focus();
+      }
+    });
+
+    // Login and audio elements
     const loginOverlay = document.getElementById("loginOverlay");
     const loginBtn = document.getElementById("loginBtn");
     const loginPass = document.getElementById("loginPass");
     const wrongGif = document.getElementById("wrongGifOverlay");
     const loginAudioCorrect = document.getElementById("loginAudioCorrect");
     const loginAudioWrong = document.getElementById("loginAudioWrong");
+
     loginPass.addEventListener("keydown", (e) => {
       if (e.key === "Enter") loginBtn.click();
     });
@@ -779,9 +716,12 @@
         }, 2200);
       }
     });
+
+    // HUD time/date update
     function startHud() {
       const timeEl = document.getElementById("hud-time-text");
       const dateEl = document.getElementById("hud-date-text");
+
       function updateHud() {
         const now = new Date();
         timeEl.textContent = now.toLocaleTimeString();
@@ -790,6 +730,8 @@
       updateHud();
       setInterval(updateHud, 1000);
     }
+
+    // Location & weather
     function updateLocationWeather() {
       const cityEl = document.getElementById("hud-city");
       const coordsEl = document.getElementById("hud-coords-text");
@@ -826,6 +768,8 @@
         }
       );
     }
+
+    // Panels open/close
     function openPanel(id) {
       document.querySelectorAll(".panel").forEach((p) => p.classList.remove("show"));
       document.getElementById(id).classList.add("show");
@@ -839,11 +783,13 @@
         window.speechSynthesis.cancel();
       }
     }
+
+    // Nav voice on clicks, all relevant panels
     document.querySelectorAll(".navItem").forEach((el) => {
       el.addEventListener("click", (e) => {
-        openPanel(el.getAttribute("aria-controls"));
         const panel = el.getAttribute("aria-controls");
-        // Voice speaking on nav click for all except reflection and productions handled separately
+        openPanel(panel);
+
         if (panel === "refPanel") {
           speakAndType(reflections[0]);
         } else if (panel === "prodPanel") {
@@ -860,6 +806,8 @@
         }
       });
     });
+
+    // Reflection text and speaking utility
     const reflectionEl = document.getElementById("reflectionText");
     const reflections = [
       `Building this site has been a deep learning experience. ... Overall, the experience emphasizes experimentation, problem-solving, and reflection in ways that are more self-directed, interactive, and personally meaningful than traditional learning environments.`,
@@ -928,6 +876,8 @@
         reallySpeakAndType();
       }
     }
+
+    // Terminal logic
     const panelIds = [
       "whoPanel",
       "refPanel",
@@ -987,10 +937,8 @@
         appendTerminalOutput(`Command not recognized: ${cmd}`);
       }
     }
-    // Header click toggles terminal
-    const terminalContainer = document.getElementById("terminalContainer");
-    const terminalInput = document.getElementById("terminalInput");
-    const headerToggleTerminal = document.getElementById("headerToggleTerminal");
+
+    // Terminal input events
     headerToggleTerminal.addEventListener("click", () => {
       if (terminalContainer.style.display === "flex") {
         terminalContainer.style.display = "none";
@@ -1007,6 +955,7 @@
         terminalInput.value = ""; // clear input
       }
     });
+
     // Quotes rotation with smooth opacity
     const quotes = [
       "Code is like humor. When you have to explain it, it’s bad.",
@@ -1027,6 +976,7 @@
       }, 6000);
     }
     rotateQuotes();
+
     // Particle background system
     (() => {
       const canvas = document.getElementById("hudParticles");
