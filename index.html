@@ -64,23 +64,18 @@ h1, h2, .headerTitle, .navItem, #reflectionText, .hud-row, .quoteBox {
   animation: hudPulse 3.5s infinite alternate;
 }
 #cornerGlobe {
-  display: none;
+  display: none; /* show only after login */
   position: fixed;
   top: 12px;
   right: 12px;
   width: 120px;
   height: auto;
+  border-radius: 50%;
   z-index: 2000;
   pointer-events: none;
-  -webkit-mask-image: radial-gradient(circle, rgba(0,0,0,1) 85%, rgba(0,0,0,0) 100%);
-  -webkit-mask-repeat: no-repeat;
-  -webkit-mask-position: center;
-  -webkit-mask-size: cover;
-  mask-image: radial-gradient(circle, rgba(0,0,0,1) 85%, rgba(0,0,0,0) 100%);
-  mask-repeat: no-repeat;
-  mask-position: center;
-  mask-size: cover;
+  /* Remove mask-image to avoid rendering issues */
 }
+
 #loginOverlay {
   position: fixed;
   inset: 0;
