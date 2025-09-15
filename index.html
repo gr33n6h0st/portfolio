@@ -191,107 +191,29 @@ h1, h2, .headerTitle, .navItem, #reflectionText, .hud-row, .quoteBox {
 }
 .backBtn { margin-top:12px; padding:8px 12px; border-radius:8px; background:transparent; border:1px solid rgba(0,229,255,0.06); color:var(--neon); cursor:pointer; }
 .backBtn:hover { background:rgba(0,229,255,0.06); color:#001018; }
+/* Quotes box smooth fade */
 .quoteBox {
   margin-top: 40px;
   text-align: center;
   font-size: 16px;
   color: rgba(0,229,255,0.85);
-  transition: opacity 0.6s ease;
+  transition: opacity 1.2s ease-in-out;
   min-height: 40px;
+  opacity: 1;
 }
-/* Cyber glitch text effect */
+/* Replace Productions glitch effect with smooth neon glow */
 .glitchText {
   position: relative;
   color: var(--neon);
   font-weight: 700;
-  animation: flicker 3s infinite alternate ease-in-out;
+  text-shadow:
+    0 0 6px var(--neon),
+    0 0 14px var(--neon),
+    0 0 18px var(--neon),
+    0 0 32px var(--neon);
+  /* Remove flicker animation and glitch pseudo elements */
 }
-.glitchText::before,
-.glitchText::after {
-  content: attr(data-text);
-  position: absolute;
-  left: 0; top: 0;
-  width: 100%; height: 100%;
-  opacity: 0.6;
-  clip-path: polygon(0 0, 100% 0, 100% 45%, 0 45%);
-  animation: glitchShift 2.5s infinite alternate ease-in-out;
-  pointer-events: none;
-}
-.glitchText::before {
-  left: 2px;
-  text-shadow: -2px 0 red;
-  animation-delay: 0s;
-}
-.glitchText::after {
-  left: -2px;
-  text-shadow: 2px 0 cyan;
-  clip-path: polygon(0 55%, 100% 55%, 100% 100%, 0 100%);
-  animation-delay: 1.25s;
-}
-@keyframes flicker {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.85; }
-}
-@keyframes glitchShift {
-  0%, 100% { transform: translateX(0); }
-  50% { transform: translateX(1.5px); }
-}
-/* Terminal styles */
-#terminalContainer {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  background: var(--panel);
-  max-height: 200px;
-  border-top: 1px solid rgba(0,229,255,0.3);
-  display: none;
-  flex-direction: column;
-  z-index: 2000;
-  font-size: 14px;
-  color: var(--neon);
-  font-family: 'Share Tech Mono', monospace;
-  user-select: text;
-  padding: 10px 20px;
-  box-sizing: border-box;
-}
-#terminalContent {
-  flex: 1;
-  overflow-y: auto;
-  white-space: pre-wrap;
-  margin-bottom: 6px;
-  min-height: 80px;
-}
-#terminalInputContainer {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-#terminalPrompt {
-  flex-shrink: 0;
-}
-#terminalInput {
-  flex: 1;
-  background: transparent;
-  border: none;
-  border-bottom: 1px solid var(--neon);
-  color: var(--neon);
-  font-family: 'Share Tech Mono', monospace;
-  font-size: 14px;
-  outline: none;
-  padding: 6px 10px;
-  caret-color: var(--neon);
-}
-#terminalInput::placeholder {
-  color: rgba(0,229,255,0.4);
-}
-@media (max-width:980px){
-  .container{flex-direction:column;}
-  .leftCol{width:100%; order:2;}
-  .rightCol{order:1;}
-  #hud{left:10px; top:8px;}
-  .lbControls { margin-top: 14px; }
-}
+@keyframes blink{0%,50%{opacity:1}51%,100%{opacity:0}}
 </style>
 </head>
 <body>
@@ -504,10 +426,12 @@ function closePanel(id){
 document.querySelectorAll('.navItem').forEach(el=>{
   el.addEventListener('click',()=>openPanel(el.getAttribute('aria-controls')));
 });
+// Reflections and generic speech+type
 const reflectionEl = document.getElementById('reflectionText');
 const reflections = [
   `Building this site has been a deep learning experience. ... Overall, the experience emphasizes experimentation, problem-solving, and reflection in ways that are more self-directed, interactive, and personally meaningful than traditional learning environments.`
 ];
+// Helper to select female voice reliably
 function getBestFemaleVoice() {
   const voices = window.speechSynthesis.getVoices();
   let patterns = [
@@ -539,6 +463,7 @@ function getBestFemaleVoice() {
   if (anyEn) return anyEn;
   return voices[0] || null;
 }
+// Combined speak and type effect for panel text
 function speakAndType(text) {
   if (window.typingTimer) clearInterval(window.typingTimer);
   window.speechSynthesis.cancel();
@@ -569,66 +494,99 @@ function speakAndType(text) {
     reallySpeakAndType();
   }
 }
+// Assign speakAndType for reflection nav item click
 document.getElementById('navRef').addEventListener('click', () => {
   speakAndType(reflections[0]);
 });
-const productionImagesMap={0:PROD1_IMAGES};
-let currImages=[],currIndex=0;
-const lb=document.getElementById('lightbox');
-const lbImg=document.getElementById('lbImage');
-document.querySelectorAll('.prodCard').forEach(card=>{
-  card.addEventListener('click',()=>{
-    const idx=card.dataset.index;
-    currImages=productionImagesMap[idx]||[];
-    if(!currImages.length) return;
-    currIndex=0;
-    lbImg.style.opacity='0';
-    setTimeout(()=>{
-      lbImg.src=currImages[currIndex];
-      setTimeout(()=>{lbImg.style.opacity='1';},60);
-    },100);
-    lb.style.display='flex';
-    setTimeout(()=>lb.classList.add('show'),12);
-  });
-});
-function updateLbImage(){
-  lbImg.style.opacity='0';
-  setTimeout(()=>{
-    lbImg.src=currImages[currIndex];
-    setTimeout(()=>{lbImg.style.opacity='1';},60);
-  },120);
+// Speech texts for other panels
+const panelSpeech = {
+  whoami: "I am Mr. Brandon Smart",
+  resources: "Here are my resources",
+  contact: "Please send me an email if you have any further inquiries"
+};
+// Terminal and nav open panel with speech
+const panelIds = ['whoPanel', 'refPanel', 'prodPanel', 'resPanel', 'contactPanel'];
+const panelNames = {
+  'whoami': 'whoPanel',
+  'reflection': 'refPanel',
+  'productions': 'prodPanel',
+  'resources': 'resPanel',
+  'contact': 'contactPanel',
+  'back': 'back'
+};
+function appendTerminalOutput(text) {
+  const terminalContent = document.getElementById('terminalContent');
+  terminalContent.textContent += text + "\n";
+  terminalContent.scrollTop = terminalContent.scrollHeight;
 }
-document.getElementById('lbPrev').addEventListener('click',()=>{
-  if(!currImages.length)return;
-  currIndex=(currIndex-1+currImages.length)%currImages.length;
-  updateLbImage();
+function executeCommand(cmd) {
+  const lowerCmd = cmd.toLowerCase().trim();
+  if (lowerCmd === 'back') {
+    panelIds.forEach(id => closePanel(id));
+    appendTerminalOutput("Closed all panels.");
+  } else if (lowerCmd === 'exit') {
+    appendTerminalOutput("Closing tab...");
+    setTimeout(() => { window.close(); }, 100);
+  } else if (panelNames.hasOwnProperty(lowerCmd)) {
+    const panelId = panelNames[lowerCmd];
+    if (panelId !== 'back') {
+      openPanel(panelId);
+      appendTerminalOutput(`Opened panel: ${lowerCmd}`);
+      if (lowerCmd === 'reflection') {
+        speakAndType(reflections[0]);
+      } else if (lowerCmd === 'productions') {
+        speakAndType("Currently, this panel contains productions and placeholders.");
+      } else if (panelSpeech.hasOwnProperty(lowerCmd)) {
+        speakAndType(panelSpeech[lowerCmd]);
+      }
+    }
+  } else if(lowerCmd.length === 0) {
+    return;
+  } else {
+    appendTerminalOutput(`Command not recognized: ${cmd}`);
+  }
+}
+// Header click toggles terminal
+const terminalContainer = document.getElementById('terminalContainer');
+const terminalInput = document.getElementById('terminalInput');
+const headerToggleTerminal = document.getElementById('headerToggleTerminal');
+headerToggleTerminal.addEventListener('click', () => {
+  if (terminalContainer.style.display === 'flex') {
+    terminalContainer.style.display = 'none';
+  } else {
+    terminalContainer.style.display = 'flex';
+    terminalInput.focus();
+  }
 });
-document.getElementById('lbNext').addEventListener('click',()=>{
-  if(!currImages.length)return;
-  currIndex=(currIndex+1)%currImages.length;
-  updateLbImage();
+terminalInput.addEventListener('keydown', (e) => {
+  if (e.key === 'Enter') {
+    const cmd = terminalInput.value;
+    appendTerminalOutput(`> ${cmd}`);
+    executeCommand(cmd);
+    terminalInput.value = ''; // clear input
+  }
 });
-document.getElementById('lbClose').addEventListener('click',()=>{
-  lb.classList.remove('show');
-  setTimeout(()=>{lb.style.display='none'},350);
-});
-const quotes=[
+// Quotes rotation with smooth opacity
+const quotes = [
   "Code is like humor. When you have to explain it, it’s bad.",
   "First, solve the problem. Then, write the code.",
   "Experience is the name everyone gives to their mistakes."
 ];
-const quoteEl=document.getElementById('quote');
+const quoteEl = document.getElementById('quote');
 function rotateQuotes(){
   let qidx=0;
   setInterval(()=>{
-    quoteEl.style.opacity=0;
+    quoteEl.style.transition = "opacity 1.2s ease-in-out";
+    quoteEl.style.opacity = 0;
     setTimeout(()=>{
-      quoteEl.textContent=quotes[qidx];
-      quoteEl.style.opacity=1;
-      qidx=(qidx+1)%quotes.length;
-    },500);
-  },6000);
+      quoteEl.textContent = quotes[qidx];
+      quoteEl.style.opacity = 1;
+      qidx = (qidx + 1) % quotes.length;
+    }, 1200);
+  }, 6000);
 }
+rotateQuotes();
+// Particle background system as before ...
 (() => {
   const canvas = document.getElementById('hudParticles');
   const ctx = canvas.getContext('2d');
@@ -721,64 +679,6 @@ function rotateQuotes(){
   for (let i = 0; i < particleCount; i++) particles.push(new Particle());
   animate();
 })();
-const terminalContainer = document.getElementById('terminalContainer');
-const terminalContent = document.getElementById('terminalContent');
-const terminalInput = document.getElementById('terminalInput');
-const headerToggleTerminal = document.getElementById('headerToggleTerminal');
-const panelIds = ['whoPanel', 'refPanel', 'prodPanel', 'resPanel', 'contactPanel'];
-const panelNames = {
-  'whoami': 'whoPanel',
-  'reflection': 'refPanel',
-  'productions': 'prodPanel',
-  'resources': 'resPanel',
-  'contact': 'contactPanel',
-  'back': 'back'
-};
-function appendTerminalOutput(text) {
-  terminalContent.textContent += text + "\n";
-  terminalContent.scrollTop = terminalContent.scrollHeight;
-}
-function executeCommand(cmd) {
-  const lowerCmd = cmd.toLowerCase().trim();
-  if (lowerCmd === 'back') {
-    panelIds.forEach(id => closePanel(id));
-    appendTerminalOutput("Closed all panels.");
-  } else if (lowerCmd === 'exit') {
-    appendTerminalOutput("Closing tab...");
-    setTimeout(() => { window.close(); }, 100);
-  } else if (panelNames.hasOwnProperty(lowerCmd)) {
-    const panelId = panelNames[lowerCmd];
-    if (panelId !== 'back') {
-      openPanel(panelId);
-      appendTerminalOutput(`Opened panel: ${lowerCmd}`);
-      if (lowerCmd === 'reflection') {
-        speakAndType(reflections[0]);
-      } else if (lowerCmd === 'productions') {
-        speakAndType("Currently, this panel contains productions and placeholders.");
-      }
-    }
-  } else if(lowerCmd.length === 0) {
-    return;
-  } else {
-    appendTerminalOutput(`Command not recognized: ${cmd}`);
-  }
-}
-headerToggleTerminal.addEventListener('click', () => {
-  if (terminalContainer.style.display === 'flex') {
-    terminalContainer.style.display = 'none';
-  } else {
-    terminalContainer.style.display = 'flex';
-    terminalInput.focus();
-  }
-});
-terminalInput.addEventListener('keydown', (e) => {
-  if (e.key === 'Enter') {
-    const cmd = terminalInput.value;
-    appendTerminalOutput(`> ${cmd}`);
-    executeCommand(cmd);
-    terminalInput.value = ''; // clear input
-  }
-});
 </script>
 <img src="images/right_icon1.gif" id="cornerGlobe" alt="Globe Glow" style="display:none; border-radius:50%;">
 </body>
