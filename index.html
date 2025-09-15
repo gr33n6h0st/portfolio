@@ -449,371 +449,467 @@ h1, h2, .headerTitle, .navItem, #reflectionText, .hud-row, .quoteBox {
 </style>
 </head>
 <body>
-  <div class="scanlines" aria-hidden="true"></div>
-  <canvas id="hudParticles" style="position: fixed; top:0; left:0; width:100vw; height:100vh; pointer-events:none; z-index:0;"></canvas>
-  <div id="loginOverlay" role="dialog" aria-label="Login">
-    <div class="login-card" role="document">
-      <h1>Login</h1>
-      <input id="loginPass" class="login-input" type="password" placeholder="Enter password" aria-label="Password" />
-      <div class="login-actions"><button id="loginBtn" class="btn-primary" aria-label="Enter">Enter</button></div>
-      <div class="login-sub">Enter the terminal</div>
+<div class="scanlines" aria-hidden="true"></div>
+<canvas id="hudParticles" style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; pointer-events: none; z-index: 0;"></canvas>
+<div id="loginOverlay" role="dialog" aria-label="Login">
+  <div class="login-card" role="document">
+    <h1>Login</h1>
+    <input id="loginPass" class="login-input" type="password" placeholder="Enter password" aria-label="Password" />
+    <div class="login-actions"><button id="loginBtn" class="btn-primary" aria-label="Enter">Enter</button></div>
+    <div class="login-sub">Enter the terminal</div>
+  </div>
+</div>
+<div id="hud" aria-live="polite">
+  <div class="hud-row" id="hud-date"><i class="fa-regular fa-calendar"></i> <span id="hud-date-text">Loading date…</span></div>
+  <div class="hud-row" id="hud-time"><i class="fa-regular fa-clock"></i> <span id="hud-time-text">--:--:--</span></div>
+  <div class="hud-row" id="hud-loc"><i class="fa-solid fa-location-dot"></i> <span id="hud-city">Toronto</span></div>
+  <div class="hud-row" id="hud-coords"><i class="fa-solid fa-crosshairs"></i> Coords: <span id="hud-coords-text">—</span></div>
+  <div class="hud-row" id="hud-weather"><i class="fa-solid fa-cloud-sun"></i> <span id="hud-weather-text">—</span></div>
+</div>
+<main id="main">
+  <div class="container">
+    <div class="leftCol" aria-hidden="false">
+      <div class="headerTitle" id="headerToggleTerminal">>: ["Hello World..."]</div>
+      <div id="navWho" class="navItem" role="button" tabindex="0" aria-controls="whoPanel">Whoami</div>
+      <div id="navRef" class="navItem" role="button" tabindex="0" aria-controls="refPanel">Reflection</div>
+      <div id="navProd" class="navItem" role="button" tabindex="0" aria-controls="prodPanel">Productions</div>
+      <div id="navRes" class="navItem" role="button" tabindex="0" aria-controls="resPanel">Resources</div>
+      <div id="navContact" class="navItem" role="button" tabindex="0" aria-controls="contactPanel">Contact</div>
+    </div>
+    <div class="rightCol">
+      <section id="whoPanel" class="panel" role="region" aria-labelledby="navWho">
+        <h2>Whoami</h2>
+        <p><strong>/BrandonSmart</strong><br />:-$ Teachable: ComputerTechnology</p>
+        <button class="backBtn" onclick="closePanel('whoPanel')">← Back</button>
+      </section>
+      <section id="refPanel" class="panel" role="region" aria-labelledby="navRef">
+        <h2>Reflection</h2>
+        <div id="reflectionText" aria-live="polite"></div><span class="cursor" id="reflectionCursor" aria-hidden="true"></span>
+        <button class="backBtn" onclick="closePanel('refPanel')">← Back</button>
+      </section>
+      <section id="prodPanel" class="panel" role="region" aria-labelledby="navProd">
+        <h2 class="glitchText" data-text="Productions">Productions</h2>
+        <div class="productionsGrid" id="productionsGrid">
+          <!-- production cards -->
+          <div class="prodCard" data-index="0"><h3>Production 1: Power up</h3><p>View Content</p></div>
+          <div class="prodCard" data-index="1"><h3>Production 2: New Literacies Reflection</h3><p>Placeholder</p></div>
+          <div class="prodCard" data-index="2"><h3>Production 3: Critical Algorithmic Literacies and AI</h3><p>Placeholder</p></div>
+          <div class="prodCard" data-index="3"><h3>Production 4: Graphic Novel</h3><p>Placeholder</p></div>
+          <div class="prodCard" data-index="4"><h3>Production 5: On the Way to Video Inquiry</h3><p>Placeholder</p></div>
+          <div class="prodCard" data-index="5"><h3>Production 6: Video Works</h3><p>Placeholder</p></div>
+          <div class="prodCard" data-index="6"><h3>Production 7: Learning Principles</h3><p>Placeholder</p></div>
+          <div class="prodCard" data-index="7"><h3>Production 8: World Building</h3><p>Placeholder</p></div>
+          <div class="prodCard" data-index="8"><h3>Production 9: Twine</h3><p>Placeholder</p></div>
+        </div>
+        <button class="backBtn" onclick="closePanel('prodPanel')">← Back</button>
+      </section>
+      <section id="resPanel" class="panel" role="region" aria-labelledby="navRes">
+        <h2>Resources</h2>
+        <p><a href="https://youtube.com" target="_blank" rel="noopener">YouTube</a></p>
+        <p><a href="https://google.ca" target="_blank" rel="noopener">Google</a></p>
+        <p><a href="https://github.com" target="_blank" rel="noopener">GitHub</a></p>
+        <button class="backBtn" onclick="closePanel('resPanel')">← Back</button>
+      </section>
+      <section id="contactPanel" class="panel" role="region" aria-labelledby="navContact">
+        <h2>Contact</h2>
+        <div class="contact-row">
+          <div class="mail"><i class="fa-solid fa-envelope"></i>&nbsp; <a href="mailto:bsmart@my.yorku.ca">bsmart@my.yorku.ca</a></div>
+        </div>
+        <button class="backBtn" onclick="closePanel('contactPanel')">← Back</button>
+      </section>
     </div>
   </div>
-  <div id="hud" aria-live="polite">
-    <div class="hud-row" id="hud-date"><i class="fa-regular fa-calendar"></i> <span id="hud-date-text">Loading date…</span></div>
-    <div class="hud-row" id="hud-time"><i class="fa-regular fa-clock"></i> <span id="hud-time-text">--:--:--</span></div>
-    <div class="hud-row" id="hud-loc"><i class="fa-solid fa-location-dot"></i> <span id="hud-city">Toronto</span></div>
-    <div class="hud-row" id="hud-coords"><i class="fa-solid fa-crosshairs"></i> Coords: <span id="hud-coords-text">—</span></div>
-    <div class="hud-row" id="hud-weather"><i class="fa-solid fa-cloud-sun"></i> <span id="hud-weather-text">—</span></div>
+  <div id="quote" class="quoteBox">Loading inspiration…</div>
+</main>
+<div id="terminalContainer" role="region" aria-label="Terminal interface">
+  <div id="terminalContent" aria-live="polite" aria-atomic="false"></div>
+  <div id="terminalInputContainer">
+    <div id="terminalPrompt">&gt;&nbsp;</div>
+    <input id="terminalInput" type="text" placeholder="Type command here..." autocomplete="off" aria-label="Terminal command input" />
   </div>
-  <main id="main">
-    <div class="container">
-      <div class="leftCol" aria-hidden="false">
-        <div class="headerTitle" id="headerToggleTerminal">>: ["Hello World..."]</div>
-        <div id="navWho" class="navItem" role="button" tabindex="0" aria-controls="whoPanel">Whoami</div>
-        <div id="navRef" class="navItem" role="button" tabindex="0" aria-controls="refPanel">Reflection</div>
-        <div id="navProd" class="navItem" role="button" tabindex="0" aria-controls="prodPanel">Productions</div>
-        <div id="navRes" class="navItem" role="button" tabindex="0" aria-controls="resPanel">Resources</div>
-        <div id="navContact" class="navItem" role="button" tabindex="0" aria-controls="contactPanel">Contact</div>
-      </div>
-      <div class="rightCol">
-        <section id="whoPanel" class="panel" role="region" aria-labelledby="navWho">
-          <h2>Whoami</h2>
-          <p><strong>/BrandonSmart</strong><br />:-$ Teachable: ComputerTechnology</p>
-          <button class="backBtn" onclick="closePanel('whoPanel')">← Back</button>
-        </section>
-        <section id="refPanel" class="panel" role="region" aria-labelledby="navRef">
-          <h2>Reflection</h2>
-          <div id="reflectionText" aria-live="polite"></div><span class="cursor" id="reflectionCursor" aria-hidden="true"></span>
-          <button class="backBtn" onclick="closePanel('refPanel')">← Back</button>
-        </section>
-        <section id="prodPanel" class="panel" role="region" aria-labelledby="navProd">
-          <h2 class="glitchText" data-text="Productions">Productions</h2>
-          <div class="productionsGrid" id="productionsGrid">
-            <!-- production cards -->
-            <div class="prodCard" data-index="0"><h3>Production 1: Power up</h3><p>View Content</p></div>
-            <div class="prodCard" data-index="1"><h3>Production 2: New Literacies Reflection</h3><p>Placeholder</p></div>
-            <div class="prodCard" data-index="2"><h3>Production 3: Critical Algorithmic Literacies and AI</h3><p>Placeholder</p></div>
-            <div class="prodCard" data-index="3"><h3>Production 4: Graphic Novel</h3><p>Placeholder</p></div>
-            <div class="prodCard" data-index="4"><h3>Production 5: On the Way to Video Inquiry</h3><p>Placeholder</p></div>
-            <div class="prodCard" data-index="5"><h3>Production 6: Video Works</h3><p>Placeholder</p></div>
-            <div class="prodCard" data-index="6"><h3>Production 7: Learning Principles</h3><p>Placeholder</p></div>
-            <div class="prodCard" data-index="7"><h3>Production 8: World Building</h3><p>Placeholder</p></div>
-            <div class="prodCard" data-index="8"><h3>Production 9: Twine</h3><p>Placeholder</p></div>
-          </div>
-          <button class="backBtn" onclick="closePanel('prodPanel')">← Back</button>
-        </section>
-        <section id="resPanel" class="panel" role="region" aria-labelledby="navRes">
-          <h2>Resources</h2>
-          <p><a href="https://youtube.com" target="_blank" rel="noopener">YouTube</a></p>
-          <p><a href="https://google.ca" target="_blank" rel="noopener">Google</a></p>
-          <p><a href="https://github.com" target="_blank" rel="noopener">GitHub</a></p>
-          <button class="backBtn" onclick="closePanel('resPanel')">← Back</button>
-        </section>
-        <section id="contactPanel" class="panel" role="region" aria-labelledby="navContact">
-          <h2>Contact</h2>
-          <div class="contact-row">
-            <div class="mail"><i class="fa-solid fa-envelope"></i>&nbsp; <a href="mailto:bsmart@my.yorku.ca">bsmart@my.yorku.ca</a></div>
-          </div>
-          <button class="backBtn" onclick="closePanel('contactPanel')">← Back</button>
-        </section>
-      </div>
-    </div>
-    <div id="quote" class="quoteBox">Loading inspiration…</div>
-  </main>
-  <div id="terminalContainer" role="region" aria-label="Terminal interface">
-    <div id="terminalContent" aria-live="polite" aria-atomic="false"></div>
-    <div id="terminalInputContainer">
-      <div id="terminalPrompt">&gt;&nbsp;</div>
-      <input id="terminalInput" type="text" placeholder="Type command here..." autocomplete="off" aria-label="Terminal command input" />
-    </div>
+</div>
+<div id="lightbox" role="dialog" aria-hidden="true" style="display:none">
+  <img id="lbImage" src="" alt="Screenshot" />
+  <div class="lbControls">
+    <button id="lbPrev">Prev</button>
+    <button id="lbNext">Next</button>
+    <button id="lbClose">Close</button>
   </div>
-  <div id="lightbox" role="dialog" aria-hidden="true" style="display:none">
-    <img id="lbImage" src="" alt="Screenshot" />
-    <div class="lbControls">
-      <button id="lbPrev">Prev</button>
-      <button id="lbNext">Next</button>
-      <button id="lbClose">Close</button>
-    </div>
-  </div>
-  <div id="wrongGifOverlay" style="display:none; position:fixed; inset:0; justify-content:center; align-items:center; background:rgba(0, 0, 0, 0.85); z-index:1500;">
-    <img src="images/computer missing GIF.gif" alt="Wrong Password GIF" style="width:100%; height:100%; object-fit:cover;" />
-  </div>
-  <audio id="loginAudioCorrect" src="sounds/robotintro.mp3" preload="auto"></audio>
-  <audio id="loginAudioWrong" src="sounds/Hacked computer- Sound Effect.mp3" preload="auto"></audio>
-  <script>
-    const OWM_API_KEY = "5043108521e5dc1feccf33701c3221bf";
-    const PROD1_IMAGES = [
-      "images/Screenshot 2025-09-10 130926.png",
-      "images/Screenshot 2025-09-10 123717.png",
-      "images/Screenshot 2025-09-10 115645.png",
-      "images/Screenshot 2025-09-10 114858.png",
-      "images/Screenshot 2025-09-10 114832.png"
-    ];
-    const loginOverlay = document.getElementById("loginOverlay");
-    const loginBtn = document.getElementById("loginBtn");
-    const loginPass = document.getElementById("loginPass");
-    const wrongGif = document.getElementById("wrongGifOverlay");
-    const loginAudioCorrect = document.getElementById("loginAudioCorrect");
-    const loginAudioWrong = document.getElementById("loginAudioWrong");
-    loginPass.addEventListener("keydown", (e) => {
-      if (e.key === "Enter") loginBtn.click();
-    });
-    loginBtn.addEventListener("click", () => {
-      const v = (loginPass.value || "").trim();
-      if (v === "mrsmart") {
-        loginOverlay.style.display = "none";
-        document.getElementById("cornerGlobe").style.display = "block";
-        const hud = document.getElementById("hud");
-        hud.style.opacity = "1";
-        hud.style.visibility = "visible";
-        startHud();
-        rotateQuotes();
-        updateLocationWeather();
-        loginAudioCorrect.muted = false;
-        loginAudioCorrect.volume = 0.7;
-        loginAudioCorrect.pause();
-        loginAudioCorrect.currentTime = 0;
-        loginAudioCorrect
-          .play()
-          .catch((err) => console.error("Audio failed:", err));
+</div>
+<div id="wrongGifOverlay" style="display:none; position:fixed; inset:0; justify-content:center; align-items:center; background:rgba(0,0,0,0.85); z-index:1500;">
+  <img src="images/computer missing GIF.gif" alt="Wrong Password GIF" style="width:100%; height:100%; object-fit:cover;" />
+</div>
+<audio id="loginAudioCorrect" src="sounds/robotintro.mp3" preload="auto"></audio>
+<audio id="loginAudioWrong" src="sounds/Hacked computer- Sound Effect.mp3" preload="auto"></audio>
+<script>
+const OWM_API_KEY = '5043108521e5dc1feccf33701c3221bf';
+const PROD1_IMAGES = [
+  "images/Screenshot 2025-09-10 130926.png",
+  "images/Screenshot 2025-09-10 123717.png",
+  "images/Screenshot 2025-09-10 115645.png",
+  "images/Screenshot 2025-09-10 114858.png",
+  "images/Screenshot 2025-09-10 114832.png"
+];
+
+const loginOverlay = document.getElementById('loginOverlay');
+const loginBtn = document.getElementById('loginBtn');
+const loginPass = document.getElementById('loginPass');
+const wrongGif = document.getElementById('wrongGifOverlay');
+const loginAudioCorrect = document.getElementById('loginAudioCorrect');
+const loginAudioWrong = document.getElementById('loginAudioWrong');
+
+loginPass.addEventListener('keydown', e => { if(e.key==='Enter') loginBtn.click(); });
+
+loginBtn.addEventListener('click', () => {
+  const v = (loginPass.value || '').trim();
+  if (v === 'mrsmart') {
+    loginOverlay.style.display = 'none';
+    document.getElementById('cornerGlobe').style.display = 'block';
+    const hud = document.getElementById('hud');
+    hud.style.opacity = '1';
+    hud.style.visibility = 'visible';
+    startHud();
+    rotateQuotes();
+    updateLocationWeather();
+    loginAudioCorrect.muted = false;
+    loginAudioCorrect.volume = 0.7;
+    loginAudioCorrect.pause();
+    loginAudioCorrect.currentTime = 0;
+    loginAudioCorrect.play().catch(err => console.error('Audio failed:', err));
+  } else {
+    loginPass.value = '';
+    loginPass.placeholder = 'Incorrect — try again';
+    loginPass.focus();
+    loginOverlay.animate([
+      { transform: 'translateX(-2px)' },
+      { transform: 'translateX(2px)' },
+      { transform: 'translateX(0)' }
+    ], { duration: 120, iterations: 3 });
+    wrongGif.style.display = 'flex';
+    loginAudioWrong.muted = false;
+    loginAudioWrong.volume = 0.7;
+    loginAudioWrong.pause();
+    loginAudioWrong.currentTime = 0;
+    loginAudioWrong.play().catch(err => console.error('Audio failed:', err));
+    setTimeout(() => {
+      wrongGif.style.display = 'none';
+      loginAudioWrong.pause();
+      loginAudioWrong.currentTime = 0;
+    }, 2200);
+  }
+});
+
+function startHud(){
+  const timeEl = document.getElementById('hud-time-text');
+  const dateEl = document.getElementById('hud-date-text');
+  function updateHud(){
+    const now = new Date();
+    timeEl.textContent = now.toLocaleTimeString();
+    dateEl.textContent = now.toDateString();
+  }
+  updateHud();
+  setInterval(updateHud,1000);
+}
+
+function updateLocationWeather(){
+  const cityEl = document.getElementById('hud-city');
+  const coordsEl = document.getElementById('hud-coords-text');
+  const weatherEl = document.getElementById('hud-weather-text');
+  if(!navigator.geolocation){ coordsEl.textContent='Unavailable'; weatherEl.textContent='Unavailable'; return; }
+  navigator.geolocation.getCurrentPosition(async pos => {
+    const {latitude, longitude} = pos.coords;
+    coordsEl.textContent = `${latitude.toFixed(4)}, ${longitude.toFixed(4)}`;
+    try{
+      const res = await fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=${OWM_API_KEY}&units=metric`);
+      const data = await res.json();
+      cityEl.textContent = data.name || 'Unknown';
+      let desc = data.weather[0].description;
+      desc = desc.charAt(0).toUpperCase() + desc.slice(1);
+      weatherEl.textContent = `${desc}, ${data.main.temp.toFixed(1)}°C`;
+    } catch(e){
+      weatherEl.textContent='Weather unavailable';
+      console.error(e);
+    }
+  }, err => {
+    coordsEl.textContent='Denied';
+    weatherEl.textContent='Weather unavailable';
+    console.error(err);
+  });
+}
+
+function openPanel(id){
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('show'));
+  document.getElementById(id).classList.add('show');
+}
+
+function closePanel(id){
+  const panel = document.getElementById(id);
+  panel.classList.remove('show');
+  if(id === 'refPanel'){
+    if(window.typingTimer) clearInterval(window.typingTimer);
+    window.typingTimer = null;
+    window.speechSynthesis.cancel();
+  }
+}
+
+document.querySelectorAll('.navItem').forEach(el => {
+  el.addEventListener('click', e => {
+    const panel = el.getAttribute('aria-controls');
+    openPanel(panel);
+
+    if(panel === 'refPanel'){
+      speakAndType(reflections[0]);
+    } else if(panel === 'prodPanel'){
+      speakAndType("Currently, this panel contains productions and placeholders.");
+    } else {
+      const panelSpeechTexts = {
+        whoPanel: "I am Mr. Brandon Smart",
+        resPanel: "Here are my resources",
+        contactPanel: "Please send me an email if you have any further inquiries"
+      };
+      if(panelSpeechTexts[panel]) speakAndType(panelSpeechTexts[panel]);
+    }
+  });
+});
+
+const reflectionEl = document.getElementById('reflectionText');
+const reflections = [
+  `Building this site has been a deep learning experience. ... Overall, the experience emphasizes experimentation, problem-solving, and reflection in ways that are more self-directed, interactive, and personally meaningful than traditional learning environments.`
+];
+
+function getBestFemaleVoice(){
+  const voices = window.speechSynthesis.getVoices();
+  const patterns = [/female/i,/woman/i,/zira/i,/susan/i,/eva/i,/samantha/i,/linda/i,/lisa/i,/amy/i,/emma/i,/victoria/i,/joanna/i,/julie/i];
+  for(let pat of patterns){
+    const v = voices.find(voice => voice.lang && voice.lang.startsWith('en') && pat.test(voice.name));
+    if(v) return v;
+  }
+  const femaleEn = voices.find(v => v.lang && v.lang.startsWith('en') && v.gender === 'female');
+  if(femaleEn) return femaleEn;
+  const anyEn = voices.find(v=>v.lang && v.lang.startsWith('en'));
+  if(anyEn) return anyEn;
+  return voices[0] || null;
+}
+
+function speakAndType(text){
+  if(window.typingTimer) clearInterval(window.typingTimer);
+  window.speechSynthesis.cancel();
+  reflectionEl.textContent = '';
+  function reallySpeakAndType(){
+    const voice = getBestFemaleVoice();
+    if(voice){
+      const utter = new SpeechSynthesisUtterance(text);
+      utter.voice = voice;
+      utter.rate = 1.1;
+      window.speechSynthesis.speak(utter);
+    }
+    let i=0;
+    window.typingTimer = setInterval(()=>{
+      if(i < text.length){
+        reflectionEl.textContent += text[i];
+        i++;
       } else {
-        loginPass.value = "";
-        loginPass.placeholder = "Incorrect — try again";
-        loginPass.focus();
-        loginOverlay.animate(
-          [
-            { transform: "translateX(-2px)" },
-            { transform: "translateX(2px)" },
-            { transform: "translateX(0)" }
-          ],
-          { duration: 120, iterations: 3 }
-        );
-        wrongGif.style.display = "flex";
-        loginAudioWrong.muted = false;
-        loginAudioWrong.volume = 0.7;
-        loginAudioWrong.pause();
-        loginAudioWrong.currentTime = 0;
-        loginAudioWrong
-          .play()
-          .catch((err) => console.error("Audio failed:", err));
-        setTimeout(() => {
-          wrongGif.style.display = "none";
-          loginAudioWrong.pause();
-          loginAudioWrong.currentTime = 0;
-        }, 2200);
-      }
-    });
-    function startHud() {
-      const timeEl = document.getElementById("hud-time-text");
-      const dateEl = document.getElementById("hud-date-text");
-      function updateHud() {
-        const now = new Date();
-        timeEl.textContent = now.toLocaleTimeString();
-        dateEl.textContent = now.toDateString();
-      }
-      updateHud();
-      setInterval(updateHud, 1000);
-    }
-    function updateLocationWeather() {
-      const cityEl = document.getElementById("hud-city");
-      const coordsEl = document.getElementById("hud-coords-text");
-      const weatherEl = document.getElementById("hud-weather-text");
-      if (!navigator.geolocation) {
-        coordsEl.textContent = "Unavailable";
-        weatherEl.textContent = "Unavailable";
-        return;
-      }
-      navigator.geolocation.getCurrentPosition(
-        async (pos) => {
-          const { latitude, longitude } = pos.coords;
-          coordsEl.textContent = `${latitude.toFixed(4)}, ${longitude.toFixed(
-            4
-          )}`;
-          try {
-            const res = await fetch(
-              `https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=${OWM_API_KEY}&units=metric`
-            );
-            const data = await res.json();
-            cityEl.textContent = data.name || "Unknown";
-            let desc = data.weather[0].description;
-            desc = desc.charAt(0).toUpperCase() + desc.slice(1);
-            weatherEl.textContent = `${desc}, ${data.main.temp.toFixed(1)}°C`;
-          } catch (e) {
-            weatherEl.textContent = "Weather unavailable";
-            console.error(e);
-          }
-        },
-        (err) => {
-          coordsEl.textContent = "Denied";
-          weatherEl.textContent = "Weather unavailable";
-          console.error(err);
-        }
-      );
-    }
-    function openPanel(id) {
-      document.querySelectorAll(".panel").forEach((p) => p.classList.remove("show"));
-      document.getElementById(id).classList.add("show");
-    }
-    function closePanel(id) {
-      const panel = document.getElementById(id);
-      panel.classList.remove("show");
-      if (id === "refPanel") {
-        if (window.typingTimer) clearInterval(window.typingTimer);
+        clearInterval(window.typingTimer);
         window.typingTimer = null;
-        window.speechSynthesis.cancel();
+      }
+    }, 30);
+  }
+  if(!window.speechSynthesis.getVoices().length){
+    window.speechSynthesis.onvoiceschanged = reallySpeakAndType;
+    window.speechSynthesis.getVoices();
+  } else {
+    reallySpeakAndType();
+  }
+}
+
+// Terminal Implementation
+const panelIds = ['whoPanel','refPanel','prodPanel','resPanel','contactPanel'];
+const panelNames = {
+  'whoami': 'whoPanel',
+  'reflection': 'refPanel',
+  'productions': 'prodPanel',
+  'resources': 'resPanel',
+  'contact': 'contactPanel',
+  'back': 'back'
+};
+
+function appendTerminalOutput(text){
+  const terminalContent = document.getElementById('terminalContent');
+  terminalContent.textContent += text + "\n";
+  terminalContent.scrollTop = terminalContent.scrollHeight;
+}
+
+function executeCommand(cmd) {
+  const lowerCmd = cmd.toLowerCase().trim();
+  if(lowerCmd === 'back') {
+    panelIds.forEach(id => closePanel(id));
+    appendTerminalOutput("Closed all panels.");
+  } else if(lowerCmd === 'exit') {
+    appendTerminalOutput("Closing tab...");
+    setTimeout(() => window.close(), 100);
+  } else if(panelNames.hasOwnProperty(lowerCmd)) {
+    const panelId = panelNames[lowerCmd];
+    if(panelId !== 'back'){
+      openPanel(panelId);
+      appendTerminalOutput(`Opened panel: ${lowerCmd}`);
+      if(lowerCmd === 'reflection'){
+        speakAndType(reflections[0]);
+      } else if(lowerCmd === 'productions'){
+        speakAndType("Currently, this panel contains productions and placeholders.");
+      } else {
+        const terminalSpeechTexts = {
+          whoami: "I am Mr. Brandon Smart",
+          resources: "Here are my resources",
+          contact: "Please send me an email if you have any further inquiries"
+        };
+        if(terminalSpeechTexts[lowerCmd]) speakAndType(terminalSpeechTexts[lowerCmd]);
       }
     }
-    document.querySelectorAll(".navItem").forEach((el) => {
-      el.addEventListener("click", (e) => {
-        const panel = el.getAttribute("aria-controls");
-        openPanel(panel);
+  } else if(lowerCmd.length === 0) {
+    return;
+  } else {
+    appendTerminalOutput(`Command not recognized: ${cmd}`);
+  }
+}
 
-        if (panel === "refPanel") {
-          speakAndType(reflections[0]);
-        } else if (panel === "prodPanel") {
-          speakAndType("Currently, this panel contains productions and placeholders.");
-        } else {
-          const panelSpeechTexts = {
-            whoPanel: "I am Mr. Brandon Smart",
-            resPanel: "Here are my resources",
-            contactPanel: "Please send me an email if you have any further inquiries",
-          };
-          if (panelSpeechTexts[panel]) {
-            speakAndType(panelSpeechTexts[panel]);
-          }
+// Terminal toggle on Hello World click
+const headerToggleTerminal = document.getElementById('headerToggleTerminal');
+const terminalContainer = document.getElementById('terminalContainer');
+const terminalInput = document.getElementById('terminalInput');
+
+headerToggleTerminal.addEventListener('click', () => {
+  if(terminalContainer.style.display === 'flex'){
+    terminalContainer.style.display = 'none';
+  } else {
+    terminalContainer.style.display = 'flex';
+    terminalInput.focus();
+  }
+});
+
+terminalInput.addEventListener('keydown', e => {
+  if(e.key === 'Enter'){
+    const cmd = terminalInput.value;
+    appendTerminalOutput(`> ${cmd}`);
+    executeCommand(cmd);
+    terminalInput.value = '';
+  }
+});
+
+// Quotes rotation with smooth opacity
+const quotes = [
+  "Code is like humor. When you have to explain it, it’s bad.",
+  "First, solve the problem. Then, write the code.",
+  "Experience is the name everyone gives to their mistakes."
+];
+const quoteEl = document.getElementById('quote');
+function rotateQuotes(){
+  let qidx=0;
+  setInterval(() => {
+    quoteEl.style.transition = "opacity 1.5s ease-in-out";
+    quoteEl.style.opacity = 0;
+    setTimeout(() => {
+      quoteEl.textContent = quotes[qidx];
+      quoteEl.style.opacity = 1;
+      qidx = (qidx + 1) % quotes.length;
+    }, 1500);
+  }, 6000);
+}
+rotateQuotes();
+
+// Particle background system
+(() => {
+  const canvas = document.getElementById('hudParticles');
+  const ctx = canvas.getContext('2d');
+  let width, height;
+  let particles = [];
+  const particleCount = 70;
+  const maxDist = 120;
+  let mouse = { x: null, y: null };
+  function resize() {
+    width = canvas.width = window.innerWidth;
+    height = canvas.height = window.innerHeight;
+  }
+  class Particle {
+    constructor() {
+      this.reset();
+    }
+    reset() {
+      this.x = Math.random() * width;
+      this.y = Math.random() * height;
+      this.vx = (Math.random() - 0.5) * 0.15;
+      this.vy = (Math.random() - 0.5) * 0.15;
+      this.size = Math.random() * 1.6 + 0.6;
+    }
+    update() {
+      this.x += this.vx;
+      this.y += this.vy;
+      if (this.x < 0) this.x = width;
+      else if (this.x > width) this.x = 0;
+      if (this.y < 0) this.y = height;
+      else if (this.y > height) this.y = 0;
+      if (mouse.x !== null && mouse.y !== null) {
+        let dx = this.x - mouse.x;
+        let dy = this.y - mouse.y;
+        let dist = Math.sqrt(dx*dx + dy*dy);
+        if (dist < 100) {
+          let angle = Math.atan2(dy, dx);
+          let force = (100 - dist) * 0.002;
+          this.vx += force * Math.cos(angle);
+          this.vy += force * Math.sin(angle);
         }
-      });
+      }
+      this.vx *= 0.98;
+      this.vy *= 0.98;
+    }
+    draw() {
+      ctx.beginPath();
+      ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+      ctx.fillStyle = 'rgba(0, 229, 255, 0.3)';
+      ctx.fill();
+    }
+  }
+  function connectParticles() {
+    for (let i = 0; i < particleCount; i++) {
+      for (let j = i + 1; j < particleCount; j++) {
+        let p1 = particles[i];
+        let p2 = particles[j];
+        let dx = p1.x - p2.x;
+        let dy = p1.y - p2.y;
+        let dist = Math.sqrt(dx*dx + dy*dy);
+        if (dist < maxDist) {
+          ctx.strokeStyle = `rgba(0, 229, 255, ${0.09 * (1 - dist / maxDist)})`;
+          ctx.lineWidth = 1;
+          ctx.beginPath();
+          ctx.moveTo(p1.x, p1.y);
+          ctx.lineTo(p2.x, p2.y);
+          ctx.stroke();
+        }
+      }
+    }
+  }
+  function animate() {
+    ctx.clearRect(0, 0, width, height);
+    particles.forEach(p => {
+      p.update();
+      p.draw();
     });
-
-    const reflectionEl = document.getElementById("reflectionText");
-    const reflections = [
-      `Building this site has been a deep learning experience. ... Overall, the experience emphasizes experimentation, problem-solving, and reflection in ways that are more self-directed, interactive, and personally meaningful than traditional learning environments.`,
-    ];
-    function getBestFemaleVoice() {
-      const voices = window.speechSynthesis.getVoices();
-      let patterns = [
-        /female/i,
-        /woman/i,
-        /zira/i,
-        /susan/i,
-        /eva/i,
-        /samantha/i,
-        /linda/i,
-        /lisa/i,
-        /amy/i,
-        /emma/i,
-        /victoria/i,
-        /joanna/i,
-        /julie/i,
-      ];
-      for (let pat of patterns) {
-        let v = voices.find(
-          (voice) =>
-            voice.lang &&
-            voice.lang.startsWith("en") &&
-            pat.test(voice.name)
-        );
-        if (v) return v;
-      }
-      let femaleEn = voices.find(
-        (v) => v.lang && v.lang.startsWith("en") && v.gender === "female"
-      );
-      if (femaleEn) return femaleEn;
-      let anyEn = voices.find((v) => v.lang && v.lang.startsWith("en"));
-      if (anyEn) return anyEn;
-      return voices[0] || null;
-    }
-    function speakAndType(text) {
-      if (window.typingTimer) clearInterval(window.typingTimer);
-      window.speechSynthesis.cancel();
-      reflectionEl.textContent = "";
-      function reallySpeakAndType() {
-        const voice = getBestFemaleVoice();
-        if (voice) {
-          const utter = new SpeechSynthesisUtterance(text);
-          utter.voice = voice;
-          utter.rate = 1.1; // slightly slowed down for smoothness
-          window.speechSynthesis.speak(utter);
-        }
-        let i = 0;
-        window.typingTimer = setInterval(() => {
-          if (i < text.length) {
-            reflectionEl.textContent += text[i];
-            i++;
-          } else {
-            clearInterval(window.typingTimer);
-            window.typingTimer = null;
-          }
-        }, 30);
-      }
-      if (!window.speechSynthesis.getVoices().length) {
-        window.speechSynthesis.onvoiceschanged = reallySpeakAndType;
-        window.speechSynthesis.getVoices();
-      } else {
-        reallySpeakAndType();
-      }
-    }
-
-    const panelIds = [
-      "whoPanel",
-      "refPanel",
-      "prodPanel",
-      "resPanel",
-      "contactPanel",
-    ];
-    const panelNames = {
-      whoami: "whoPanel",
-      reflection: "refPanel",
-      productions: "prodPanel",
-      resources: "resPanel",
-      contact: "contactPanel",
-      back: "back",
-    };
-    function appendTerminalOutput(text) {
-      const terminalContent = document.getElementById("terminalContent");
-      terminalContent.textContent += text + "\n";
-      terminalContent.scrollTop = terminalContent.scrollHeight;
-    }
-    function executeCommand(cmd) {
-      const lowerCmd = cmd.toLowerCase().trim();
-      if (lowerCmd === "back") {
-        panelIds.forEach((id) => closePanel(id));
-        appendTerminalOutput("Closed all panels.");
-      } else if (lowerCmd === "exit") {
-        appendTerminalOutput("Closing tab...");
-        setTimeout(() => {
-          window.close();
-        }, 100);
-      } else if (panelNames.hasOwnProperty(lowerCmd)) {
-        const panelId = panelNames[lowerCmd];
-        if (panelId !== "back") {
-          openPanel(panelId);
-          appendTerminalOutput(`Opened panel: ${lowerCmd}`);
-          if (lowerCmd === "reflection") {
-            speakAndType(reflections[0]);
-          } else if (lowerCmd === "productions") {
-            speakAndType(
-              "Currently, this panel contains productions and placeholders."
-            );
-          } else {
-            const terminalSpeechTexts = {
-              whoami: "I am Mr. Brandon Smart",
-              resources: "Here are my resources",
-              contact: "Please send me an email if you have any further inquiries",
-            };
-            if (terminalSpeechTexts[lowerCmd]) {
-              speakAndType(terminalSpeechTexts[lowerCmd]);
-            }
-          }
-        }
-      } else if (lowerCmd.length === 0) {
-        return;
-      } else {
-        appendTerminalOutput(`Command not recognized: ${cmd}`);
-      }
-    }
-  </script>
-  <img src="images/right_icon1.gif" id="cornerGlobe" alt="Globe Glow" style="display:none; border-radius:50%;" />
+    connectParticles();
+    requestAnimationFrame(animate);
+  }
+  window.addEventListener('resize', resize);
+  window.addEventListener('mousemove', e => {
+    mouse.x = e.clientX;
+    mouse.y = e.clientY;
+  });
+  window.addEventListener('mouseout', () => {
+    mouse.x = null;
+    mouse.y = null;
+  });
+  resize();
+  for (let i = 0; i < particleCount; i++) particles.push(new Particle());
+  animate();
+})();
+</script>
+<img src="images/right_icon1.gif" id="cornerGlobe" alt="Globe Glow" style="display:none; border-radius:50%;">
 </body>
 </html>
