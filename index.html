@@ -550,16 +550,53 @@ const PROD1_IMAGES = [
   "images/Screenshot 2025-09-10 114858.png",
   "images/Screenshot 2025-09-10 114832.png"
 ];
-
+const productionImagesMap = { 0: PROD1_IMAGES };
+let currImages = [], currIndex = 0;
+const lb = document.getElementById('lightbox');
+const lbImg = document.getElementById('lbImage');
+document.querySelectorAll('.prodCard').forEach(card => {
+  card.addEventListener('click', () => {
+    const idx = card.dataset.index;
+    currImages = productionImagesMap[idx] || [];
+    if (!currImages.length) return;
+    currIndex = 0;
+    lbImg.style.opacity = '0';
+    setTimeout(() => {
+      lbImg.src = currImages[currIndex];
+      setTimeout(() => { lbImg.style.opacity = '1'; }, 60);
+    }, 100);
+    lb.style.display = 'flex';
+    setTimeout(() => lb.classList.add('show'), 12);
+  });
+});
+function updateLbImage() {
+  lbImg.style.opacity = '0';
+  setTimeout(() => {
+    lbImg.src = currImages[currIndex];
+    setTimeout(() => { lbImg.style.opacity = '1'; }, 60);
+  }, 120);
+}
+document.getElementById('lbPrev').addEventListener('click', () => {
+  if (!currImages.length) return;
+  currIndex = (currIndex - 1 + currImages.length) % currImages.length;
+  updateLbImage();
+});
+document.getElementById('lbNext').addEventListener('click', () => {
+  if (!currImages.length) return;
+  currIndex = (currIndex + 1) % currImages.length;
+  updateLbImage();
+});
+document.getElementById('lbClose').addEventListener('click', () => {
+  lb.classList.remove('show');
+  setTimeout(() => { lb.style.display = 'none'; }, 350);
+});
 const loginOverlay = document.getElementById('loginOverlay');
 const loginBtn = document.getElementById('loginBtn');
 const loginPass = document.getElementById('loginPass');
 const wrongGif = document.getElementById('wrongGifOverlay');
 const loginAudioCorrect = document.getElementById('loginAudioCorrect');
 const loginAudioWrong = document.getElementById('loginAudioWrong');
-
 loginPass.addEventListener('keydown', e => { if(e.key==='Enter') loginBtn.click(); });
-
 loginBtn.addEventListener('click', () => {
   const v = (loginPass.value || '').trim();
   if (v === 'mrsmart') {
@@ -598,6 +635,7 @@ loginBtn.addEventListener('click', () => {
     }, 2200);
   }
 });
+
 
 function startHud(){
   const timeEl = document.getElementById('hud-time-text');
