@@ -374,7 +374,6 @@ h1, h2, .headerTitle, .navItem, #reflectionText, .hud-row, .quoteBox {
     </div>
     <div id="quote" class="quoteBox">Loading inspiration…</div>
   </main>
-  
   <!-- Terminal panel -->
   <div id="terminalContainer" role="region" aria-label="Terminal interface">
     <div id="terminalContent" aria-live="polite" aria-atomic="false"></div>
@@ -383,7 +382,6 @@ h1, h2, .headerTitle, .navItem, #reflectionText, .hud-row, .quoteBox {
       <input id="terminalInput" type="text" placeholder="Type command here..." autocomplete="off" aria-label="Terminal command input" />
     </div>
   </div>
-
   <!-- LIGHTBOX -->
   <div id="lightbox" role="dialog" aria-hidden="true" style="display:none">
     <img id="lbImage" src="" alt="Screenshot">
@@ -400,7 +398,6 @@ h1, h2, .headerTitle, .navItem, #reflectionText, .hud-row, .quoteBox {
   <!-- Audio -->
   <audio id="loginAudioCorrect" src="sounds/LogicMP3.mp3" preload="auto"></audio>
   <audio id="loginAudioWrong" src="sounds/Hacked computer- Sound Effect.mp3" preload="auto"></audio>
-
 <script>
 const OWM_API_KEY = '5043108521e5dc1feccf33701c3221bf';
 const PROD1_IMAGES = [
@@ -410,7 +407,6 @@ const PROD1_IMAGES = [
   "images/Screenshot 2025-09-10 114858.png",
   "images/Screenshot 2025-09-10 114832.png"
 ];
-// Login functionality
 const loginOverlay = document.getElementById('loginOverlay');
 const loginBtn = document.getElementById('loginBtn');
 const loginPass = document.getElementById('loginPass');
@@ -456,7 +452,6 @@ loginBtn.addEventListener('click', () => {
     }, 2200);
   }
 });
-// HUD (time/date)
 function startHud(){
   const timeEl = document.getElementById('hud-time-text');
   const dateEl = document.getElementById('hud-date-text');
@@ -468,7 +463,6 @@ function startHud(){
   updateHud();
   setInterval(updateHud,1000);
 }
-// Weather
 function updateLocationWeather(){
   const cityEl = document.getElementById('hud-city');
   const coordsEl = document.getElementById('hud-coords-text');
@@ -494,7 +488,6 @@ function updateLocationWeather(){
     console.error(err);
   });
 }
-// Panels open/close logic
 function openPanel(id){
   document.querySelectorAll('.panel').forEach(p=>p.classList.remove('show'));
   document.getElementById(id).classList.add('show');
@@ -503,48 +496,82 @@ function closePanel(id){
   const panel = document.getElementById(id);
   panel.classList.remove('show');
   if(id === 'refPanel'){
-    if(typingTimer) clearInterval(typingTimer);
-    typingTimer = null;
+    if(window.typingTimer) clearInterval(window.typingTimer);
+    window.typingTimer = null;
     window.speechSynthesis.cancel();
   }
 }
-// Click nav items to open panels
 document.querySelectorAll('.navItem').forEach(el=>{
   el.addEventListener('click',()=>openPanel(el.getAttribute('aria-controls')));
 });
-
-// Reflection typing and speech synthesis
 const reflectionEl = document.getElementById('reflectionText');
 const reflections = [
   `Building this site has been a deep learning experience. ... Overall, the experience emphasizes experimentation, problem-solving, and reflection in ways that are more self-directed, interactive, and personally meaningful than traditional learning environments.`
 ];
-let typingTimer = null;
-function typeReflection(text){
-  if(typingTimer) clearInterval(typingTimer);
-  reflectionEl.textContent='';
-  window.speechSynthesis.cancel();
-  // Find female voice and use moderately fast rate
+function getBestFemaleVoice() {
   const voices = window.speechSynthesis.getVoices();
-  let voice = voices.find(v => v.name.toLowerCase().includes('female') || v.name.toLowerCase().includes('zira') || v.name.toLowerCase().includes('susan') || v.name.toLowerCase().includes('allan')) || voices[0];
-  const utter = new SpeechSynthesisUtterance(text);
-  utter.voice = voice;
-  utter.rate = 1.3; // Smooth, fast but clear
-  window.speechSynthesis.speak(utter);
-  let i = 0;
-  typingTimer = setInterval(()=>{
-    if(i < text.length){
-      reflectionEl.textContent += text[i]; i++;
-    } else {
-      clearInterval(typingTimer);
-      typingTimer = null;
+  let patterns = [
+    /female/i,
+    /woman/i,
+    /zira/i,
+    /susan/i,
+    /eva/i,
+    /samantha/i,
+    /linda/i,
+    /lisa/i,
+    /amy/i,
+    /emma/i,
+    /victoria/i,
+    /joanna/i,
+    /julie/i
+  ];
+  for (let pat of patterns) {
+    let v = voices.find(voice =>
+      voice.lang && voice.lang.startsWith('en') && pat.test(voice.name)
+    );
+    if (v) return v;
+  }
+  let femaleEn = voices.find(v =>
+    v.lang && v.lang.startsWith('en') && v.gender === 'female'
+  );
+  if (femaleEn) return femaleEn;
+  let anyEn = voices.find(v => v.lang && v.lang.startsWith('en'));
+  if (anyEn) return anyEn;
+  return voices[0] || null;
+}
+function speakAndType(text) {
+  if (window.typingTimer) clearInterval(window.typingTimer);
+  window.speechSynthesis.cancel();
+  reflectionEl.textContent = '';
+  function reallySpeakAndType() {
+    const voice = getBestFemaleVoice();
+    if (voice) {
+      const utter = new SpeechSynthesisUtterance(text);
+      utter.voice = voice;
+      utter.rate = 1.25;
+      window.speechSynthesis.speak(utter);
     }
-  }, 30);
+    let i = 0;
+    window.typingTimer = setInterval(() => {
+      if (i < text.length) {
+        reflectionEl.textContent += text[i];
+        i++;
+      } else {
+        clearInterval(window.typingTimer);
+        window.typingTimer = null;
+      }
+    }, 30);
+  }
+  if (!window.speechSynthesis.getVoices().length) {
+    window.speechSynthesis.onvoiceschanged = reallySpeakAndType;
+    window.speechSynthesis.getVoices();
+  } else {
+    reallySpeakAndType();
+  }
 }
 document.getElementById('navRef').addEventListener('click', () => {
-  typeReflection(reflections[0]);
+  speakAndType(reflections[0]);
 });
-
-// Productions Lightbox
 const productionImagesMap={0:PROD1_IMAGES};
 let currImages=[],currIndex=0;
 const lb=document.getElementById('lightbox');
@@ -585,8 +612,6 @@ document.getElementById('lbClose').addEventListener('click',()=>{
   lb.classList.remove('show');
   setTimeout(()=>{lb.style.display='none'},350);
 });
-
-// Quotes rotation
 const quotes=[
   "Code is like humor. When you have to explain it, it’s bad.",
   "First, solve the problem. Then, write the code.",
@@ -604,8 +629,6 @@ function rotateQuotes(){
     },500);
   },6000);
 }
-
-// Particle background system (unchanged)
 (() => {
   const canvas = document.getElementById('hudParticles');
   const ctx = canvas.getContext('2d');
@@ -632,12 +655,10 @@ function rotateQuotes(){
     update() {
       this.x += this.vx;
       this.y += this.vy;
-      // Wrap edges
       if (this.x < 0) this.x = width;
       else if (this.x > width) this.x = 0;
       if (this.y < 0) this.y = height;
       else if (this.y > height) this.y = 0;
-      // Simple repulsion from mouse
       if (mouse.x !== null && mouse.y !== null) {
         let dx = this.x - mouse.x;
         let dy = this.y - mouse.y;
@@ -649,7 +670,6 @@ function rotateQuotes(){
           this.vy += force * Math.sin(angle);
         }
       }
-      // Slow velocity decay to keep smooth drift
       this.vx *= 0.98;
       this.vy *= 0.98;
     }
@@ -697,18 +717,14 @@ function rotateQuotes(){
     mouse.x = null;
     mouse.y = null;
   });
-  // Init
   resize();
   for (let i = 0; i < particleCount; i++) particles.push(new Particle());
   animate();
 })();
-
-// Terminal functionality and commands
 const terminalContainer = document.getElementById('terminalContainer');
 const terminalContent = document.getElementById('terminalContent');
 const terminalInput = document.getElementById('terminalInput');
 const headerToggleTerminal = document.getElementById('headerToggleTerminal');
-
 const panelIds = ['whoPanel', 'refPanel', 'prodPanel', 'resPanel', 'contactPanel'];
 const panelNames = {
   'whoami': 'whoPanel',
@@ -718,33 +734,35 @@ const panelNames = {
   'contact': 'contactPanel',
   'back': 'back'
 };
-
 function appendTerminalOutput(text) {
   terminalContent.textContent += text + "\n";
   terminalContent.scrollTop = terminalContent.scrollHeight;
 }
-
 function executeCommand(cmd) {
   const lowerCmd = cmd.toLowerCase().trim();
   if (lowerCmd === 'back') {
-    // Close all panels
     panelIds.forEach(id => closePanel(id));
     appendTerminalOutput("Closed all panels.");
+  } else if (lowerCmd === 'exit') {
+    appendTerminalOutput("Closing tab...");
+    setTimeout(() => { window.close(); }, 100);
   } else if (panelNames.hasOwnProperty(lowerCmd)) {
     const panelId = panelNames[lowerCmd];
     if (panelId !== 'back') {
       openPanel(panelId);
       appendTerminalOutput(`Opened panel: ${lowerCmd}`);
+      if (lowerCmd === 'reflection') {
+        speakAndType(reflections[0]);
+      } else if (lowerCmd === 'productions') {
+        speakAndType("Currently, this panel contains productions and placeholders.");
+      }
     }
   } else if(lowerCmd.length === 0) {
-    // do nothing for empty input
     return;
   } else {
     appendTerminalOutput(`Command not recognized: ${cmd}`);
   }
 }
-
-// Toggle terminal panel visibility on title click
 headerToggleTerminal.addEventListener('click', () => {
   if (terminalContainer.style.display === 'flex') {
     terminalContainer.style.display = 'none';
@@ -753,7 +771,6 @@ headerToggleTerminal.addEventListener('click', () => {
     terminalInput.focus();
   }
 });
-
 terminalInput.addEventListener('keydown', (e) => {
   if (e.key === 'Enter') {
     const cmd = terminalInput.value;
