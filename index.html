@@ -15,9 +15,7 @@
 }
 * { box-sizing: border-box; }
 html, body {
-  margin: 0;
-  height: 100%;
-  overflow-x: hidden;
+  margin: 0; height: 100%; overflow-x: hidden;
   font-family: 'Share Tech Mono', monospace;
   background: linear-gradient(180deg, #020203, #07080a);
   color: var(--neon);
@@ -38,7 +36,7 @@ a:hover { color: var(--hover); }
   opacity: 0.12;
 }
 @keyframes hudPulse {
-  0%, 100% { text-shadow: 0 0 4px var(--neon),0 0 9px var(--neon); opacity: 1; }
+  0%, 100% { text-shadow: 0 0 4px var(--neon),0 0 9px var(--neon); opacity: 1;}
   50% { text-shadow: 0 0 2px var(--hover),0 0 5px var(--hover); opacity: 0.95; }
 }
 h1, .headerTitle, .navItem, #reflectionText, .hud-row, .quoteBox { animation: hudPulse 4s infinite alternate; }
@@ -55,7 +53,10 @@ h1, .headerTitle, .navItem, #reflectionText, .hud-row, .quoteBox { animation: hu
   align-items: flex-start; position: relative; z-index: 5;
 }
 .leftCol { width: 320px; display: flex; flex-direction: column; gap: 18px; align-items: flex-start; }
-.rightCol { flex-grow: 1; min-height: 100vh; overflow-y: auto; }
+.rightCol {
+  flex-grow: 1; min-height: 100vh; overflow-y: auto;
+  display: flex; flex-direction: column;
+}
 /* Navigation/UI */
 .headerTitle { font-size: 18px; color: var(--neon); cursor: pointer; margin-bottom: 8px; user-select: none; }
 .navItem {
@@ -76,8 +77,12 @@ h1, .headerTitle, .navItem, #reflectionText, .hud-row, .quoteBox { animation: hu
   box-shadow: 0 15px 40px rgba(0,0,0,0.5); max-height: 70vh;
   overflow-y: auto; transition: opacity 0.35s, transform 0.35s;
   opacity: 0; transform: translateY(8px); position: relative; z-index: 1150;
+  flex-grow: 1;
+  min-height: 400px;
 }
-.panel.show { display: block; opacity: 1; transform: translateY(0);}
+.panel.show {
+  display: block; opacity: 1; transform: translateY(0);
+}
 .panel h2 {
   color: var(--neon); font-weight: 700; margin-top: 0;
   text-shadow: 0 0 6px var(--neon),0 0 14px var(--neon),0 0 22px var(--neon);
@@ -87,12 +92,18 @@ h1, .headerTitle, .navItem, #reflectionText, .hud-row, .quoteBox { animation: hu
   text-shadow: 0 0 12px var(--hover),0 0 24px var(--hover),0 0 40px var(--hover);
 }
 /* Reflection */
-#reflectionText { white-space: pre-wrap; font-size: 14px; color: rgba(0,229,255,0.95);}
+#reflectionText {
+  white-space: pre-wrap;
+  font-size: 14px;
+  color: rgba(0,229,255,0.9);
+  min-height: 320px; /* Keep space stable during typing */
+}
 .cursor {
   display: inline-block; width: 10px; margin-left: 6px; background: var(--neon);
-  animation: blink 1s steps(2) infinite; vertical-align: middle;
+  animation: blink 1s steps(2) infinite;
+  vertical-align: middle;
 }
-@keyframes blink{0%,50%{opacity:1;}51%,100%{opacity:0;}}
+@keyframes blink { 0%,50%{opacity:1;}51%,100%{opacity:0;}}
 /* Login Overlay */
 #loginOverlay {
   position: fixed; inset: 0; z-index: 12000;
@@ -163,7 +174,6 @@ h1, .headerTitle, .navItem, #reflectionText, .hud-row, .quoteBox { animation: hu
 <body>
 <div class="scanlines" aria-hidden="true"></div>
 <canvas id="hudParticles"></canvas>
-
 <!-- Login Overlay -->
 <div id="loginOverlay" role="dialog" aria-modal="true" aria-labelledby="loginTitle">
   <div class="login-card" role="document">
@@ -175,19 +185,15 @@ h1, .headerTitle, .navItem, #reflectionText, .hud-row, .quoteBox { animation: hu
     <div class="login-sub">Enter the terminal</div>
   </div>
 </div>
-
 <!-- Wrong Password GIF Overlay -->
 <div id="wrongGifOverlay">
   <img src="images/computer missing GIF.gif" alt="Wrong Password GIF" />
 </div>
-
 <!-- Audio elements -->
 <audio id="loginAudioCorrect" src="sounds/robotintro.mp3" preload="auto"></audio>
 <audio id="loginAudioWrong" src="sounds/Hacked computer- Sound Effect.mp3" preload="auto"></audio>
-
 <!-- Globe icon -->
 <img src="images/right_icon1.gif" id="cornerGlobe" alt="Globe Glow" style="display:none" />
-
 <!-- HUD -->
 <div id="hud" aria-live="polite" style="opacity:0; visibility:hidden;">
   <div class="hud-row"><i class="fa-regular fa-calendar"></i> <span id="hud-date-text">Loading date…</span></div>
@@ -196,7 +202,6 @@ h1, .headerTitle, .navItem, #reflectionText, .hud-row, .quoteBox { animation: hu
   <div class="hud-row"><i class="fa-solid fa-crosshairs"></i> Coords: <span id="hud-coords-text">—</span></div>
   <div class="hud-row"><i class="fa-solid fa-cloud-sun"></i> <span id="hud-weather-text">—</span></div>
 </div>
-
 <main id="main">
   <div class="container">
     <div class="leftCol">
@@ -244,7 +249,10 @@ h1, .headerTitle, .navItem, #reflectionText, .hud-row, .quoteBox { animation: hu
       <section id="contactPanel" class="panel" role="region" aria-labelledby="navContact">
         <h2>Contact</h2>
         <div class="contact-row">
-          <div class="mail"><i class="fa-solid fa-envelope"></i>&nbsp;<a href="mailto:bsmart@my.yorku.ca">bsmart@my.yorku.ca</a></div>
+          <div class="mail">
+            <i class="fa-solid fa-envelope"></i>&nbsp;
+            <a href="mailto:bsmart@my.yorku.ca">bsmart@my.yorku.ca</a>
+          </div>
         </div>
         <button class="backBtn" onclick="closePanel('contactPanel')">← Back</button>
       </section>
@@ -283,12 +291,15 @@ loginBtn.addEventListener('click', () => {
     loginPass.placeholder = 'Incorrect — try again';
     loginPass.focus();
 
-    loginOverlay.animate(
-      [{ transform: 'translateX(-2px)' },{ transform: 'translateX(2px)' },{ transform: 'translateX(0)' }],
-      { duration: 150, iterations: 3 }
-    );
+    loginOverlay.animate([
+      { transform: 'translateX(-2px)' },
+      { transform: 'translateX(2px)' },
+      { transform: 'translateX(0)' }
+    ], {
+      duration: 150,
+      iterations: 3
+    });
 
-    // Show the wrong password GIF overlay
     wrongGif.style.display = 'flex';
 
     loginAudioWrong.volume = 0.7;
@@ -336,6 +347,5 @@ function closePanel(id){
   if(panel) panel.classList.remove('show');
 }
 </script>
-
 </body>
 </html>
