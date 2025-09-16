@@ -161,31 +161,20 @@ h1, .headerTitle, .navItem, #reflectionText, .hud-row, .quoteBox { animation: hu
   </div>
 </div>
 
+<!-- Audio Elements for login sounds -->
+<audio id="loginAudioCorrect" src="sounds/robotintro.mp3" preload="auto"></audio>
+<audio id="loginAudioWrong" src="sounds/Hacked computer- Sound Effect.mp3" preload="auto"></audio>
+
 <!-- Globe icon hidden initially -->
 <img src="images/right_icon1.gif" id="cornerGlobe" alt="Globe Glow" style="display:none" />
 
 <!-- HUD -->
 <div id="hud" aria-live="polite" style="opacity:0; visibility:hidden;">
-  <div class="hud-row">
-    <i class="fa-regular fa-calendar"></i>
-    <span id="hud-date-text">Loading date…</span>
-  </div>
-  <div class="hud-row">
-    <i class="fa-regular fa-clock"></i>
-    <span id="hud-time-text">--:--:--</span>
-  </div>
-  <div class="hud-row">
-    <i class="fa-solid fa-location-dot"></i>
-    <span id="hud-city">Toronto</span>
-  </div>
-  <div class="hud-row">
-    <i class="fa-solid fa-crosshairs"></i> Coords:
-    <span id="hud-coords-text">—</span>
-  </div>
-  <div class="hud-row">
-    <i class="fa-solid fa-cloud-sun"></i>
-    <span id="hud-weather-text">—</span>
-  </div>
+  <div class="hud-row"><i class="fa-regular fa-calendar"></i> <span id="hud-date-text">Loading date…</span></div>
+  <div class="hud-row"><i class="fa-regular fa-clock"></i> <span id="hud-time-text">--:--:--</span></div>
+  <div class="hud-row"><i class="fa-solid fa-location-dot"></i> <span id="hud-city">Toronto</span></div>
+  <div class="hud-row"><i class="fa-solid fa-crosshairs"></i> Coords: <span id="hud-coords-text">—</span></div>
+  <div class="hud-row"><i class="fa-solid fa-cloud-sun"></i> <span id="hud-weather-text">—</span></div>
 </div>
 
 <main id="main">
@@ -198,21 +187,18 @@ h1, .headerTitle, .navItem, #reflectionText, .hud-row, .quoteBox { animation: hu
       <div id="navRes" class="navItem" role="button" tabindex="0" aria-controls="resPanel">Resources</div>
       <div id="navContact" class="navItem" role="button" tabindex="0" aria-controls="contactPanel">Contact</div>
     </div>
-
     <div class="rightCol">
       <section id="whoPanel" class="panel" role="region" aria-labelledby="navWho">
         <h2>Whoami</h2>
         <p><strong>/BrandonSmart</strong><br />:-$ Teachable: ComputerTechnology</p>
         <button class="backBtn" onclick="closePanel('whoPanel')">← Back</button>
       </section>
-
       <section id="refPanel" class="panel" role="region" aria-labelledby="navRef">
         <h2>Reflection</h2>
         <div id="reflectionText" aria-live="polite"></div>
-        <span class="cursor" id="reflectionCursor" aria-hidden="true"></span>
+        <span class="cursor" aria-hidden="true"></span>
         <button class="backBtn" onclick="closePanel('refPanel')">← Back</button>
       </section>
-
       <section id="prodPanel" class="panel" role="region" aria-labelledby="navProd">
         <h2>Productions</h2>
         <div class="productionsGrid" id="productionsGrid">
@@ -228,7 +214,6 @@ h1, .headerTitle, .navItem, #reflectionText, .hud-row, .quoteBox { animation: hu
         </div>
         <button class="backBtn" onclick="closePanel('prodPanel')">← Back</button>
       </section>
-
       <section id="resPanel" class="panel" role="region" aria-labelledby="navRes">
         <h2>Resources</h2>
         <p><a href="https://youtube.com" target="_blank" rel="noopener">YouTube</a></p>
@@ -236,14 +221,10 @@ h1, .headerTitle, .navItem, #reflectionText, .hud-row, .quoteBox { animation: hu
         <p><a href="https://github.com" target="_blank" rel="noopener">GitHub</a></p>
         <button class="backBtn" onclick="closePanel('resPanel')">← Back</button>
       </section>
-
       <section id="contactPanel" class="panel" role="region" aria-labelledby="navContact">
         <h2>Contact</h2>
         <div class="contact-row">
-          <div class="mail">
-            <i class="fa-solid fa-envelope"></i>&nbsp;
-            <a href="mailto:bsmart@my.yorku.ca">bsmart@my.yorku.ca</a>
-          </div>
+          <div class="mail"><i class="fa-solid fa-envelope"></i>&nbsp;<a href="mailto:bsmart@my.yorku.ca">bsmart@my.yorku.ca</a></div>
         </div>
         <button class="backBtn" onclick="closePanel('contactPanel')">← Back</button>
       </section>
@@ -251,7 +232,6 @@ h1, .headerTitle, .navItem, #reflectionText, .hud-row, .quoteBox { animation: hu
   </div>
 </main>
 
-<!-- Particle canvas -->
 <canvas id="hudParticles"></canvas>
 
 <script>
@@ -260,24 +240,34 @@ const loginBtn = document.getElementById('loginBtn');
 const loginPass = document.getElementById('loginPass');
 const globe = document.getElementById('cornerGlobe');
 const reflectionEl = document.getElementById('reflectionText');
+const loginAudioCorrect = document.getElementById('loginAudioCorrect');
+const loginAudioWrong = document.getElementById('loginAudioWrong');
 const navItems = document.querySelectorAll('.navItem');
-let reflectionTimeout;
+let typingInterval;
 
 loginBtn.addEventListener('click', () => {
   const pass = (loginPass.value || '').trim();
   if (pass === 'mrsmart') {
     loginOverlay.style.display = 'none';
     globe.style.display = 'block';
-    document.getElementById('hud').style.opacity = '1';
-    document.getElementById('hud').style.visibility = 'visible';
+    const hud = document.getElementById('hud');
+    hud.style.opacity = '1';
+    hud.style.visibility = 'visible';
+
+    loginAudioCorrect.volume = 0.7;
+    loginAudioCorrect.currentTime = 0;
+    loginAudioCorrect.play().catch(err => console.error('Audio play error:', err));
   } else {
     loginPass.value = '';
     loginPass.placeholder = 'Incorrect — try again';
     loginPass.focus();
     loginOverlay.animate(
       [{ transform: 'translateX(-2px)' }, { transform: 'translateX(2px)' }, { transform: 'translateX(0)' }],
-      { duration: 100, iterations: 3 }
+      { duration: 150, iterations: 3 }
     );
+    loginAudioWrong.volume = 0.7;
+    loginAudioWrong.currentTime = 0;
+    loginAudioWrong.play().catch(err => console.error('Audio play error:', err));
   }
 });
 
@@ -287,24 +277,33 @@ loginPass.addEventListener('keydown', e => {
 
 navItems.forEach(nav => {
   nav.addEventListener('click', () => {
-    clearTimeout(reflectionTimeout);
+    // Close all panels first
+    document.querySelectorAll('.panel').forEach(panel => panel.classList.remove('show'));
     const panelId = nav.getAttribute('aria-controls');
-    document.querySelectorAll('.panel').forEach(panel => {
-      if (panel.id === panelId) {
-        panel.classList.add('show');
-      } else {
-        panel.classList.remove('show');
-      }
-    });
+    const panel = document.getElementById(panelId);
+    if (panel) panel.classList.add('show');
+
     if (panelId === 'refPanel') {
-      let i = 0;
+      const reflectionText = `Building my portfolio site was a mix of applying familiar design and coding skills while also facing new challenges as a learner. Choosing GitHub Pages instead of drag-and-drop builders like Wix allowed me to work closely with the code and design, which suits my style of hands-on exploration.
+
+Throughout the process, I encountered issues like broken layouts from small typos, inconsistent styling, and menus not linking correctly. These challenges required careful troubleshooting and multiple revisions. At times, it was frustrating when a single missing bracket caused the page to break, but solving these problems brought a rewarding sense of accomplishment.
+
+AI tools like ChatGPT supported me by offering suggestions and helping refine my ideas. Rather than handing me answers, the AI guided me to consider alternative solutions—like having a resourceful brainstorming partner along the way. This was particularly useful when quick fresh ideas were needed.
+
+I also relied heavily on community resources such as GitHub documentation, Stack Overflow, and conversations with classmates. Collaborating this way added a welcome social dimension, contrasting with the more independent work I usually do.
+
+Emotionally, the process moved from curiosity and excitement to moments of irritation during debugging, and finally to satisfaction as the site came together to reflect my vision. This experience felt similar to how I approach new projects—through trial, error, and reflection—more than following a strict step-by-step formula.
+
+Ultimately, this project reinforced that being an effective learner means staying patient, open-minded, and willing to work through challenges independently, regardless of prior experience.`;
+
+      if (typingInterval) clearInterval(typingInterval);
       reflectionEl.textContent = '';
-      const reflectionText = "Building my portfolio site was a mix of applying familiar design and coding skills while also facing new challenges as a learner. Choosing GitHub Pages instead of drag-and-drop builders like Wix allowed me to work closely with the code and design, which suits my style of hands-on exploration.\n\nThroughout the process, I encountered issues like broken layouts from small typos, inconsistent styling, and menus not linking correctly. These challenges required careful troubleshooting and multiple revisions. At times, it was frustrating when a single missing bracket caused the page to break, but solving these problems brought a rewarding sense of accomplishment.\n\nAI tools like ChatGPT supported me by offering suggestions and helping refine my ideas. Rather than handing me answers, the AI guided me to consider alternative solutions—like having a resourceful brainstorming partner along the way. This was particularly useful when quick fresh ideas were needed.\n\nI also relied heavily on community resources such as GitHub documentation, Stack Overflow, and conversations with classmates. Collaborating this way added a welcome social dimension, contrasting with the more independent work I usually do.\n\nEmotionally, the process moved from curiosity and excitement to moments of irritation during debugging, and finally to satisfaction as the site came together to reflect my vision. This experience felt similar to how I approach new projects—through trial, error, and reflection—more than following a strict step-by-step formula.\n\nUltimately, this project reinforced that being an effective learner means staying patient, open-minded, and willing to work through challenges independently, regardless of prior experience.";
-      reflectionTimeout = setInterval(() => {
+      let i = 0;
+      typingInterval = setInterval(() => {
         if (i < reflectionText.length) {
           reflectionEl.textContent += reflectionText[i++];
         } else {
-          clearInterval(reflectionTimeout);
+          clearInterval(typingInterval);
         }
       }, 25);
     }
@@ -313,7 +312,7 @@ navItems.forEach(nav => {
 
 function closePanel(id) {
   const panel = document.getElementById(id);
-  panel.classList.remove('show');
+  if(panel) panel.classList.remove('show');
 }
 </script>
 
