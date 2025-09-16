@@ -141,6 +141,21 @@ h1, .headerTitle, .navItem, #reflectionText, .hud-row, .quoteBox { animation: hu
   font-size: 13px;
   opacity: 0.7;
 }
+/* Wrong password GIF overlay */
+#wrongGifOverlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.85);
+  z-index: 13000;
+  justify-content: center;
+  align-items: center;
+}
+#wrongGifOverlay img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
 /* Particle canvas */
 #hudParticles {position:fixed;top:0;left:0;width:100vw;height:100vh;pointer-events:none;z-index:0;}
 </style>
@@ -161,20 +176,35 @@ h1, .headerTitle, .navItem, #reflectionText, .hud-row, .quoteBox { animation: hu
   </div>
 </div>
 
-<!-- Audio Elements for login sounds -->
+<!-- Wrong Password GIF Overlay -->
+<div id="wrongGifOverlay">
+  <img src="images/computer missing GIF.gif" alt="Wrong Password GIF" />
+</div>
+
+<!-- Audio elements -->
 <audio id="loginAudioCorrect" src="sounds/robotintro.mp3" preload="auto"></audio>
 <audio id="loginAudioWrong" src="sounds/Hacked computer- Sound Effect.mp3" preload="auto"></audio>
 
-<!-- Globe icon hidden initially -->
+<!-- Globe icon -->
 <img src="images/right_icon1.gif" id="cornerGlobe" alt="Globe Glow" style="display:none" />
 
 <!-- HUD -->
 <div id="hud" aria-live="polite" style="opacity:0; visibility:hidden;">
-  <div class="hud-row"><i class="fa-regular fa-calendar"></i> <span id="hud-date-text">Loading date…</span></div>
-  <div class="hud-row"><i class="fa-regular fa-clock"></i> <span id="hud-time-text">--:--:--</span></div>
-  <div class="hud-row"><i class="fa-solid fa-location-dot"></i> <span id="hud-city">Toronto</span></div>
-  <div class="hud-row"><i class="fa-solid fa-crosshairs"></i> Coords: <span id="hud-coords-text">—</span></div>
-  <div class="hud-row"><i class="fa-solid fa-cloud-sun"></i> <span id="hud-weather-text">—</span></div>
+  <div class="hud-row">
+    <i class="fa-regular fa-calendar"></i> <span id="hud-date-text">Loading date…</span>
+  </div>
+  <div class="hud-row">
+    <i class="fa-regular fa-clock"></i> <span id="hud-time-text">--:--:--</span>
+  </div>
+  <div class="hud-row">
+    <i class="fa-solid fa-location-dot"></i> <span id="hud-city">Toronto</span>
+  </div>
+  <div class="hud-row">
+    <i class="fa-solid fa-crosshairs"></i> Coords: <span id="hud-coords-text">—</span>
+  </div>
+  <div class="hud-row">
+    <i class="fa-solid fa-cloud-sun"></i> <span id="hud-weather-text">—</span>
+  </div>
 </div>
 
 <main id="main">
@@ -239,9 +269,10 @@ const loginOverlay = document.getElementById('loginOverlay');
 const loginBtn = document.getElementById('loginBtn');
 const loginPass = document.getElementById('loginPass');
 const globe = document.getElementById('cornerGlobe');
-const reflectionEl = document.getElementById('reflectionText');
 const loginAudioCorrect = document.getElementById('loginAudioCorrect');
 const loginAudioWrong = document.getElementById('loginAudioWrong');
+const wrongGif = document.getElementById('wrongGifOverlay');
+const reflectionEl = document.getElementById('reflectionText');
 const navItems = document.querySelectorAll('.navItem');
 let typingInterval;
 
@@ -261,13 +292,24 @@ loginBtn.addEventListener('click', () => {
     loginPass.value = '';
     loginPass.placeholder = 'Incorrect — try again';
     loginPass.focus();
+
     loginOverlay.animate(
-      [{ transform: 'translateX(-2px)' }, { transform: 'translateX(2px)' }, { transform: 'translateX(0)' }],
+      [{ transform: 'translateX(-2px)' },{ transform: 'translateX(2px)' },{ transform: 'translateX(0)' }],
       { duration: 150, iterations: 3 }
     );
+
+    // Show the wrong password GIF overlay
+    wrongGif.style.display = 'flex';
+
     loginAudioWrong.volume = 0.7;
     loginAudioWrong.currentTime = 0;
     loginAudioWrong.play().catch(err => console.error('Audio play error:', err));
+
+    setTimeout(() => {
+      wrongGif.style.display = 'none';
+      loginAudioWrong.pause();
+      loginAudioWrong.currentTime = 0;
+    }, 2200);
   }
 });
 
@@ -277,30 +319,19 @@ loginPass.addEventListener('keydown', e => {
 
 navItems.forEach(nav => {
   nav.addEventListener('click', () => {
-    // Close all panels first
     document.querySelectorAll('.panel').forEach(panel => panel.classList.remove('show'));
     const panelId = nav.getAttribute('aria-controls');
     const panel = document.getElementById(panelId);
     if (panel) panel.classList.add('show');
 
     if (panelId === 'refPanel') {
-      const reflectionText = `Building my portfolio site was a mix of applying familiar design and coding skills while also facing new challenges as a learner. Choosing GitHub Pages instead of drag-and-drop builders like Wix allowed me to work closely with the code and design, which suits my style of hands-on exploration.
+      const reflectionText = "Building my portfolio site was a mix of applying familiar design and coding skills while also facing new challenges as a learner. Choosing GitHub Pages instead of drag-and-drop builders like Wix allowed me to work closely with the code and design, which suits my style of hands-on exploration.\n\nThroughout the process, I encountered issues like broken layouts from small typos, inconsistent styling, and menus not linking correctly. These challenges required careful troubleshooting and multiple revisions. At times, it was frustrating when a single missing bracket caused the page to break, but solving these problems brought a rewarding sense of accomplishment.\n\nAI tools like ChatGPT supported me by offering suggestions and helping refine my ideas. Rather than handing me answers, the AI guided me to consider alternative solutions—like having a resourceful brainstorming partner along the way. This was particularly useful when quick fresh ideas were needed.\n\nI also relied heavily on community resources such as GitHub documentation, Stack Overflow, and conversations with classmates. Collaborating this way added a welcome social dimension, contrasting with the more independent work I usually do.\n\nEmotionally, the process moved from curiosity and excitement to moments of irritation during debugging, and finally to satisfaction as the site came together to reflect my vision. This experience felt similar to how I approach new projects—through trial, error, and reflection—more than following a strict step-by-step formula.\n\nUltimately, this project reinforced that being an effective learner means staying patient, open-minded, and willing to work through challenges independently, regardless of prior experience.";
 
-Throughout the process, I encountered issues like broken layouts from small typos, inconsistent styling, and menus not linking correctly. These challenges required careful troubleshooting and multiple revisions. At times, it was frustrating when a single missing bracket caused the page to break, but solving these problems brought a rewarding sense of accomplishment.
-
-AI tools like ChatGPT supported me by offering suggestions and helping refine my ideas. Rather than handing me answers, the AI guided me to consider alternative solutions—like having a resourceful brainstorming partner along the way. This was particularly useful when quick fresh ideas were needed.
-
-I also relied heavily on community resources such as GitHub documentation, Stack Overflow, and conversations with classmates. Collaborating this way added a welcome social dimension, contrasting with the more independent work I usually do.
-
-Emotionally, the process moved from curiosity and excitement to moments of irritation during debugging, and finally to satisfaction as the site came together to reflect my vision. This experience felt similar to how I approach new projects—through trial, error, and reflection—more than following a strict step-by-step formula.
-
-Ultimately, this project reinforced that being an effective learner means staying patient, open-minded, and willing to work through challenges independently, regardless of prior experience.`;
-
-      if (typingInterval) clearInterval(typingInterval);
+      if(typingInterval) clearInterval(typingInterval);
       reflectionEl.textContent = '';
       let i = 0;
       typingInterval = setInterval(() => {
-        if (i < reflectionText.length) {
+        if(i < reflectionText.length){
           reflectionEl.textContent += reflectionText[i++];
         } else {
           clearInterval(typingInterval);
@@ -310,7 +341,7 @@ Ultimately, this project reinforced that being an effective learner means stayin
   });
 });
 
-function closePanel(id) {
+function closePanel(id){
   const panel = document.getElementById(id);
   if(panel) panel.classList.remove('show');
 }
