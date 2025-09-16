@@ -153,7 +153,7 @@ h1, .headerTitle, .navItem, #reflectionText, .hud-row, .quoteBox { animation: hu
 <!-- Globe icon (appears after login) -->
 <img src="images/right_icon1.gif" id="cornerGlobe" alt="Globe Glow" />
 <!-- HUD -->
-<div id="hud" aria-live="polite">
+<div id="hud" aria-live="polite" style="opacity:0; visibility:hidden;">
   <div class="hud-row" id="hud-date">
     <i class="fa-regular fa-calendar"></i>
     <span id="hud-date-text">Loading date…</span>
@@ -247,15 +247,18 @@ const loginPass = document.getElementById('loginPass');
 const terminalInputWrapper = document.getElementById('terminalInputWrapper');
 const terminalInput = document.getElementById('terminalInput');
 const globe = document.getElementById('cornerGlobe');
+
 loginPass.addEventListener('keydown', e => { if (e.key === 'Enter') loginBtn.click(); });
+
 loginBtn.addEventListener('click', () => {
   const v = (loginPass.value || '').trim();
   if (v === 'mrsmart') {
     loginOverlay.style.display = 'none';
     globe.style.display = 'block';
-    document.getElementById('hud').style.opacity = '1';
-    document.getElementById('hud').style.visibility = 'visible';
-    terminalInputWrapper.style.display = 'none';
+    const hud = document.getElementById('hud');
+    hud.style.opacity = '1';
+    hud.style.visibility = 'visible';
+    terminalInputWrapper.style.display = 'none'; // You could enable if you want terminal visible on login
     startHud();
     updateLocationWeather();
   } else {
@@ -266,9 +269,9 @@ loginBtn.addEventListener('click', () => {
       [{ transform: 'translateX(-2px)' },{ transform: 'translateX(2px)' },{ transform: 'translateX(0)' }],
       { duration: 120, iterations: 3 }
     );
-    setTimeout(()=>{}, 2200);
   }
 });
+
 // HUD (time/date)
 function startHud() {
   const timeEl = document.getElementById('hud-time-text');
@@ -280,6 +283,7 @@ function startHud() {
   }
   updateHud(); setInterval(updateHud, 1000);
 }
+
 // Weather
 function updateLocationWeather() {
   const cityEl = document.getElementById('hud-city');
@@ -309,41 +313,48 @@ function updateLocationWeather() {
     }
   );
 }
+
 // Panels
 function openPanel(id) {
   document.querySelectorAll('.panel').forEach(p => {
     p.classList.remove('show');
     const h2 = p.querySelector('h2');
-    if (h2) h2.classList.remove('active-glow'); });
+    if (h2) h2.classList.remove('active-glow');
+  });
   document.getElementById(id).classList.add('show');
   const activeTitle = document.getElementById(id).querySelector('h2');
   if (activeTitle) activeTitle.classList.add('active-glow');
+
   if(id === 'refPanel') animateReflection();
 }
+
 function closePanel(id) {
   const panel = document.getElementById(id);
   panel.classList.remove('show');
   const h2 = panel.querySelector('h2');
   if (h2) h2.classList.remove('active-glow');
 }
+
 document.querySelectorAll('.navItem').forEach(el =>
   el.addEventListener('click', () => { openPanel(el.getAttribute('aria-controls')); })
 );
-// Reflection text animation (no voice)
+
+// Reflection text animation typing effect
 function animateReflection() {
   const reflectionEl = document.getElementById('reflectionText');
   const text = "Building my portfolio site was a mix of applying familiar design and coding skills while also facing new challenges as a learner. Choosing GitHub Pages instead of drag-and-drop builders like Wix allowed me to work closely with the code and design, which suits my style of hands-on exploration.\n\nThroughout the process, I encountered issues like broken layouts from small typos, inconsistent styling, and menus not linking correctly. These challenges required careful troubleshooting and multiple revisions. At times, it was frustrating when a single missing bracket caused the page to break, but solving these problems brought a rewarding sense of accomplishment.\n\nAI tools like ChatGPT supported me by offering suggestions and helping refine my ideas. Rather than handing me answers, the AI guided me to consider alternative solutions—like having a resourceful brainstorming partner along the way. This was particularly useful when quick fresh ideas were needed.\n\nI also relied heavily on community resources such as GitHub documentation, Stack Overflow, and conversations with classmates. Collaborating this way added a welcome social dimension, contrasting with the more independent work I usually do.\n\nEmotionally, the process moved from curiosity and excitement to moments of irritation during debugging, and finally to satisfaction as the site came together to reflect my vision. This experience felt similar to how I approach new projects—through trial, error, and reflection—more than following a strict step-by-step formula.\n\nUltimately, this project reinforced that being an effective learner means staying patient, open-minded, and willing to work through challenges independently, regardless of prior experience.";
   reflectionEl.textContent = '';
-  // Your code to animate the text...
-}
-
   let i = 0;
   clearInterval(window._reflectionTyping);
   window._reflectionTyping = setInterval(() => {
-    if (i < text.length) { reflectionEl.textContent += text[i++]; }
-    else { clearInterval(window._reflectionTyping); }
+    if (i < text.length) {
+      reflectionEl.textContent += text[i++];
+    } else {
+      clearInterval(window._reflectionTyping);
+    }
   }, 18);
 }
+
 // Particle system
 (() => {
   const canvas = document.getElementById('hudParticles');
@@ -365,24 +376,39 @@ function animateReflection() {
       if(mouse.x !== null && mouse.y !== null) {
         let dx = this.x - mouse.x; let dy = this.y - mouse.y;
         let dist = Math.sqrt(dx * dx + dy * dy);
-        if (dist < 100) { let angle = Math.atan2(dy, dx); let force = (100 - dist) * 0.002; this.vx += force * Math.cos(angle); this.vy += force * Math.sin(angle);}
+        if (dist < 100) {
+          let angle = Math.atan2(dy, dx);
+          let force = (100 - dist) * 0.002;
+          this.vx += force * Math.cos(angle);
+          this.vy += force * Math.sin(angle);
+        }
       }
       this.vx *= 0.98; this.vy *= 0.98;
     }
     draw() {
-      ctx.beginPath(); ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-      ctx.fillStyle = 'rgba(0,229,255,0.3)'; ctx.fill();
+      ctx.beginPath();
+      ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+      ctx.fillStyle = 'rgba(0,229,255,0.3)';
+      ctx.fill();
     }
   }
   function connectParticles() {
     for (let i = 0; i < particleCount; i++) for(let j = i+1; j < particleCount; j++) {
       let p1=particles[i],p2=particles[j],dx=p1.x-p2.x,dy=p1.y-p2.y,dist=Math.sqrt(dx*dx+dy*dy);
-      if(dist<maxDist){ctx.strokeStyle=`rgba(0,229,255,${0.09*(1-dist/maxDist)})`;ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(p1.x,p1.y);ctx.lineTo(p2.x,p2.y);ctx.stroke();}
+      if(dist<maxDist){
+        ctx.strokeStyle=`rgba(0,229,255,${0.09*(1-dist/maxDist)})`;
+        ctx.lineWidth=1;
+        ctx.beginPath();
+        ctx.moveTo(p1.x,p1.y);
+        ctx.lineTo(p2.x,p2.y);
+        ctx.stroke();
+      }
     }
   }
   function animate() {
     ctx.clearRect(0,0,width,height);
-    particles.forEach(p=>{p.update();p.draw();}); connectParticles();
+    particles.forEach(p=>{p.update();p.draw();});
+    connectParticles();
     requestAnimationFrame(animate);
   }
   window.addEventListener('resize', resize);
@@ -392,11 +418,13 @@ function animateReflection() {
   for(let i=0; i<particleCount; i++) particles.push(new Particle());
   animate();
 })();
+
 // Terminal toggle/command processing
 document.querySelector('.headerTitle').addEventListener('click', () => {
   terminalInputWrapper.style.display = terminalInputWrapper.style.display === 'flex' ? 'none' : 'flex';
   terminalInput.focus();
 });
+
 terminalInput.addEventListener('keydown', e => {
   if (e.key === 'Enter') {
     const val = terminalInput.value.trim().toLowerCase();
@@ -413,7 +441,8 @@ terminalInput.addEventListener('keydown', e => {
     if (val === 'exit') {
       terminalInput.value = '';
       terminalInput.blur();
-      window.open('', '_self'); window.close(); return;
+      window.open('', '_self'); window.close();
+      return;
     }
     if (panelMap[val]) {
       openPanel(panelMap[val]);
