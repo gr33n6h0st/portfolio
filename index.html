@@ -510,7 +510,7 @@ h1, h2, .headerTitle, .navItem, #reflectionText, .hud-row, .quoteBox {
       </section>
       <section id="prod2Panel" class="panel" role="region" aria-labelledby="navProd">
         <h2>Production 2: New Literacies Reflection</h2>
-        <div id="prod2ReflectionText"></div>
+        <div id="prod2ReflectionText" aria-live="polite" aria-atomic="true"></div><span class="cursor" id="prod2ReflectionCursor" aria-hidden="true"></span>
         <button class="backBtn" onclick="closePanel('prod2Panel')">← Back</button>
       </section>
       <section id="resPanel" class="panel" role="region" aria-labelledby="navRes">
@@ -567,14 +567,12 @@ const lbImg = document.getElementById('lbImage');
 document.querySelectorAll('.prodCard').forEach(card => {
   card.addEventListener('click', () => {
     const idx = parseInt(card.dataset.index);
-
     // Special case: Production 2 opens its own reflection panel
     if (idx === 1) {
       openPanel("prod2Panel");
-      document.getElementById("prod2ReflectionText").textContent = prod2Reflection;
+      speakAndTypeProd2(prod2Reflection);
       return;
     }
-
     // Default: open lightbox for images
     currImages = productionImagesMap[idx] || [];
     if (!currImages.length) return;
@@ -702,6 +700,11 @@ function closePanel(id){
     window.typingTimer = null;
     window.speechSynthesis.cancel();
   }
+  if(id === 'prod2Panel'){
+    if(window.typingTimer) clearInterval(window.typingTimer);
+    window.typingTimer = null;
+    window.speechSynthesis.cancel();
+  }
 }
 document.querySelectorAll('.navItem').forEach(el => {
   el.addEventListener('click', e => {
@@ -711,6 +714,8 @@ document.querySelectorAll('.navItem').forEach(el => {
       speakAndType(reflections[0]);
     } else if(panel === 'prodPanel'){
       speakAndType("Currently, this panel contains productions and placeholders.");
+    } else if(panel === 'prod2Panel'){
+      speakAndTypeProd2(prod2Reflection);
     } else {
       const panelSpeechTexts = {
         whoPanel: "I am Mr. Smart",
@@ -722,6 +727,7 @@ document.querySelectorAll('.navItem').forEach(el => {
   });
 });
 const reflectionEl = document.getElementById('reflectionText');
+const prod2ReflectionEl = document.getElementById('prod2ReflectionText');
 const reflections = [
   `Building my portfolio site was a mix of applying familiar design and coding skills while also facing new challenges as a learner. Choosing GitHub Pages instead of drag-and-drop builders like Wix allowed me to work closely with the code and design, which suits my style of hands-on exploration.
 An important feature I wanted was a weather widget, so I had to obtain an API key from OpenWeatherMap. This allowed me to access real-time weather data that updates automatically. I also came up with the idea to request the user's location with a prompt notification, respecting privacy concerns since some people might not want their location visible or shared. This made the experience more user-friendly and transparent.
@@ -732,7 +738,6 @@ Emotionally, the process moved from curiosity and excitement to moments of irrit
 Ultimately, this project reinforced that being an effective learner means staying patient, open-minded, and willing to work through challenges independently, regardless of prior experience.`
 ];
 const prod2Reflection = `Indigenous Knowledge as Relational Practice Transforming Education
-
 Brayboy and Maughan’s (2008) Indigenous Knowledges and the Story of the Bean challenges Western education by emphasizing knowledge as a lived, relational process vital to community survival. They argue that “Indigenous knowledges… are lived and integral to survival. Truth and knowledge cannot be ends in and of themselves” (pp. 11–12), critiquing the Western tendency to treat knowledge as abstract facts. They further stress that “knowledge is not… a commodity that can be possessed or controlled by educators but rather a process that can be absorbed and understood” (p. 12), highlighting knowledge’s ethical, ongoing nature. These insights invite educators to ground learning in accountability and context rather than isolated content.
 The Story of the Bean illustrates knowledge embedded in Indigenous cosmology and community responsibility, contrasting Western schooling’s linear, individualistic approach. As highlighted in our class chart, Indigenous education values communal, nonlinear learning. The call for teachers to “have something at stake” in their communities (Brayboy & Maughan, 2008, p. 9) reflects this relational ethics, positioning educators as responsible participants in learners’ environments.
 A key concept is viewing knowledge as a verb, a living practice enacted through relationships, rather than a noun or fixed object. This challenges curriculum and assessments to privilege engagement, reflection, and responsibility over rote memorization.
@@ -759,6 +764,7 @@ function speakAndType(text){
   if(window.typingTimer) clearInterval(window.typingTimer);
   window.speechSynthesis.cancel();
   reflectionEl.textContent = '';
+  const cursor = document.getElementById('reflectionCursor');
   function reallySpeakAndType(){
     const voice = getBestFemaleVoice();
     if(voice){
@@ -768,6 +774,7 @@ function speakAndType(text){
       window.speechSynthesis.speak(utter);
     }
     let i=0;
+    cursor.style.display = 'inline-block';
     window.typingTimer = setInterval(()=>{
       if(i < text.length){
         reflectionEl.textContent += text[i];
@@ -775,6 +782,40 @@ function speakAndType(text){
       } else {
         clearInterval(window.typingTimer);
         window.typingTimer = null;
+        cursor.style.display = 'none';
+      }
+    }, 30);
+  }
+  if(!window.speechSynthesis.getVoices().length){
+    window.speechSynthesis.onvoiceschanged = reallySpeakAndType;
+    window.speechSynthesis.getVoices();
+  } else {
+    reallySpeakAndType();
+  }
+}
+function speakAndTypeProd2(text){
+  if(window.typingTimer) clearInterval(window.typingTimer);
+  window.speechSynthesis.cancel();
+  prod2ReflectionEl.textContent = '';
+  const cursor = document.getElementById('prod2ReflectionCursor');
+  function reallySpeakAndType(){
+    const voice = getBestFemaleVoice();
+    if(voice){
+      const utter = new SpeechSynthesisUtterance(text);
+      utter.voice = voice;
+      utter.rate = 1.1;
+      window.speechSynthesis.speak(utter);
+    }
+    let i=0;
+    cursor.style.display = 'inline-block';
+    window.typingTimer = setInterval(()=>{
+      if(i < text.length){
+        prod2ReflectionEl.textContent += text[i];
+        i++;
+      } else {
+        clearInterval(window.typingTimer);
+        window.typingTimer = null;
+        cursor.style.display = 'none';
       }
     }, 30);
   }
@@ -819,10 +860,7 @@ function executeCommand(cmd) {
       } else if(lowerCmd === 'productions'){
         speakAndType("Currently, this panel contains productions and placeholders.");
       } else if(lowerCmd === 'production2') {
-        // Display Production 2 reflection text without voice
-        const prod2PanelEl = document.getElementById('prod2Panel');
-        openPanel('prod2Panel');
-        document.getElementById("prod2ReflectionText").textContent = prod2Reflection;
+        speakAndTypeProd2(prod2Reflection);
       } else {
         const terminalSpeechTexts = {
           whoami: "I am Mr. Smart",
