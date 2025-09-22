@@ -240,6 +240,11 @@ h1, h2, .headerTitle, .navItem, #reflectionText, .hud-row, .quoteBox {
   font-size: 14px;
   color: rgba(0,229,255,0.95);
 }
+#prod2ReflectionText {
+  white-space: pre-wrap;
+  font-size: 14px;
+  color: rgba(0,229,255,0.95);
+}
 .cursor {
   display: inline-block;
   width: 10px;
@@ -503,6 +508,11 @@ h1, h2, .headerTitle, .navItem, #reflectionText, .hud-row, .quoteBox {
         </div>
         <button class="backBtn" onclick="closePanel('prodPanel')">← Back</button>
       </section>
+      <section id="prod2Panel" class="panel" role="region" aria-labelledby="navProd">
+        <h2>Production 2: New Literacies Reflection</h2>
+        <div id="prod2ReflectionText"></div>
+        <button class="backBtn" onclick="closePanel('prod2Panel')">← Back</button>
+      </section>
       <section id="resPanel" class="panel" role="region" aria-labelledby="navRes">
         <h2>Resources</h2>
         <p><a href="https://youtube.com" target="_blank" rel="noopener">YouTube</a></p>
@@ -556,7 +566,16 @@ const lb = document.getElementById('lightbox');
 const lbImg = document.getElementById('lbImage');
 document.querySelectorAll('.prodCard').forEach(card => {
   card.addEventListener('click', () => {
-    const idx = card.dataset.index;
+    const idx = parseInt(card.dataset.index);
+
+    // Special case: Production 2 opens its own reflection panel
+    if (idx === 1) {
+      openPanel("prod2Panel");
+      document.getElementById("prod2ReflectionText").textContent = prod2Reflection;
+      return;
+    }
+
+    // Default: open lightbox for images
     currImages = productionImagesMap[idx] || [];
     if (!currImages.length) return;
     currIndex = 0;
@@ -635,8 +654,6 @@ loginBtn.addEventListener('click', () => {
     }, 2200);
   }
 });
-
-
 function startHud(){
   const timeEl = document.getElementById('hud-time-text');
   const dateEl = document.getElementById('hud-date-text');
@@ -648,7 +665,6 @@ function startHud(){
   updateHud();
   setInterval(updateHud,1000);
 }
-
 function updateLocationWeather(){
   const cityEl = document.getElementById('hud-city');
   const coordsEl = document.getElementById('hud-coords-text');
@@ -674,12 +690,10 @@ function updateLocationWeather(){
     console.error(err);
   });
 }
-
 function openPanel(id){
   document.querySelectorAll('.panel').forEach(p => p.classList.remove('show'));
   document.getElementById(id).classList.add('show');
 }
-
 function closePanel(id){
   const panel = document.getElementById(id);
   panel.classList.remove('show');
@@ -689,12 +703,10 @@ function closePanel(id){
     window.speechSynthesis.cancel();
   }
 }
-
 document.querySelectorAll('.navItem').forEach(el => {
   el.addEventListener('click', e => {
     const panel = el.getAttribute('aria-controls');
     openPanel(panel);
-
     if(panel === 'refPanel'){
       speakAndType(reflections[0]);
     } else if(panel === 'prodPanel'){
@@ -709,24 +721,26 @@ document.querySelectorAll('.navItem').forEach(el => {
     }
   });
 });
-
 const reflectionEl = document.getElementById('reflectionText');
 const reflections = [
   `Building my portfolio site was a mix of applying familiar design and coding skills while also facing new challenges as a learner. Choosing GitHub Pages instead of drag-and-drop builders like Wix allowed me to work closely with the code and design, which suits my style of hands-on exploration.
-
 An important feature I wanted was a weather widget, so I had to obtain an API key from OpenWeatherMap. This allowed me to access real-time weather data that updates automatically. I also came up with the idea to request the user's location with a prompt notification, respecting privacy concerns since some people might not want their location visible or shared. This made the experience more user-friendly and transparent.
-
 Throughout the process, I encountered issues like broken layouts from small typos, inconsistent styling, and menus not linking correctly. These challenges required careful troubleshooting and multiple revisions. At times, it was frustrating when a single missing bracket caused the page to break, but solving these problems brought a rewarding sense of accomplishment.
-
 AI tools like ChatGPT supported me by offering suggestions and helping refine my ideas. Rather than handing me answers, the AI guided me to consider alternative solutions—like having a resourceful brainstorming partner along the way. This was particularly useful when quick fresh ideas were needed.
-
 I also relied heavily on community resources such as GitHub documentation, Stack Overflow, and conversations with classmates. Collaborating this way added a welcome social dimension, contrasting with the more independent work I usually do.
-
 Emotionally, the process moved from curiosity and excitement to moments of irritation during debugging, and finally to satisfaction as the site came together to reflect my vision. This experience felt similar to how I approach new projects—through trial, error, and reflection—more than following a strict step-by-step formula.
-
 Ultimately, this project reinforced that being an effective learner means staying patient, open-minded, and willing to work through challenges independently, regardless of prior experience.`
 ];
-
+const prod2Reflection = `Indigenous Knowledge as Relational Practice Transforming Education
+Brayboy and Maughan’s (2008) Indigenous Knowledges and the Story of the Bean compellingly challenges the dominant Western educational paradigm by emphasizing knowledge as a lived, relational process integral to community survival. Their observation that “Indigenous knowledges… are lived and integral to survival. Truth and knowledge cannot be ends in and of themselves” (pp. 11–12) critiques Western education’s tendency to treat knowledge as abstract, decontextualized information. Further, the assertion that “knowledge is not… a commodity that can be possessed or controlled by educators but rather a process that can be absorbed and understood” (p. 12) underscores knowledge’s dynamic, ethical nature within Indigenous epistemologies. These insights call for a reorientation of education toward practices grounded in accountability, cultural context, and relationship, an orientation I believe essential for genuinely transformative learning.
+The story of bean planting, embedded within Indigenous cosmology and guided by star constellations, demonstrates how knowledge is inseparable from environment, culture, and community responsibility. This holistic, nonlinear approach contrasts sharply with Western schooling’s linear, individualistic, and compartmentalized methods, as juxtaposed in our class discussion chart contrasting Indigenous communal values with Eurocentric ones. The emphasized need for teachers to “have something at stake” in their communities (Brayboy & Maughan, 2008, p. 9) embodies a relational ethics positioning educators as accountable and engaged members of the learning ecosystem.
+A central concept the authors develop is the distinction between viewing knowledge as a noun; a static object to be acquired, and as a verb, a living, ethical practice enacted through ongoing relationships and accountability. This distinction demands reconsideration of curriculum and assessment designs to privilege context, engagement, and responsibility over rote memorization.
+This relational pedagogy extends meaningfully into digital spaces, as seen in Indigenous projects like He Ao Hou: A New World (Kanaeokana, 2020) and Indigenous Virtual Reality initiatives (CBC, 2018). These digital environments embed ancestral language and stories within immersive experiences that invite active participation and cultural continuity. For instance, He Ao Hou merges Hawaiian cosmology with science fiction, inviting learners into a layered, contemporary expression of Indigenous knowledge. Virtual Reality projects facilitate ceremonies and storytelling online, reclaiming Indigenous presence in cyberspace and contesting monolithic narratives of tradition versus modernity.
+Within Computer Technology education, particularly central to my Bachelor of Tech Ed program, the challenge and opportunity lie in bridging technical skill with this relational framework. Computer technology offers Indigenous learners’ pathways to innovate and thrive beyond environmental applications. For example, learners might develop language revitalization apps or culturally grounded educational software that translates community narratives into interactive digital forms. This empowers individuals as creators, inventors, and entrepreneurs, crafting solutions that speak directly to their cultural contexts and economic futures.
+Access to advanced technologies such as 3D printing, virtual reality, and data science further expands possibilities. Indigenous innovators use these tools to prototype and share ideas that maintain cultural integrity while engaging global scientific and economic networks. This synthesis honors Indigenous knowledge’s dynamic nature, enabling learners to trailblaze new scientific and technological frontiers on their own terms.
+However, the integration of Indigenous Knowledge Systems into mainstream education is not without challenges. As scholars and community members note, Indigenous Knowledge is diverse and sometimes contested internally, making singular representations difficult and risking romanticization (Levac et al., 2018; ABC Life Literacy Canada, 2024). Moreover, mainstream education systems emphasize standardized curricula, universal knowledge claims, and assessment models that often conflict with Indigenous relational and context-based epistemologies (Sosyalarastirmalar, 2025). Institutional constraints, including limited Indigenous leadership and funding, further complicate authentic integration (People for Education, 2016). Addressing these challenges requires epistemic pluralism that respects and values both Indigenous and Western knowledge frameworks, promoting ongoing respectful dialogue and co-creation.
+Supporting Indigenous learners to realize their potential as creators and innovators involves more than curriculum design. It requires educational spaces that make technology meaningful and culturally resonant. For example, students can use code to build apps teaching everyday Indigenous language phrases, turning technical tasks into acts of cultural preservation. Infrastructure gaps, such as unreliable internet and outdated devices, must be addressed to ensure equitable participation. Mentorship by Indigenous technology professionals offers culturally relevant guidance and tangible role models. Project-based learning tied to community challenges fosters engagement and critical thinking, encouraging learners to see technology as a tool for positive change. Teacher preparation that embraces culturally sustaining pedagogy builds trust and respectful relationships essential for deep learning. Finally, institutional policies and funding must empower Indigenous leadership and initiative. These efforts combined create environments where Indigenous learners can genuinely thrive; technologically, creatively, and ethically.
+Brayboy and Maughan emphasize that “Indigenous knowledge systems are inherently political and ethical projects rooted in survival and sovereignty” (2008, p. 22). This underscores the critical role Indigenous Knowledges play in empowering Indigenous learners not only to sustain their communities but to reclaim their place in educational spaces historically shaped by exclusion. Including Indigenous Knowledge Systems in education is therefore a vital act of inclusion, one that affirms Indigenous students’ identities, histories, and ways of knowing as central rather than peripheral. This inclusion enriches learning by fostering relational accountability, critical reflection, and community engagement, principles that align closely with Indigenous epistemologies. While this profoundly supports Indigenous learners’ success and well-being, it also invites all students and educators to participate in a deeper, more ethical education, one that moves beyond isolated facts toward understanding knowledge as a dynamic, shared process rooted in culture and community. In this way, Indigenous Knowledge inclusion represents not only an ethical imperative but a meaningful expansion of educational practice that advances humanity through respect, connection, and mutual growth.`;
 function getBestFemaleVoice(){
   const voices = window.speechSynthesis.getVoices();
   const patterns = [/female/i,/woman/i,/zira/i,/susan/i,/eva/i,/samantha/i,/linda/i,/lisa/i,/amy/i,/emma/i,/victoria/i,/joanna/i,/julie/i];
@@ -740,7 +754,6 @@ function getBestFemaleVoice(){
   if(anyEn) return anyEn;
   return voices[0] || null;
 }
-
 function speakAndType(text){
   if(window.typingTimer) clearInterval(window.typingTimer);
   window.speechSynthesis.cancel();
@@ -771,24 +784,22 @@ function speakAndType(text){
     reallySpeakAndType();
   }
 }
-
 // Terminal Implementation
-const panelIds = ['whoPanel','refPanel','prodPanel','resPanel','contactPanel'];
+const panelIds = ['whoPanel','refPanel','prodPanel','resPanel','contactPanel', 'prod2Panel'];
 const panelNames = {
   'whoami': 'whoPanel',
   'reflection': 'refPanel',
   'productions': 'prodPanel',
   'resources': 'resPanel',
   'contact': 'contactPanel',
+  'production2': 'prod2Panel',
   'back': 'back'
 };
-
 function appendTerminalOutput(text){
   const terminalContent = document.getElementById('terminalContent');
   terminalContent.textContent += text + "\n";
   terminalContent.scrollTop = terminalContent.scrollHeight;
 }
-
 function executeCommand(cmd) {
   const lowerCmd = cmd.toLowerCase().trim();
   if(lowerCmd === 'back') {
@@ -806,6 +817,11 @@ function executeCommand(cmd) {
         speakAndType(reflections[0]);
       } else if(lowerCmd === 'productions'){
         speakAndType("Currently, this panel contains productions and placeholders.");
+      } else if(lowerCmd === 'production2') {
+        // Display Production 2 reflection text without voice
+        const prod2PanelEl = document.getElementById('prod2Panel');
+        openPanel('prod2Panel');
+        document.getElementById("prod2ReflectionText").textContent = prod2Reflection;
       } else {
         const terminalSpeechTexts = {
           whoami: "I am Mr. Smart",
@@ -821,12 +837,10 @@ function executeCommand(cmd) {
     appendTerminalOutput(`Command not recognized: ${cmd}`);
   }
 }
-
 // Terminal toggle on Hello World click
 const headerToggleTerminal = document.getElementById('headerToggleTerminal');
 const terminalContainer = document.getElementById('terminalContainer');
 const terminalInput = document.getElementById('terminalInput');
-
 headerToggleTerminal.addEventListener('click', () => {
   if(terminalContainer.style.display === 'flex'){
     terminalContainer.style.display = 'none';
@@ -835,7 +849,6 @@ headerToggleTerminal.addEventListener('click', () => {
     terminalInput.focus();
   }
 });
-
 terminalInput.addEventListener('keydown', e => {
   if(e.key === 'Enter'){
     const cmd = terminalInput.value;
@@ -844,7 +857,6 @@ terminalInput.addEventListener('keydown', e => {
     terminalInput.value = '';
   }
 });
-
 // Quotes rotation with smooth opacity
 const quotes = [
   "Code is like humor. When you have to explain it, it’s bad.",
@@ -866,7 +878,6 @@ function rotateQuotes(){
   }, 6000);
 }
 rotateQuotes();
-
 // Particle background system
 (() => {
   const canvas = document.getElementById('hudParticles');
