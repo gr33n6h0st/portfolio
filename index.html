@@ -820,14 +820,17 @@ function speakAndTypeProd2(htmlText) {
   tempDiv.innerHTML = htmlText;
   const plainText = tempDiv.textContent || tempDiv.innerText || "";
 
-  function reallySpeakAndType(){
-    const voice = getBestFemaleVoice();
-    if(voice){
-      const utter = new SpeechSynthesisUtterance(plainText);
-      utter.voice = voice;
-      utter.rate = 1.1;
-      window.speechSynthesis.speak(utter);
-    }
+  function speakAndTypeProd2(htmlText) {
+  if(window.typingTimer) clearInterval(window.typingTimer);
+  window.speechSynthesis.cancel();
+  prod2ReflectionEl.textContent = '';
+  const cursor = document.getElementById('prod2ReflectionCursor');
+
+  const tempDiv = document.createElement('div');
+  tempDiv.innerHTML = htmlText;
+  const plainText = tempDiv.textContent || tempDiv.innerText || "";
+
+  function reallyType(){
     let i=0;
     cursor.style.display = 'inline-block';
     window.typingTimer = setInterval(()=>{
@@ -838,9 +841,16 @@ function speakAndTypeProd2(htmlText) {
         clearInterval(window.typingTimer);
         window.typingTimer = null;
         cursor.style.display = 'none';
+        // Replace plain text with formatted HTML paragraphs after typing finishes
         prod2ReflectionEl.innerHTML = htmlText;
       }
     }, 30);
+  }
+
+  // Immediately start typing without speech
+  reallyType();
+}
+
   }
   if(!window.speechSynthesis.getVoices().length){
     window.speechSynthesis.onvoiceschanged = reallySpeakAndType;
