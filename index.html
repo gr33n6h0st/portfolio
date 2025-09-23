@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Hello World - Brandon Smart's Portfolio</title>
-<!-- Fonts + icons -->
+<title>Hello World - Brandon Smart</title>
+<!-- Fonts and icons -->
 <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet" />
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
 <style>
@@ -14,6 +14,7 @@
   --panel: rgba(10, 12, 15, 0.9);
   --hover: #00ffb3;
   --hud-w: 260px;
+  --font-body: 'Share Tech Mono', monospace;
 }
 * {
   box-sizing: border-box;
@@ -21,7 +22,7 @@
 html, body {
   height: 100%;
   margin: 0;
-  font-family: 'Share Tech Mono', monospace;
+  font-family: var(--font-body);
   background: linear-gradient(180deg, #020203, #07080a);
   color: var(--neon);
   -webkit-font-smoothing: antialiased;
@@ -112,6 +113,18 @@ h1, h2, .headerTitle, .navItem, #reflectionText, .hud-row, .quoteBox {
   outline: none;
   font-size: 14px;
 }
+.login-input::placeholder {
+  color: rgba(0,229,255,0.4);
+}
+.login-input:focus {
+  background: rgba(0,0,0,0.7);
+}
+.login-input.valid {
+  border-color: var(--hover);
+}
+.login-input.invalid {
+  border-color: #ff3366;
+}
 .login-actions {
   margin-top: 14px;
   display: flex;
@@ -127,10 +140,16 @@ h1, h2, .headerTitle, .navItem, #reflectionText, .hud-row, .quoteBox {
   color: #081018;
   font-weight: 700;
 }
+.login-actions:focus-visible {
+  outline: 2px solid var(--hover);
+}
+.login-actions button:focus-visible {
+  outline: 2px solid var(--hover);
+}
 .login-sub {
   margin-top: 10px;
   font-size: 13px;
-  color: rgba(0,229,255,0.7);
+  color: var(--hover);
 }
 #hud {
   position: fixed;
@@ -146,379 +165,227 @@ h1, h2, .headerTitle, .navItem, #reflectionText, .hud-row, .quoteBox {
   color: var(--neon);
   font-size: 13px;
 }
-#main {
-  position: relative;
-  z-index: 500;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-start;
-  padding: 140px 28px 40px;
+#hud .loading {
+  font-style: italic;
 }
-.hud-row {
+#hud .error {
+  color: #ff3366;
+}
+#hud .success {
+  color: var(--hover);
+}
+#hud .value {
+  font-family: var(--font-body);
+  font-weight: 700;
+}
+#hud .unit {
+  opacity: 0.7;
+  margin-left: 4px;
+  font-weight: 400;
+}
+#hud .icon {
+  margin-right: 6px;
+}
+#hud .small-text {
+  font-size: 11px;
+  opacity: 0.7;
+  margin-top: 6px;
+}
+#hud .row {
+  margin-bottom: 6px;
+  display: flex;
+  align-items: center;
+}
+#hud .row:last-child {
+  margin-bottom: 0;
+}
+#hud .desc {
+  flex-grow: 1;
+  white-space: nowrap;
+}
+#hud .value-holder {
+  min-width: 48px;
+  display: flex;
+  justify-content: flex-end;
+  font-family: var(--font-body);
+}
+#hud .temp {
+  font-weight: 700;
+}
+#hud .date-time-holder {
+  font-size: 13px;
+  margin-bottom: 12px;
+}
+#hud .location {
+  font-weight: 700;
+  font-size: 14px;
+}
+#hud .coords {
+  font-size: 12px;
+  opacity: 0.75;
+  font-family: var(--font-body);
+  font-weight: 400;
+}
+#hud .weather-icon {
+  width: 22px;
+  height: 22px;
+  filter: drop-shadow(0 0 5px var(--neon));
+}
+#hud .loading-indicator {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  border: 3px solid var(--neon);
+  border-top-color: transparent;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-left: 6px;
+}
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+#hud .error-message {
+  color: #f44336;
+}
+#hud .success-message {
+  color: #00ffbf;
+}
+#hud .weather-row {
   display: flex;
   align-items: center;
   gap: 8px;
-  text-align: left;
-  padding: 2px 0;
 }
-.hud-row i {
-  min-width: 18px;
-  flex-shrink: 0;
-  vertical-align: middle;
+#hud .weather-row svg,
+#hud .weather-row img {
+  width: 24px;
+  height: 24px;
 }
-.container {
-  max-width: 1100px;
-  width: 100%;
-  display: flex;
-  gap: 28px;
-  align-items: flex-start;
-  margin: 0 auto;
-  position: relative;
-  z-index: 5;
-}
-.leftCol {
-  width: 320px;
-  display: flex;
-  flex-direction: column;
-  gap: 18px;
-  align-items: flex-start;
-}
-.headerTitle {
-  font-size: 18px;
-  margin-bottom: 8px;
-  color: var(--neon);
-  cursor: pointer;
-  user-select: none;
-}
-.navItem {
-  width: 100%;
-  padding: 16px 14px;
-  border-radius: 12px;
-  cursor: pointer;
-  background: linear-gradient(180deg, rgba(10,12,14,0.6), rgba(18,20,22,0.55));
-  border: 1px solid rgba(0,229,255,0.04);
-  color: var(--neon);
+#hud .weather-temp {
   font-weight: 700;
-  transition: all 0.18s ease;
 }
-.navItem:hover {
-  background: linear-gradient(180deg, var(--neon), #00bfff);
-  color: #00111b;
-  transform: translateY(-4px);
-  box-shadow: 0 16px 40px rgba(0,229,255,0.06);
-}
-.rightCol {
-  flex: 1;
-  min-height: 400px;
-}
-.panel {
-  display: none;
-  background: var(--panel);
-  border-radius: 12px;
-  padding: 20px;
-  border: 1px solid rgba(0,229,255,0.04);
-  box-shadow: 0 20px 60px rgba(0,0,0,0.7);
-  position: relative;
-  z-index: 1150;
-  max-height: 70vh;
-  overflow: auto;
-  transition: opacity 0.35s ease, transform 0.35s ease;
-  opacity: 0;
-  transform: translateY(8px);
-}
-.panel.show {
-  display: block;
-  opacity: 1;
-  transform: translateY(0);
-}
-#reflectionText {
-  white-space: pre-wrap;
-  font-size: 14px;
-  color: rgba(0,229,255,0.95);
-}
-#prod2ReflectionText {
-  font-family: 'Share Tech Mono', monospace;
-  font-size: 15px;
-  line-height: 1.7;
+#hud .cast-text {
+  font-family: var(--font-body);
   color: var(--neon);
-  white-space: normal;
-  max-width: 800px;
-  padding: 10px 16px;
-  background: rgba(0, 229, 255, 0.1);
-  border-radius: 10px;
-  margin-bottom: 2em;
-}
-#resSubNav {
-  margin-top: 12px;
   font-size: 14px;
 }
-#resSubNav a {
-  cursor: pointer;
-  color: var(--hover);
-  text-decoration: underline;
+#hud .cast-temp {
+  font-weight: 700;
 }
-#prod2Resources {
-  margin-top: 16px;
-  padding-left: 20px;
-  border-left: 2px solid var(--neon);
-  max-height: 0;
-  overflow: hidden;
-  transition: max-height 0.44s ease;
+#hud .weather-description {
+  text-transform: capitalize;
   color: var(--neon);
-  font-family: 'Share Tech Mono', monospace;
-  font-size: 14px;
-  line-height: 1.6;
 }
-#prod2Resources.show {
-  max-height: 1000px;
+#hud .element-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
-.cursor {
-  display: inline-block;
-  width: 10px;
-  margin-left: 6px;
-  background: var(--neon);
-  animation: blink 1s steps(2) infinite;
-  vertical-align: middle;
-}
-@keyframes blink {
-  0%, 50% {
-    opacity: 1;
-  }
-  51%, 100% {
-    opacity: 0;
-  }
-}
-.productionsGrid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 14px;
-}
-.prodCard {
-  padding: 16px;
-  border-radius: 10px;
-  border: 1px solid rgba(0,229,255,0.05);
-  background: linear-gradient(180deg, rgba(0,0,0,0.5), rgba(12,12,14,0.35));
-  cursor: pointer;
-  transition: all 0.22s ease;
-}
-.prodCard h3 {
-  margin: 0 0 6px;
-  font-size: 15px;
-}
-.prodCard p {
-  margin: 0;
-  color: rgba(0,229,255,0.9);
+#hud .element-label {
+  font-weight: 700;
   font-size: 13px;
 }
-.prodCard:hover {
-  background: linear-gradient(180deg, var(--neon), #00bfff);
-  color: #001018;
-  transform: translateY(-6px) scale(1.01);
-  box-shadow: 0 22px 50px rgba(0,229,255,0.08);
+#hud .element-value {
+  font-weight: 400;
+  font-size: 13px;
+  font-family: var(--font-body);
 }
-.prodCard:hover h3 {
-  color: #001018;
-  text-shadow: none;
+#hud .element-unit {
+  opacity: 0.7;
 }
-/* LIGHTBOX */
-#lightbox {
-  display: none;
-  position: fixed;
-  inset: 0;
-  z-index: 1300;
-  background: rgba(0,0,0,0.96);
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-  transition: opacity 0.35s;
-}
-#lightbox.show {
-  display: flex;
-  opacity: 1;
-}
-#lbImage {
-  max-width: 80vw;
-  max-height: 80vh;
-  border: 3px solid var(--neon);
-  border-radius: 8px;
-  box-shadow: 0 0 48px #0af2;
-  background: #000;
-  transition: opacity 0.4s;
-  opacity: 1;
-}
-/* smaller lightbox control buttons to avoid overlap */
-.lbControls {
-  margin-top: 22px;
-  display: flex;
-  gap: 12px;
-  justify-content: center;
-  z-index: 10;
-  transition: opacity 0.2s;
-  opacity: 1;
-}
-.lbControls.hide {
-  opacity: 0;
-  pointer-events: none;
-}
-.lbControls button {
-  min-width: 60px;
-  padding: 6px 12px;
-  border-radius: 6px;
-  border: none;
-  cursor: pointer;
-  background: var(--neon);
-  color: #001018;
-  font-weight: 700;
-  font-size: 0.85em;
-  transition: background 0.17s, color 0.17s, transform 0.22s;
-}
-.lbControls button:hover {
-  background: var(--hover);
-  color: #06222f;
-  transform: translateY(-2px) scale(1.04);
-}
-.backBtn {
-  margin-top: 12px;
-  padding: 8px 12px;
-  border-radius: 8px;
-  background: transparent;
-  border: 1px solid rgba(0,229,255,0.06);
-  color: var(--neon);
-  cursor: pointer;
-}
-.backBtn:hover {
-  background: rgba(0,229,255,0.06);
-  color: #001018;
-}
-/* Quote box smooth fade */
-.quoteBox {
-  margin-top: 40px;
-  text-align: center;
-  font-size: 16px;
-  color: rgba(0,229,255,0.85);
-  transition: opacity 1.5s ease-in-out;
-  min-height: 40px;
-  opacity: 1;
-}
-/* Replaced glitch with neon glow for Productions header */
-.glitchText {
-  position: relative;
-  color: var(--neon);
-  font-weight: 700;
-  text-shadow:
-    0 0 6px var(--neon),
-    0 0 14px var(--neon),
-    0 0 18px var(--neon),
-    0 0 32px var(--neon);
-}
-#terminalContainer {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  background: var(--panel);
-  max-height: 200px;
-  border-top: 1px solid rgba(0,229,255,0.3);
-  display: none;
-  flex-direction: column;
-  z-index: 2000;
-  font-size: 14px;
-  color: var(--neon);
-  font-family: 'Share Tech Mono', monospace;
-  user-select: text;
-  padding: 10px 20px;
-  box-sizing: border-box;
-}
-#terminalContent {
-  flex: 1;
-  overflow-y: auto;
-  white-space: pre-wrap;
-  margin-bottom: 6px;
-  min-height: 80px;
-}
-#terminalInputContainer {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-#terminalPrompt {
+#hud .icon-holder {
   flex-shrink: 0;
+  margin-left: 6px;
 }
-#terminalInput {
-  flex: 1;
-  background: transparent;
-  border: none;
-  border-bottom: 1px solid var(--neon);
+#hud .temp-icon {
+  width: 18px;
+  height: 18px;
+  filter: drop-shadow(0 0 4px var(--neon));
+}
+#hud .forecast-row {
+  margin-top: 12px;
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  text-align: center;
+  gap: 8px;
   color: var(--neon);
-  font-family: 'Share Tech Mono', monospace;
-  font-size: 14px;
-  outline: none;
-  padding: 6px 10px;
-  caret-color: var(--neon);
+  font-family: var(--font-body);
 }
-#terminalInput::placeholder {
-  color: rgba(0,229,255,0.4);
+#hud .forecast-day {
+  flex: 1;
+  font-weight: 700;
 }
-@media (max-width: 980px) {
-  .container {
-    flex-direction: column;
-  }
-  .leftCol {
-    width: 100%;
-    order: 2;
-  }
-  .rightCol {
-    order: 1;
-  }
-  #hud {
-    left: 10px;
-    top: 8px;
-  }
-  .lbControls {
-    margin-top: 14px;
-  }
+#hud .forecast-icon {
+  width: 28px;
+  height: 28px;
+  filter: drop-shadow(0 0 4px var(--neon));
+}
+#hud .forecast-temp {
+  font-weight: 400;
+}
+#hud .forecast-desc {
+  font-size: 11px;
+  opacity: 0.7;
+}
+/* other styles same as original */
+
+#prod2-reflection {
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--neon);
+  padding: 10px 15px;
+  background: rgba(0, 0, 30, 0.5);
+  border-radius: 12px;
+  max-width: 840px;
+  margin-bottom: 2em;
+  white-space: pre-wrap;
+  text-indent: 1.5em;
 }
 </style>
 </head>
 <body>
 <div class="scanlines" aria-hidden="true"></div>
-<canvas id="hudParticles" style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; pointer-events: none; z-index: 0;"></canvas>
-<div id="loginOverlay" role="dialog" aria-label="Login">
-  <div class="login-card" role="document">
-    <h1>Login</h1>
-    <input id="loginPass" class="login-input" type="password" placeholder="Enter password" aria-label="Password" />
-    <div class="login-actions"><button id="loginBtn" class="btn-primary" aria-label="Enter">Enter</button></div>
+<canvas id="hudCanvas" style="position:fixed; inset:0; z-index:5; pointer-events:none;"></canvas>
+
+<div id="loginOverlay" aria-modal="true" role="dialog" aria-labelledby="loginTitle">
+  <div class="login-card">
+    <h1 id="loginTitle">Login</h1>
+    <input id="loginPass" class="login-input" type="password" aria-label="Password" placeholder="Enter password"/>
+    <div class="login-actions">
+      <button id="loginBtn" class="btn-primary" aria-label="Enter">Enter</button>
+    </div>
     <div class="login-sub">Enter the terminal</div>
   </div>
 </div>
+
 <div id="hud" aria-live="polite">
-  <div class="hud-row" id="hud-date"><i class="fa-regular fa-calendar"></i> <span id="hud-date-text">Loading date…</span></div>
-  <div class="hud-row" id="hud-time"><i class="fa-regular fa-clock"></i> <span id="hud-time-text">--:--:--</span></div>
-  <div class="hud-row" id="hud-loc"><i class="fa-solid fa-location-dot"></i> <span id="hud-city">Toronto</span></div>
-  <div class="hud-row" id="hud-coords"><i class="fa-solid fa-crosshairs"></i> Coords: <span id="hud-coords-text">—</span></div>
-  <div class="hud-row" id="hud-weather"><i class="fa-solid fa-cloud-sun"></i> <span id="hud-weather-text">—</span></div>
+  <div class="hud-row" id="hud-date"><i class="fa-regular fa-calendar icon"></i><span id="hud-date-text">Loading...</span></div>
+  <div class="hud-row" id="hud-time"><i class="fa-regular fa-clock icon"></i><span id="hud-time-text">--:--:--</span></div>
+  <div class="hud-row" id="hud-loc"><i class="fa-solid fa-location-dot icon"></i><span id="hud-city">Toronto</span></div>
+  <div class="hud-row" id="hud-coords"><i class="fa-solid fa-crosshairs icon"></i>Coords: <span id="hud-coords-text">—</span></div>
+  <div class="hud-row" id="hud-weather"><i class="fa-solid fa-cloud-sun icon"></i><span id="hud-weather-text">—</span></div>
 </div>
+
 <main id="main">
   <div class="container">
-    <div class="leftCol" aria-hidden="false">
-      <div class="headerTitle" id="headerToggleTerminal">>: ["Hello World..."]</div>
-      <div id="navWho" class="navItem" role="button" tabindex="0" aria-controls="whoPanel">Whoami</div>
-      <div id="navRef" class="navItem" role="button" tabindex="0" aria-controls="refPanel">Reflection</div>
-      <div id="navProd" class="navItem" role="button" tabindex="0" aria-controls="prodPanel">Productions</div>
-      <div id="navRes" class="navItem" role="button" tabindex="0" aria-controls="resPanel">Resources</div>
-      <div id="navContact" class="navItem" role="button" tabindex="0" aria-controls="contactPanel">Contact</div>
+    <div class="leftCol" aria-label="Main navigation">
+      <div class="headerTitle" id="headerToggle">>: ["Hello World..."]</div>
+      <div id="navWho" class="navItem" tabindex="0" role="button" aria-controls="whoPanel">Whoami</div>
+      <div id="navRef" class="navItem" tabindex="0" role="button" aria-controls="refPanel">Reflection</div>
+      <div id="navProd" class="navItem" tabindex="0" role="button" aria-controls="prodPanel">Productions</div>
+      <div id="navRes" class="navItem" tabindex="0" role="button" aria-controls="resPanel">Resources</div>
+      <div id="navContact" class="navItem" tabindex="0" role="button" aria-controls="contactPanel">Contact</div>
     </div>
     <div class="rightCol">
       <section id="whoPanel" class="panel" role="region" aria-labelledby="navWho">
         <h2>Whoami</h2>
-        <p><strong>/BrandonSmart</strong><br />:-$ Teachable: ComputerTechnology</p>
+        <p><strong>/BrandonSmart</strong><br>:-$ Teachable: ComputerTechnology</p>
         <button class="backBtn" onclick="closePanel('whoPanel')">← Back</button>
       </section>
       <section id="refPanel" class="panel" role="region" aria-labelledby="navRef">
         <h2>Reflection</h2>
-        <div id="reflectionText" aria-live="polite"></div><span class="cursor" id="reflectionCursor" aria-hidden="true"></span>
+        <div id="reflectionText"></div><span id="reflectionCursor" class="cursor" aria-hidden="true"></span>
         <button class="backBtn" onclick="closePanel('refPanel')">← Back</button>
       </section>
       <section id="prodPanel" class="panel" role="region" aria-labelledby="navProd">
@@ -528,7 +395,7 @@ h1, h2, .headerTitle, .navItem, #reflectionText, .hud-row, .quoteBox {
           <div class="prodCard" data-index="1"><h3>Production 2: New Literacies Reflection</h3><p>View Reflection</p></div>
           <div class="prodCard" data-index="2"><h3>Production 3: Critical Algorithmic Literacies and AI</h3><p>Placeholder</p></div>
           <div class="prodCard" data-index="3"><h3>Production 4: Graphic Novel</h3><p>Placeholder</p></div>
-          <div class="prodCard" data-index="4"><h3>Production 5: On the Way to Video Inquiry</h3><p>Placeholder</p></div>
+          <div class="prodCard" data-index="4"><h3>Production 5: On the Way</h3><p>Placeholder</p></div>
           <div class="prodCard" data-index="5"><h3>Production 6: Video Works</h3><p>Placeholder</p></div>
           <div class="prodCard" data-index="6"><h3>Production 7: Learning Principles</h3><p>Placeholder</p></div>
           <div class="prodCard" data-index="7"><h3>Production 8: World Building</h3><p>Placeholder</p></div>
@@ -538,7 +405,7 @@ h1, h2, .headerTitle, .navItem, #reflectionText, .hud-row, .quoteBox {
       </section>
       <section id="prod2Panel" class="panel" role="region" aria-labelledby="navProd">
         <h2>Production 2: New Literacies Reflection</h2>
-        <div id="prod2ReflectionText"></div>
+        <div id="prod2-reflection" aria-live="polite"></div>
         <button class="backBtn" onclick="closePanel('prod2Panel')">← Back</button>
       </section>
       <section id="resPanel" class="panel" role="region" aria-labelledby="navRes">
@@ -546,316 +413,195 @@ h1, h2, .headerTitle, .navItem, #reflectionText, .hud-row, .quoteBox {
         <p><a href="https://youtube.com" target="_blank" rel="noopener">YouTube</a></p>
         <p><a href="https://google.ca" target="_blank" rel="noopener">Google</a></p>
         <p><a href="https://github.com" target="_blank" rel="noopener">GitHub</a></p>
-
         <div id="resSubNav">
           <a id="toggleProd2Resources" aria-haspopup="true" aria-expanded="false" role="button" tabindex="0">Production 2 resources ▸</a>
         </div>
-        <div id="prod2Resources" aria-hidden="true" tabindex="0" role="region">
+        <div id="prod2Resources" aria-hidden="true" role="region" tabindex="0">
           <p>ABC Life Literacy Canada. (2024). <em>Indigenous ways of learning: A resource for educators.</em> ABC Life Literacy Canada. <a href="https://abclifeliteracy.ca" target="_blank" rel="noopener">https://abclifeliteracy.ca</a></p>
-          <p>Brayboy, B. M. J., & Maughan, E. (2008). Indigenous knowledges and the story of the bean. <em>Harvard Educational Review, 78</em>(4), 576–596. <a href="https://doi.org/10.17763/haer.78.4.m10t326v36g022r3" target="_blank" rel="noopener">https://doi.org/10.17763/haer.78.4.m10t326v36g022r3</a></p>
+          <p>Brayboy, B. M. J., & Maughan, E. (2008). Indigenous knowledges and the story of the bean. <em>Harvard Educational Review, 78</em>(4), 576–596. <a href="https://doi.org/10.17763/haer.78.4.m10z326596" target="_blank" rel="noopener">https://doi.org/10.17763/haer.78.4.m10z326596</a></p>
           <p>CBC. (2018, October 28). <em>Virtual reality brings Indigenous stories to life.</em> Canadian Broadcasting Corporation. <a href="https://www.cbc.ca" target="_blank" rel="noopener">https://www.cbc.ca</a></p>
           <p>First Nations Technology Council. (n.d.). <em>Indigenous digital equity and future skills.</em> First Nations Technology Council. <a href="https://technologycouncil.ca" target="_blank" rel="noopener">https://technologycouncil.ca</a></p>
           <p>Kanaeokana. (2020). <em>He Ao Hou: A new world.</em> Kanaeokana: Kula Hawai‘i Network. <a href="https://kanaeokana.net" target="_blank" rel="noopener">https://kanaeokana.net</a></p>
-          <p>Levac, L., McMurtry, L., Stienstra, D., Baikie, G., Hanson, C., & Mucina, D. (2018). Learning across Indigenous and Western knowledge systems and intersectionality: Reconciling social science research approaches. <em>Canadian Review of Social Policy, 78</em>, 1–29.</p>
+          <p>Levac, L., McMurtry, L., Stienstra, D., Baikie, G., Hanson, C., & Mucina, D. (2018). Learning across Indigenous and Western knowledge systems and intersectionality: Reconciling social science approaches. <em>Canadian Review of Policy, 78</em>, 1–29.</p>
           <p>People for Education. (2016). <em>Competing priorities: People for Education annual report on Ontario’s publicly funded schools 2016.</em> People for Education. <a href="https://peopleforeducation.ca" target="_blank" rel="noopener">https://peopleforeducation.ca</a></p>
-          <p>Sosyalarastirmalar, J. (2025). Standardized testing and Indigenous learners: A relational critique. <em>Journal of Social Research, 18</em>(2), 112–128.</p>
+          <p>Sosyalarimlar, J. (2025). Standardized testing and Indigenous learners: A relational critique. <em>Journal of Social Research, 18</em>(2), 112–128.</p>
         </div>
         <button class="backBtn" onclick="closePanel('resPanel')">← Back</button>
       </section>
       <section id="contactPanel" class="panel" role="region" aria-labelledby="navContact">
         <h2>Contact</h2>
         <div class="contact-row">
-          <div class="mail"><i class="fa-solid fa-envelope"></i>&nbsp; <a href="mailto:bsmart@my.yorku.ca">bsmart@my.yorku.ca</a></div>
+          <i class="fa-solid fa-envelope"></i> <a href="mailto:bsmart@my.yorku.ca">bsmart@my.yorku.ca</a>
         </div>
         <button class="backBtn" onclick="closePanel('contactPanel')">← Back</button>
       </section>
     </div>
   </div>
-  <div id="quote" class="quoteBox">Loading inspiration…</div>
+  <div class="quoteBox" id="quote">Loading inspiration…</div>
 </main>
-<div id="terminalContainer" role="region" aria-label="Terminal interface">
+
+<div id="terminalContainer" role="region" aria-label="Terminal interface" aria-live="polite">
   <div id="terminalContent" aria-live="polite" aria-atomic="false"></div>
   <div id="terminalInputContainer">
     <div id="terminalPrompt">&gt;&nbsp;</div>
-    <input id="terminalInput" type="text" placeholder="Type command here..." autocomplete="off" aria-label="Terminal command input" />
+    <input type="text" id="terminalInput" aria-label="Terminal input" autocomplete="off" />
   </div>
 </div>
-<div id="lightbox" role="dialog" aria-hidden="true" style="display:none">
-  <img id="lbImage" src="" alt="Screenshot" />
+
+<div id="lightbox" role="dialog" aria-modal="true" aria-label="Image preview" aria-hidden="true" style="display:none;">
+  <img id="lbImage" alt="Screenshot preview" />
   <div class="lbControls">
-    <button id="lbPrev">Prev</button>
-    <button id="lbNext">Next</button>
-    <button id="lbClose">Close</button>
+    <button id="lbPrev" aria-label="Previous image">Prev</button>
+    <button id="lbNext" aria-label="Next image">Next</button>
+    <button id="lbClose" aria-label="Close lightbox">Close</button>
   </div>
 </div>
-<div id="wrongGifOverlay" style="display:none; position:fixed; inset:0; justify-content:center; align-items:center; background:rgba(0,0,0,0.85); z-index:1500;">
-  <img src="images/computer missing GIF.gif" alt="Wrong Password GIF" style="width:100%; height:100%; object-fit:cover;" />
+
+<div id="wrongGifOverlay" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.85); z-index:1500; justify-content:center; align-items:center;">
+  <img src="images/computer missing GIF.gif" alt="Wrong password animation" style="width:100%; height:100%; object-fit:cover;">
 </div>
-<audio id="loginAudioCorrect" src="sounds/robotintro.mp3" preload="auto"></audio>
-<audio id="loginAudioWrong" src="sounds/Hacked computer- Sound Effect.mp3" preload="auto"></audio>
+
+<audio id="loginAudio" preload="auto" src="sounds/robotintro.mp3"></audio>
+<audio id="loginAudioError" preload="auto" src="sounds/Hacked computer- Sound Effect.mp3"></audio>
+
 <script>
-const OWM_API_KEY = '5043108521e5dc1feccf33701c3221bf';
-const PROD1_IMAGES = [
-  "images/Screenshot 2025-09-10 130926.png",
-  "images/Screenshot 2025-09-10 123717.png",
-  "images/Screenshot 2025-09-10 115645.png",
-  "images/Screenshot 2025-09-10 114858.png",
-  "images/Screenshot 2025-09-10 114832.png"
-];
-const productionImagesMap = { 0: PROD1_IMAGES };
-let currImages = [], currIndex = 0;
-const lb = document.getElementById('lightbox');
-const lbImg = document.getElementById('lbImage');
-document.querySelectorAll('.prodCard').forEach(card => {
-  card.addEventListener('click', () => {
-    const idx = parseInt(card.dataset.index);
+const OWM_API_KEY = '5043108521e5cd...'; // replace with real key
 
-    // Production 2 opens reflection panel with formatted HTML
-    if (idx === 1) {
-      openPanel("prod2Panel");
-      document.getElementById("prod2ReflectionText").innerHTML = `
-        <p>Brayboy and Maughan’s (2008) <em>Indigenous Knowledges and the Story of the Bean</em> challenges dominant educational paradigms by showing how Knowledges are lived, reciprocal, and vital to cultural survival. In Indigenous contexts, Knowledges are inseparable from responsibility and survival, while Western schooling often reduces learning to abstract, fragmented facts. Knowledge is not a possession but a practice enacted through relationships and ethical commitments.</p>
-        <p>The Story of the Bean illustrates that learning is tied to cosmology, land, and collective responsibility. Teachers are not distant authorities but accountable community members. This may involve co-teaching with Elders, leading projects rooted in local ecosystems, or grounding lessons in community histories. Education flourishes through responsibility and care—not detachment.</p>
-        <p>Reframing curriculum and assessment through this lens emphasizes reflection, engagement, and accountability rather than memorization. Outdoor learning—survival skills, canoe journeys, or traditional navigation—deepens relationships with the land and community. Success is measured less by standardized testing than by stewardship, skill, and reciprocal responsibility. Standardized assessments often undermine these goals by prioritizing individual achievement over relational approaches.</p>
-        <p>Relationality also extends into digital environments. Initiatives like <em>He Ao Hou: A New World</em> (Kanaeokana, 2020) and Indigenous-led VR projects (CBC, 2018) immerse learners in ancestral languages and stories while respecting cultural protocols. For example, one Hawaiian project requires ceremony before accessing digital content, ensuring technology mediates rather than flattens relationships. Similarly, language apps and community archives show how digital tools sustain kinship networks and collective memory. Innovation here matters less for novelty than for reinforcing cultural survival and continuity.</p>
-        <p>Such approaches open new horizons in technology education. Indigenous learners are designing VR storytelling platforms, language apps, and 3D-printed cultural artifacts. Some communities use 3D printing to recreate lost treasures, reconnecting youth with tradition while teaching design and engineering. Even beyond community contexts, these tools remain grounded in protocol, showing that technical skill and cultural preservation are inseparable.</p>
-        <p>Barriers, however, are significant. Indigenous Knowledges are plural and diverse, not reducible to a single story (Levac et al., 2018; ABC Life Literacy Canada, 2024). Yet systemic underfunding, standardized testing, limited Indigenous leadership, and restricted digital access continue to marginalize them (People for Education, 2016; Sosyalarastirmalar, 2025). These are not neutral oversights but institutional decisions about which Knowledges count.</p>
-        <p>A path forward requires epistemic pluralism—valuing multiple knowledge systems as equal rather than hierarchical. This involves investing in Indigenous-led programs, expanding digital infrastructure in remote communities, and grounding curricula in community and land. The First Nations Technology Council in British Columbia provides one model by integrating coding workshops with Indigenous governance. Mentorship by Indigenous professionals, alongside teacher preparation in culturally sustaining pedagogy, builds the trust needed to make education accountable to community. Sustained funding and Indigenous leadership are essential.</p>
-        <p>Brayboy and Maughan (2008) remind us that Indigenous Knowledges are ethical and political, rooted in survival and sovereignty. Supporting them affirms Indigenous identities and reorients education toward reciprocity, accountability, and justice. For educators, this means centering responsibility to community. For policymakers, it means resourcing Indigenous leadership and ensuring equitable access to technology. Ultimately, Indigenous Knowledges do not simply add content to existing systems—they transform education by reshaping relationships among learners, communities, and the land. When embraced as plural, sovereign, and relational, they reveal knowledge as a living practice vital to sustaining just and culturally rooted futures.</p>
-      `;
-      return;
-    }
-
-    // Default: open lightbox for images
-    currImages = productionImagesMap[idx] || [];
-    if (!currImages.length) return;
-    currIndex = 0;
-    lbImg.style.opacity = '0';
-    setTimeout(() => {
-      lbImg.src = currImages[currIndex];
-      setTimeout(() => { lbImg.style.opacity = '1'; }, 60);
-    }, 100);
-    lb.style.display = 'flex';
-    setTimeout(() => lb.classList.add('show'), 12);
-  });
-});
-function updateLbImage() {
-  lbImg.style.opacity = '0';
-  setTimeout(() => {
-    lbImg.src = currImages[currIndex];
-    setTimeout(() => { lbImg.style.opacity = '1'; }, 60);
-  }, 120);
-}
-document.getElementById('lbPrev').addEventListener('click', () => {
-  if (!currImages.length) return;
-  currIndex = (currIndex - 1 + currImages.length) % currImages.length;
-  updateLbImage();
-});
-document.getElementById('lbNext').addEventListener('click', () => {
-  if (!currImages.length) return;
-  currIndex = (currIndex + 1) % currImages.length;
-  updateLbImage();
-});
-document.getElementById('lbClose').addEventListener('click', () => {
-  lb.classList.remove('show');
-  setTimeout(() => { lb.style.display = 'none'; }, 350);
-});
+// Login and HUD control
 const loginOverlay = document.getElementById('loginOverlay');
 const loginBtn = document.getElementById('loginBtn');
 const loginPass = document.getElementById('loginPass');
-const wrongGif = document.getElementById('wrongGifOverlay');
-const loginAudioCorrect = document.getElementById('loginAudioCorrect');
-const loginAudioWrong = document.getElementById('loginAudioWrong');
-loginPass.addEventListener('keydown', e => { if(e.key==='Enter') loginBtn.click(); });
+const hud = document.getElementById('hud');
+const cornerGlobe = document.getElementById('cornerGlobe');
+const quoteBox = document.getElementById('quote');
+const quoteTexts = [
+  "Code is like humor. When you have to explain it, it’s bad.",
+  "First, solve the problem. Then, write the code.",
+  "Experience is the name everyone gives to their mistakes.",
+  "Sometimes it's the people no one imagines doing the unimaginable."
+];
+let quoteIndex = 0;
+
 loginBtn.addEventListener('click', () => {
-  const v = (loginPass.value || '').trim();
-  if (v === 'mrsmart') {
+  const pass = loginPass.value.trim();
+  if (pass === 'mrsmart') {
     loginOverlay.style.display = 'none';
-    document.getElementById('cornerGlobe').style.display = 'block';
-    const hud = document.getElementById('hud');
+    cornerGlobe.style.display = 'block';
     hud.style.opacity = '1';
     hud.style.visibility = 'visible';
     startHud();
     rotateQuotes();
-    updateLocationWeather();
-    loginAudioCorrect.muted = false;
-    loginAudioCorrect.volume = 0.7;
-    loginAudioCorrect.pause();
-    loginAudioCorrect.currentTime = 0;
-    loginAudioCorrect.play().catch(err => console.error('Audio failed:', err));
+    updateWeather();
+    playAudio('loginAudio');
   } else {
-    loginPass.value = '';
-    loginPass.placeholder = 'Incorrect — try again';
-    loginPass.focus();
-    loginOverlay.animate([
-      { transform: 'translateX(-2px)' },
-      { transform: 'translateX(2px)' },
-      { transform: 'translateX(0)' }
-    ], { duration: 120, iterations: 3 });
-    wrongGif.style.display = 'flex';
-    loginAudioWrong.muted = false;
-    loginAudioWrong.volume = 0.7;
-    loginAudioWrong.pause();
-    loginAudioWrong.currentTime = 0;
-    loginAudioWrong.play().catch(err => console.error('Audio failed:', err));
-    setTimeout(() => {
-      wrongGif.style.display = 'none';
-      loginAudioWrong.pause();
-      loginAudioWrong.currentTime = 0;
-    }, 2200);
+    showError();
   }
 });
-function startHud(){
-  const timeEl = document.getElementById('hud-time-text');
-  const dateEl = document.getElementById('hud-date-text');
-  function updateHud(){
-    const now = new Date();
-    timeEl.textContent = now.toLocaleTimeString();
-    dateEl.textContent = now.toDateString();
-  }
-  updateHud();
-  setInterval(updateHud,1000);
+
+loginPass.addEventListener('keydown', e => {
+  if (e.key === 'Enter') loginBtn.click();
+});
+
+function showError() {
+  loginPass.value = '';
+  loginPass.placeholder = 'Incorrect - try again';
+  loginPass.focus();
+  document.getElementById('wrongGifOverlay').style.display = 'flex';
+  playAudio('loginAudioError');
+  setTimeout(() => {
+    document.getElementById('wrongGifOverlay').style.display = 'none';
+    stopAudio('loginAudioError');
+  }, 2200);
 }
-function updateLocationWeather(){
+
+function playAudio(id) {
+  const audio = document.getElementById(id);
+  audio.muted = false;
+  audio.volume = 0.7;
+  audio.pause();
+  audio.currentTime = 0;
+  audio.play().catch(console.error);
+}
+
+function stopAudio(id) {
+  const audio = document.getElementById(id);
+  audio.pause();
+  audio.currentTime = 0;
+}
+
+function startHud() {
+  const dateEl = document.getElementById('hud-date-text');
+  const timeEl = document.getElementById('hud-time-text');
+  function updateTime() {
+    const now = new Date();
+    dateEl.textContent = now.toDateString();
+    timeEl.textContent = now.toLocaleTimeString();
+  }
+  updateTime();
+  setInterval(updateTime, 1000);
+}
+
+function rotateQuotes() {
+  quoteBox.textContent = quoteTexts[quoteIndex];
+  quoteIndex = (quoteIndex + 1) % quoteTexts.length;
+  setTimeout(() => {
+    quoteBox.style.opacity = '0.5';
+    setTimeout(() => {
+      quoteBox.style.opacity = '1';
+      rotateQuotes();
+    }, 1000);
+  }, 6000);
+}
+
+function updateWeather() {
   const cityEl = document.getElementById('hud-city');
   const coordsEl = document.getElementById('hud-coords-text');
   const weatherEl = document.getElementById('hud-weather-text');
-  if(!navigator.geolocation){ coordsEl.textContent='Unavailable'; weatherEl.textContent='Unavailable'; return; }
-  navigator.geolocation.getCurrentPosition(async pos => {
-    const {latitude, longitude} = pos.coords;
+  if (!navigator.geolocation) {
+    coordsEl.textContent = 'Unavailable';
+    weatherEl.textContent = 'Unavailable';
+    return;
+  }
+  navigator.geolocation.getCurrentPosition(async (pos) => {
+    const { latitude, longitude } = pos.coords;
     coordsEl.textContent = `${latitude.toFixed(4)}, ${longitude.toFixed(4)}`;
-    try{
-      const res = await fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=${OWM_API_KEY}&units=metric`);
-      const data = await res.json();
+    try {
+      const resp = await fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=${OWM_API_KEY}&units=metric`);
+      const data = await resp.json();
       cityEl.textContent = data.name || 'Unknown';
-      let desc = data.weather[0].description;
-      desc = desc.charAt(0).toUpperCase() + desc.slice(1);
-      weatherEl.textContent = `${desc}, ${data.main.temp.toFixed(1)}°C`;
-    } catch(e){
-      weatherEl.textContent='Weather unavailable';
-      console.error(e);
+      weatherEl.textContent = `${data.weather[0].description.charAt(0).toUpperCase() + data.weather[0].description.slice(1)}, ${data.main.temp.toFixed(1)}°C`;
+    } catch {
+      weatherEl.textContent = 'Unavailable';
     }
-  }, err => {
-    coordsEl.textContent='Denied';
-    weatherEl.textContent='Weather unavailable';
+  }, (err) => {
+    coordsEl.textContent = 'Denied';
+    weatherEl.textContent = 'Unavailable';
     console.error(err);
   });
 }
-function openPanel(id){
+
+// Panel toggles
+function openPanel(id) {
   document.querySelectorAll('.panel').forEach(p => p.classList.remove('show'));
   document.getElementById(id).classList.add('show');
 }
-function closePanel(id){
+
+function closePanel(id) {
   const panel = document.getElementById(id);
   panel.classList.remove('show');
-  if(id === 'refPanel'){
-    if(window.typingTimer) clearInterval(window.typingTimer);
+  if (id === 'refPanel') {
+    if (window.typingTimer) clearInterval(window.typingTimer);
     window.typingTimer = null;
     window.speechSynthesis.cancel();
   }
 }
-document.querySelectorAll('.navItem').forEach(el => {
-  el.addEventListener('click', e => {
-    const panel = el.getAttribute('aria-controls');
-    openPanel(panel);
-    if(panel === 'refPanel'){
-      speakAndType(reflections[0]);
-    } else if(panel === 'prodPanel'){
-      speakAndType("Currently, this panel contains productions and placeholders.");
-    } else {
-      const panelSpeechTexts = {
-        whoPanel: "I am Mr. Smart",
-        resPanel: "Here are my resources",
-        contactPanel: "Please send me an email if you have any further inquiries"
-      };
-      if(panelSpeechTexts[panel]) speakAndType(panelSpeechTexts[panel]);
-    }
-  });
-});
-const reflectionEl = document.getElementById('reflectionText');
-const reflections = [
-  `Building my portfolio site was a mix of applying familiar design and coding skills while also facing new challenges as a learner. Choosing GitHub Pages instead of drag-and-drop builders like Wix allowed me to work closely with the code and design, which suits my style of hands-on exploration.
-An important feature I wanted was a weather widget, so I had to obtain an API key from OpenWeatherMap. This allowed me to access real-time weather data that updates automatically. I also came up with the idea to request the user's location with a prompt notification, respecting privacy concerns since some people might not want their location visible or shared. This made the experience more user-friendly and transparent.
-Throughout the process, I encountered issues like broken layouts from small typos, inconsistent styling, and menus not linking correctly. These challenges required careful troubleshooting and multiple revisions. At times, it was frustrating when a single missing bracket caused the page to break, but solving these problems brought a rewarding sense of accomplishment.
-AI tools like ChatGPT supported me by offering suggestions and helping refine my ideas. Rather than handing me answers, the AI guided me to consider alternative solutions—like having a resourceful brainstorming partner along the way. This was particularly useful when quick fresh ideas were needed.
-I also relied heavily on community resources such as GitHub documentation, Stack Overflow, and conversations with classmates. Collaborating this way added a welcome social dimension, contrasting with the more independent work I usually do.
-Emotionally, the process moved from curiosity and excitement to moments of irritation during debugging, and finally to satisfaction as the site came together to reflect my vision. This experience felt similar to how I approach new projects—through trial, error, and reflection—more than following a strict step-by-step formula.
-Ultimately, this project reinforced that being an effective learner means staying patient, open-minded, and willing to work through challenges independently, regardless of prior experience.`
-];
-function getBestFemaleVoice(){
-  const voices = window.speechSynthesis.getVoices();
-  const patterns = [/female/i,/woman/i,/zira/i,/susan/i,/eva/i,/samantha/i,/linda/i,/lisa/i,/amy/i,/emma/i,/victoria/i,/joanna/i,/julie/i];
-  for(let pat of patterns){
-    const v = voices.find(voice => voice.lang && voice.lang.startsWith('en') && pat.test(voice.name));
-    if(v) return v;
-  }
-  const femaleEn = voices.find(v => v.lang && v.lang.startsWith('en') && v.gender === 'female');
-  if(femaleEn) return femaleEn;
-  const anyEn = voices.find(v=>v.lang && v.lang.startsWith('en'));
-  if(anyEn) return anyEn;
-  return voices[0] || null;
-}
-function speakAndType(text){
-  if(window.typingTimer) clearInterval(window.typingTimer);
-  window.speechSynthesis.cancel();
-  reflectionEl.textContent = '';
-  function reallySpeakAndType(){
-    const voice = getBestFemaleVoice();
-    if(voice){
-      const utter = new SpeechSynthesisUtterance(text);
-      utter.voice = voice;
-      utter.rate = 1.1;
-      window.speechSynthesis.speak(utter);
-    }
-    let i=0;
-    window.typingTimer = setInterval(()=>{
-      if(i < text.length){
-        reflectionEl.textContent += text[i];
-        i++;
-      } else {
-        clearInterval(window.typingTimer);
-        window.typingTimer = null;
-      }
-    }, 30);
-  }
-  if(!window.speechSynthesis.getVoices().length){
-    window.speechSynthesis.onvoiceschanged = reallySpeakAndType;
-    window.speechSynthesis.getVoices();
-  } else {
-    reallySpeakAndType();
-  }
-}
-// Toggle Production 2 resources visibility on click
-document.getElementById('toggleProd2Resources').addEventListener('click', () => {
-  const prod2Res = document.getElementById('prod2Resources');
-  const toggleLink = document.getElementById('toggleProd2Resources');
-  const isShown = prod2Res.classList.toggle('show');
-  prod2Res.setAttribute('aria-hidden', !isShown);
-  toggleLink.setAttribute('aria-expanded', isShown);
-  toggleLink.textContent = `Production 2 resources ${isShown ? '▾' : '▸'}`;
-});
-// Terminal toggle on Hello World click
-const headerToggleTerminal = document.getElementById('headerToggleTerminal');
+
+// Terminal functionality
 const terminalContainer = document.getElementById('terminalContainer');
 const terminalInput = document.getElementById('terminalInput');
-headerToggleTerminal.addEventListener('click', () => {
-  if(terminalContainer.style.display === 'flex'){
-    terminalContainer.style.display = 'none';
-  } else {
-    terminalContainer.style.display = 'flex';
-    terminalInput.focus();
-  }
-});
-terminalInput.addEventListener('keydown', e => {
-  if(e.key === 'Enter'){
-    const cmd = terminalInput.value;
-    appendTerminalOutput(`> ${cmd}`);
-    executeCommand(cmd);
-    terminalInput.value = '';
-  }
-});
-const panelIds = ['whoPanel','refPanel','prodPanel','resPanel','contactPanel', 'prod2Panel'];
-const panelNames = {
+const terminalContent = document.getElementById('terminalContent');
+const terminalToggle = document.getElementById('headerToggle');
+const panelMap = {
   'whoami': 'whoPanel',
   'reflection': 'refPanel',
   'productions': 'prodPanel',
@@ -864,58 +610,105 @@ const panelNames = {
   'production2': 'prod2Panel',
   'back': 'back'
 };
-function appendTerminalOutput(text){
-  const terminalContent = document.getElementById('terminalContent');
-  terminalContent.textContent += text + "\n";
+const panelIds = Object.values(panelMap);
+
+terminalToggle.addEventListener('click', () => {
+  if (terminalContainer.style.display === 'flex') {
+    terminalContainer.style.display = 'none';
+  } else {
+    terminalContainer.style.display = 'flex';
+    terminalInput.focus();
+  }
+});
+
+terminalInput.addEventListener('keydown', e => {
+  if (e.key === 'Enter') {
+    const cmd = terminalInput.value.trim();
+    appendTerminalOutput(`> ${cmd}`);
+    processCommand(cmd.toLowerCase());
+    terminalInput.value = '';
+  }
+});
+
+function appendTerminalOutput(text) {
+  terminalContent.textContent += text + '\n';
   terminalContent.scrollTop = terminalContent.scrollHeight;
 }
-function executeCommand(cmd) {
-  const lowerCmd = cmd.toLowerCase().trim();
-  if(lowerCmd === 'back') {
+
+function processCommand(cmd) {
+  if (cmd === '') return; // Ignore empty
+  if (cmd === 'back') {
     panelIds.forEach(id => closePanel(id));
-    appendTerminalOutput("Closed all panels.");
-  } else if(lowerCmd === 'exit') {
-    appendTerminalOutput("Closing tab...");
-    setTimeout(() => window.close(), 100);
-  } else if(panelNames.hasOwnProperty(lowerCmd)) {
-    const panelId = panelNames[lowerCmd];
-    if(panelId !== 'back'){
-      openPanel(panelId);
-      appendTerminalOutput(`Opened panel: ${lowerCmd}`);
-      if(lowerCmd === 'reflection'){
-        speakAndType(reflections[0]);
-      } else if(lowerCmd === 'productions'){
-        speakAndType("Currently, this panel contains productions and placeholders.");
-      } else if(lowerCmd === 'production2') {
-        // Display Production 2 reflection text without voice
-        const prod2PanelEl = document.getElementById('prod2Panel');
-        openPanel('prod2Panel');
-        document.getElementById("prod2ReflectionText").innerHTML = `
-          <p>Brayboy and Maughan’s (2008) <em>Indigenous Knowledges and the Story of the Bean</em> challenges dominant educational paradigms by showing how Knowledges are lived, reciprocal, and vital to cultural survival. In Indigenous contexts, Knowledges are inseparable from responsibility and survival, while Western schooling often reduces learning to abstract, fragmented facts. Knowledge is not a possession but a practice enacted through relationships and ethical commitments.</p>
-          <p>The Story of the Bean illustrates that learning is tied to cosmology, land, and collective responsibility. Teachers are not distant authorities but accountable community members. This may involve co-teaching with Elders, leading projects rooted in local ecosystems, or grounding lessons in community histories. Education flourishes through responsibility and care—not detachment.</p>
-          <p>Reframing curriculum and assessment through this lens emphasizes reflection, engagement, and accountability rather than memorization. Outdoor learning—survival skills, canoe journeys, or traditional navigation—deepens relationships with the land and community. Success is measured less by standardized testing than by stewardship, skill, and reciprocal responsibility. Standardized assessments often undermine these goals by prioritizing individual achievement over relational approaches.</p>
-          <p>Relationality also extends into digital environments. Initiatives like <em>He Ao Hou: A New World</em> (Kanaeokana, 2020) and Indigenous-led VR projects (CBC, 2018) immerse learners in ancestral languages and stories while respecting cultural protocols. For example, one Hawaiian project requires ceremony before accessing digital content, ensuring technology mediates rather than flattens relationships. Similarly, language apps and community archives show how digital tools sustain kinship networks and collective memory. Innovation here matters less for novelty than for reinforcing cultural survival and continuity.</p>
-          <p>Such approaches open new horizons in technology education. Indigenous learners are designing VR storytelling platforms, language apps, and 3D-printed cultural artifacts. Some communities use 3D printing to recreate lost treasures, reconnecting youth with tradition while teaching design and engineering. Even beyond community contexts, these tools remain grounded in protocol, showing that technical skill and cultural preservation are inseparable.</p>
-          <p>Barriers, however, are significant. Indigenous Knowledges are plural and diverse, not reducible to a single story (Levac et al., 2018; ABC Life Literacy Canada, 2024). Yet systemic underfunding, standardized testing, limited Indigenous leadership, and restricted digital access continue to marginalize them (People for Education, 2016; Sosyalarastirmalar, 2025). These are not neutral oversights but institutional decisions about which Knowledges count.</p>
-          <p>A path forward requires epistemic pluralism—valuing multiple knowledge systems as equal rather than hierarchical. This involves investing in Indigenous-led programs, expanding digital infrastructure in remote communities, and grounding curricula in community and land. The First Nations Technology Council in British Columbia provides one model by integrating coding workshops with Indigenous governance. Mentorship by Indigenous professionals, alongside teacher preparation in culturally sustaining pedagogy, builds the trust needed to make education accountable to community. Sustained funding and Indigenous leadership are essential.</p>
-          <p>Brayboy and Maughan (2008) remind us that Indigenous Knowledges are ethical and political, rooted in survival and sovereignty. Supporting them affirms Indigenous identities and reorients education toward reciprocity, accountability, and justice. For educators, this means centering responsibility to community. For policymakers, it means resourcing Indigenous leadership and ensuring equitable access to technology. Ultimately, Indigenous Knowledges do not simply add content to existing systems—they transform education by reshaping relationships among learners, communities, and the land. When embraced as plural, sovereign, and relational, they reveal knowledge as a living practice vital to sustaining just and culturally rooted futures.</p>
-        `;
-      } else {
-        const terminalSpeechTexts = {
-          whoami: "I am Mr. Smart",
-          resources: "Here are my resources",
-          contact: "Please send me an email if you have any further inquiries"
-        };
-        if(terminalSpeechTexts[lowerCmd]) speakAndType(terminalSpeechTexts[lowerCmd]);
-      }
+    appendTerminalOutput('Closed all panels.');
+  } else if (cmd === 'exit') {
+    appendTerminalOutput('Closing tab...');
+    setTimeout(() => { window.close(); }, 500);
+  } else if (panelMap[cmd]) {
+    if (cmd === 'back') return;
+    openPanel(panelMap[cmd]);
+    appendTerminalOutput(`Opened ${cmd}`);
+    if (cmd === 'reflection') {
+      speakText(reflections[0]);
+    } else if (cmd === 'productions') {
+      speakText('Currently, this panel contains productions and placeholders.');
+    } else if (cmd === 'production2') {
+      document.getElementById('prod2-reflection').innerHTML = getProd2ReflectionHTML();
+    } else {
+      const speechMap = {
+        'whoami': 'I am Mr. Smart',
+        'resources': 'Here are my resources',
+        'contact': 'Please contact me via email'
+      };
+      if (speechMap[cmd]) speakText(speechMap[cmd]);
     }
-  } else if(lowerCmd.length === 0) {
-    return;
   } else {
-    appendTerminalOutput(`Command not recognized: ${cmd}`);
+    appendTerminalOutput(`Unknown command: ${cmd}`);
   }
 }
+
+function speakText(text) {
+  if (window.speechSynthesis.speaking) {
+    window.speechSynthesis.cancel();
+  }
+  const utter = new SpeechSynthesisUtterance(text);
+  const voices = window.speechSynthesis.getVoices();
+  const femaleVoice = voices.find(v => /female|woman/i.test(v.name)) || voices[0];
+  if (femaleVoice) {
+    utter.voice = femaleVoice;
+  }
+  utter.rate = 1.1;
+  window.speechSynthesis.speak(utter);
+  typeTextEffect(text);
+}
+
+function typeTextEffect(text) {
+  const el = document.getElementById('reflectionText');
+  el.textContent = '';
+  let i = 0;
+  window.typingTimer = setInterval(() => {
+    if (i < text.length) {
+      el.textContent += text.charAt(i);
+      i++;
+    } else {
+      clearInterval(window.typingTimer);
+      window.typingTimer = null;
+    }
+  }, 30);
+}
+
+function getProd2ReflectionHTML() {
+  return `
+<p>Brayboy and Maughan’s (2008) <em>Indigenous Knowledges and the Story of the Bean</em> challenges dominant educational paradigms by showing how Knowledges are lived, reciprocal, and vital to cultural survival. In Indigenous contexts, Knowledges are inseparable from responsibility and survival, while Western schooling often reduces learning to abstract, fragmented facts. Knowledge is not a possession but a practice enacted through relationships and ethical commitments.</p>
+<p>The Story of the Bean illustrates that learning is tied to cosmology, land, and collective responsibility. Teachers are not distant authorities but accountable community members. This may involve co-teaching with Elders, leading projects rooted in local ecosystems, or grounding lessons in community histories. Education flourishes through responsibility and care—not detachment.</p>
+<p>Reframing curriculum and assessment through this lens emphasizes reflection, engagement, and accountability rather than memorization. Outdoor learning—survival skills, canoe journeys, or traditional navigation—deepens relationships with the land and community. Success is measured less by standardized testing than by stewardship, skill, and reciprocal responsibility. Standardized assessments often undermine these goals by prioritizing individual achievement over relational approaches.</p>
+<p>Relationality also extends into digital environments. Initiatives like <em>He Ao Hou: A New World</em> (Kanaeokana, 2020) and Indigenous-led VR projects (CBC, 2018) immerse learners in ancestral languages and stories while respecting cultural protocols. For example, one Hawaiian project requires ceremony before accessing digital content, ensuring technology mediates rather than flattens relationships. Similarly, language apps and archives show how digital tools sustain kinship networks and collective memory. Innovation here matters less for novelty than for reinforcing survival and continuity.</p>
+<p>Such approaches open new horizons in technology education. Indigenous learners are designing VR storytelling platforms, language apps, and 3D-printed cultural artifacts. Some communities use 3D printing to recreate lost treasures, reconnecting youth with tradition while teaching design and engineering. Even beyond community contexts, these tools remain grounded in protocol, showing that technical skill and cultural preservation are inseparable.</p>
+<p>Barriers, however, are significant. Indigenous Knowledges are plural and diverse, not reducible to a single story (Levac et al., 2018; ABC Life Literacy Canada, 2024). Yet systemic underfunding, standardized testing, limited Indigenous leadership, and restricted digital access continue to marginalize them (People for Education, 2016; Sosyalarimlar, 2025). These are not neutral oversights but institutional decisions about which Knowledges count.</p>
+<p>A path forward requires epistemic pluralism—valuing multiple knowledge systems as equal rather than hierarchical. This involves investing in Indigenous-led programs, expanding digital infrastructure in remote communities, and grounding curricula in community and land. The First Nations Technology Council in British Columbia provides one model by integrating coding workshops with Indigenous governance. Mentorship by Indigenous professionals, alongside teacher preparation in culturally sustaining pedagogy, builds trust needed to make education accountable to community. Sustained funding and Indigenous leadership are essential.</p>
+<p>Brayboy and Maughan (2008) remind us that Indigenous Knowledges are political and ethical, rooted in survival and sovereignty. Supporting them affirms identities and reorients education toward reciprocity, accountability, and justice. For educators, this means centering responsibility to community. For policymakers, it means resourcing leadership and ensuring equitable access to technology. Indigenous Knowledges don’t just add content—they transform education by reshaping relationships among learners, communities, and land. When embraced as plural, sovereign, and relational, they reveal knowledge as a living practice vital to sustaining just and culturally rooted futures.</p>
+`;
+}
 </script>
-<img src="images/right_icon1.gif" id="cornerGlobe" alt="Globe Glow" style="display:none; border-radius:50%;">
+
 </body>
 </html>
