@@ -821,9 +821,9 @@ function speakAndTypeProd2(htmlText) {
   const plainText = tempDiv.textContent || tempDiv.innerText || "";
 
   function reallyType(){
-    let i=0;
+    let i = 0;
     cursor.style.display = 'inline-block';
-    window.typingTimer = setInterval(()=>{
+    window.typingTimer = setInterval(() => {
       if(i < plainText.length){
         prod2ReflectionEl.textContent += plainText[i];
         i++;
@@ -831,15 +831,14 @@ function speakAndTypeProd2(htmlText) {
         clearInterval(window.typingTimer);
         window.typingTimer = null;
         cursor.style.display = 'none';
-        // Replace plain text with formatted HTML paragraphs after typing finishes
         prod2ReflectionEl.innerHTML = htmlText;
       }
     }, 30);
   }
 
-  // Immediately start typing without speech
   reallyType();
 }
+
 
   }
   if(!window.speechSynthesis.getVoices().length){
