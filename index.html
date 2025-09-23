@@ -2,143 +2,741 @@
 <html lang="en">
 <head>
 <meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
 <title>Hello World - Brandon Smart's Portfolio</title>
+<!-- Fonts + icons -->
 <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet" />
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+<link 
+ rel="stylesheet" 
+ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
 <style>
-  :root {
-    --neon: #00e5ff;
-    --bg-dark: #030305;
-    --panel: rgba(10, 12, 15, 0.9);
-    --hover: #00ffb3;
-    --hud-w: 260px;
-    --font-main: 'Share Tech Mono', monospace;
+:root {
+  --neon: #00e5ff;
+  --bg-dark: #030305;
+  --panel: rgba(10, 12, 15, 0.9);
+  --hover: #00ffb3;
+  --hud-w: 260px;
+}
+* {
+  box-sizing: border-box;
+}
+html, body {
+  height: 100%;
+  margin: 0;
+  font-family: 'Share Tech Mono', monospace;
+  background: linear-gradient(180deg, #020203, #07080a);
+  color: var(--neon);
+  -webkit-font-smoothing: antialiased;
+}
+a {
+  color: var(--neon);
+  text-decoration: none;
+  transition: color 0.18s ease;
+}
+a:hover {
+  color: var(--hover);
+}
+.scanlines {
+  pointer-events: none;
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  background: repeating-linear-gradient(
+    to bottom,
+    rgba(0, 229, 255, 0.03) 0px,
+    rgba(0, 229, 255, 0.03) 1px,
+    transparent 1px,
+    transparent 3px
+  );
+  opacity: 0.12;
+}
+@keyframes hudPulse {
+  0%, 100% {
+    text-shadow: 0 0 4px var(--neon), 0 0 8px var(--neon);
+    opacity: 1;
   }
-  * {
-    box-sizing: border-box;
+  50% {
+    text-shadow: 0 0 2px var(--hover), 0 0 5px var(--hover);
+    opacity: 0.96;
   }
-  html, body {
-    margin: 0; padding: 0;
-    height: 100%;
-    font-family: var(--font-main);
-    background: linear-gradient(180deg, #020203, #07080a);
-    color: var(--neon);
-    -webkit-font-smoothing: antialiased;
+}
+h1, h2, .headerTitle, .navItem, #reflectionText, .hud-row, .quoteBox {
+  animation: hudPulse 3.5s infinite alternate;
+}
+#cornerGlobe {
+  display: none;
+  position: fixed;
+  top: 12px;
+  right: 12px;
+  width: 120px;
+  height: auto;
+  z-index: 2000;
+  pointer-events: none;
+  -webkit-mask-image: radial-gradient(circle, rgba(0,0,0,1) 85%, rgba(0,0,0,0) 100%);
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  -webkit-mask-size: cover;
+  mask-image: radial-gradient(circle, rgba(0,0,0,1) 85%, rgba(0,0,0,0) 100%);
+  mask-repeat: no-repeat;
+  mask-position: center;
+  mask-size: cover;
+}
+#loginOverlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1200;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(180deg, rgba(0,0,0,0.98), rgba(0,0,0,0.98));
+}
+.login-card {
+  width: 380px;
+  padding: 28px;
+  border-radius: 14px;
+  background: linear-gradient(135deg, rgba(0,229,255,0.04), rgba(0,102,153,0.03));
+  border: 1px solid rgba(0,229,255,0.12);
+  box-shadow: 0 18px 60px rgba(0,0,0,0.7), inset 0 0 14px rgba(0,229,255,0.02);
+  text-align: center;
+}
+.login-card h1 {
+  margin: 0 0 12px;
+  font-size: 20px;
+  color: var(--neon);
+}
+.login-input {
+  width: 100%;
+  padding: 12px 14px;
+  border-radius: 999px;
+  border: 1px solid rgba(0,229,255,0.12);
+  background: rgba(0,0,0,0.45);
+  color: var(--neon);
+  outline: none;
+  font-size: 14px;
+}
+.login-actions {
+  margin-top: 14px;
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+}
+.btn-primary {
+  padding: 10px 20px;
+  border-radius: 999px;
+  border: none;
+  cursor: pointer;
+  background: linear-gradient(135deg, var(--neon), #00bfff);
+  color: #081018;
+  font-weight: 700;
+}
+.login-sub {
+  margin-top: 10px;
+  font-size: 13px;
+  color: rgba(0,229,255,0.7);
+}
+#hud {
+  position: fixed;
+  left: 18px;
+  top: 12px;
+  z-index: 1100;
+  width: var(--hud-w);
+  background: linear-gradient(180deg, rgba(0,0,0,0.55), rgba(0,0,0,0.35));
+  border-radius: 10px;
+  padding: 10px 12px;
+  border: 1px solid rgba(0,229,255,0.06);
+  box-shadow: 0 8px 40px rgba(0,0,0,0.6);
+  color: var(--neon);
+  font-size: 13px;
+}
+#main {
+  position: relative;
+  z-index: 500;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 140px 28px 40px;
+}
+.hud-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  text-align: left;
+  padding: 2px 0;
+}
+.hud-row i {
+  min-width: 18px;
+  flex-shrink: 0;
+  vertical-align: middle;
+}
+.container {
+  max-width: 1100px;
+  width: 100%;
+  display: flex;
+  gap: 28px;
+  align-items: flex-start;
+  margin: 0 auto;
+  position: relative;
+  z-index: 5;
+}
+.leftCol {
+  width: 320px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  align-items: flex-start;
+}
+.headerTitle {
+  font-size: 18px;
+  margin-bottom: 8px;
+  color: var(--neon);
+  cursor: pointer;
+  user-select: none;
+}
+.navItem {
+  width: 100%;
+  padding: 16px 14px;
+  border-radius: 12px;
+  cursor: pointer;
+  background: linear-gradient(180deg, rgba(10,12,14,0.6), rgba(18,20,22,0.55));
+  border: 1px solid rgba(0,229,255,0.04);
+  color: var(--neon);
+  font-weight: 700;
+  transition: all 0.18s ease;
+}
+.navItem:hover {
+  background: linear-gradient(180deg, var(--neon), #00bfff);
+  color: #00111b;
+  transform: translateY(-4px);
+  box-shadow: 0 16px 40px rgba(0,229,255,0.06);
+}
+.rightCol {
+  flex: 1;
+  min-height: 400px;
+}
+.panel {
+  display: none;
+  background: var(--panel);
+  border-radius: 12px;
+  padding: 20px;
+  border: 1px solid rgba(0,229,255,0.04);
+  box-shadow: 0 20px 60px rgba(0,0,0,0.7);
+  position: relative;
+  z-index: 1150;
+  max-height: 70vh;
+  overflow: auto;
+  transition: opacity 0.35s ease, transform 0.35s ease;
+  opacity: 0;
+  transform: translateY(8px);
+}
+.panel.show {
+  display: block;
+  opacity: 1;
+  transform: translateY(0);
+}
+#reflectionText {
+  white-space: pre-wrap;
+  font-size: 14px;
+  color: rgba(0,229,255,0.95);
+}
+#prod2ReflectionText {
+  white-space: pre-wrap;
+  font-size: 14px;
+  color: rgba(0,229,255,0.95);
+}
+.cursor {
+  display: inline-block;
+  width: 10px;
+  margin-left: 6px;
+  background: var(--neon);
+  animation: blink 1s steps(2) infinite;
+  vertical-align: middle;
+}
+@keyframes blink {
+  0%, 50% {
+    opacity: 1;
   }
-  /* Login Overlay & Form */
-  #loginOverlay {
-    position: fixed;
-    inset: 0;
-    background: linear-gradient(180deg, rgba(0,0,0,0.98), rgba(0,0,0,0.98));
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 2000;
+  51%, 100% {
+    opacity: 0;
   }
-  .login-card {
-    width: 380px;
-    background: linear-gradient(135deg, rgba(0,229,255,0.04), rgba(0,102,153,0.03));
-    padding: 28px;
-    border-radius: 14px;
-    border: 1px solid rgba(0,229,255,0.12);
-    box-shadow: 0 18px 60px rgba(0,0,0,0.7), inset 0 0 14px rgba(0,229,255,0.02);
-    color: var(--neon);
-  }
-  .login-card h1 {
-    margin-top: 0; margin-bottom: 1rem;
-    font-size: 20px;
-  }
-  form {
-    display: flex;
+}
+.productionsGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+}
+.prodCard {
+  padding: 16px;
+  border-radius: 10px;
+  border: 1px solid rgba(0,229,255,0.05);
+  background: linear-gradient(180deg, rgba(0,0,0,0.5), rgba(12,12,14,0.35));
+  cursor: pointer;
+  transition: all 0.22s ease;
+}
+.prodCard h3 {
+  margin: 0 0 6px;
+  font-size: 15px;
+}
+.prodCard p {
+  margin: 0;
+  color: rgba(0,229,255,0.9);
+  font-size: 13px;
+}
+.prodCard:hover {
+  background: linear-gradient(180deg, var(--neon), #00bfff);
+  color: #001018;
+  transform: translateY(-6px) scale(1.01);
+  box-shadow: 0 22px 50px rgba(0,229,255,0.08);
+}
+.prodCard:hover h3 {
+  color: #001018;
+  text-shadow: none;
+}
+#lightbox {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 1300;
+  background: rgba(0,0,0,0.96);
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  transition: opacity 0.35s;
+}
+#lightbox.show {
+  display: flex;
+  opacity: 1;
+}
+#lbImage {
+  max-width: 80vw;
+  max-height: 80vh;
+  border: 3px solid var(--neon);
+  border-radius: 8px;
+  box-shadow: 0 0 48px #0af2;
+  background: #000;
+  transition: opacity 0.4s;
+  opacity: 1;
+}
+.lbControls {
+  margin-top: 22px;
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  z-index: 10;
+  transition: opacity 0.2s;
+  opacity: 1;
+}
+.lbControls.hide {
+  opacity: 0;
+  pointer-events: none;
+}
+.lbControls button {
+  min-width: 60px;
+  padding: 6px 12px;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  background: var(--neon);
+  color: #001018;
+  font-weight: 700;
+  font-size: 0.85em;
+  transition: background 0.17s, color 0.17s, transform 0.22s;
+}
+.lbControls button:hover {
+  background: var(--hover);
+  color: #06222f;
+  transform: translateY(-2px) scale(1.04);
+}
+.backBtn {
+  margin-top: 12px;
+  padding: 8px 12px;
+  border-radius: 8px;
+  background: transparent;
+  border: 1px solid rgba(0,229,255,0.06);
+  color: var(--neon);
+  cursor: pointer;
+}
+.backBtn:hover {
+  background: rgba(0,229,255,0.06);
+  color: #001018;
+}
+.quoteBox {
+  margin-top: 40px;
+  text-align: center;
+  font-size: 16px;
+  color: rgba(0,229,255,0.85);
+  transition: opacity 1.5s ease-in-out;
+  min-height: 40px;
+  opacity: 1;
+}
+.glitchText {
+  position: relative;
+  color: var(--neon);
+  font-weight: 700;
+  text-shadow:
+    0 0 6px var(--neon),
+    0 0 14px var(--neon),
+    0 0 18px var(--neon),
+    0 0 32px var(--neon);
+}
+#terminalContainer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background: var(--panel);
+  max-height: 200px;
+  border-top: 1px solid rgba(0,229,255,0.3);
+  display: none;
+  flex-direction: column;
+  z-index: 2000;
+  font-size: 14px;
+  color: var(--neon);
+  font-family: 'Share Tech Mono', monospace;
+  user-select: text;
+  padding: 10px 20px;
+  box-sizing: border-box;
+}
+#terminalContent {
+  flex: 1;
+  overflow-y: auto;
+  white-space: pre-wrap;
+  margin-bottom: 6px;
+  min-height: 80px;
+}
+#terminalInputContainer {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+#terminalPrompt {
+  flex-shrink: 0;
+}
+#terminalInput {
+  flex: 1;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid var(--neon);
+  color: var(--neon);
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 14px;
+  outline: none;
+  padding: 6px 10px;
+  caret-color: var(--neon);
+}
+#terminalInput::placeholder {
+  color: rgba(0,229,255,0.4);
+}
+@media (max-width: 980px) {
+  .container {
     flex-direction: column;
-    gap: 14px;
   }
-  label {
-    font-size: 14px;
-    margin-bottom: 6px;
-    display: block;
+  .leftCol {
+    width: 100%;
+    order: 2;
   }
-  input[type="password"] {
-    padding: 12px 14px;
-    border-radius: 999px;
-    border: 1px solid rgba(0,229,255,0.12);
-    background: rgba(0,0,0,0.45);
-    color: var(--neon);
-    font-family: var(--font-main);
-    font-size: 14px;
-    outline: none;
-    transition: border-color 0.2s ease;
+  .rightCol {
+    order: 1;
   }
-  input[type="password"]:focus {
-    border-color: var(--hover);
-    background: rgba(0,0,0,0.7);
+  #hud {
+    left: 10px;
+    top: 8px;
   }
-  button[type="submit"] {
-    padding: 10px 20px;
-    font-weight: 700;
-    font-size: 14px;
-    border-radius: 999px;
-    border: none;
-    cursor: pointer;
-    background: linear-gradient(135deg, var(--neon), #00bfff);
-    color: #081018;
-    transition: background-color 0.3s ease;
+  .lbControls {
+    margin-top: 14px;
   }
-  button[type="submit"]:hover,
-  button[type="submit"]:focus {
-    background: var(--hover);
-    outline: none;
-  }
-  .login-sub {
-    font-size: 13px;
-    margin-top: 8px;
-    color: rgba(0,229,255,0.7);
-    text-align: center;
-  }
+}
 </style>
 </head>
 <body>
-
-<div id="loginOverlay" role="dialog" aria-modal="true" aria-labelledby="loginTitle">
-  <div class="login-card">
-    <h1 id="loginTitle">Login</h1>
-    <form id="loginForm" novalidate>
-      <label for="loginPassInput">Password</label>
-      <input id="loginPassInput" name="password" type="password" placeholder="Enter password" aria-required="true" autocomplete="current-password" />
-      <button type="submit" aria-label="Submit login">Enter</button>
-    </form>
+<div class="scanlines" aria-hidden="true"></div>
+<canvas id="hudParticles" style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; pointer-events: none; z-index: 0;"></canvas>
+<div id="loginOverlay" role="dialog" aria-label="Login">
+  <div class="login-card" role="document">
+    <h1>Login</h1>
+    <input id="loginPass" class="login-input" type="password" placeholder="Enter password" aria-label="Password" />
+    <div class="login-actions"><button id="loginBtn" class="btn-primary" aria-label="Enter">Enter</button></div>
     <div class="login-sub">Enter the terminal</div>
   </div>
 </div>
-
+<div id="hud" aria-live="polite">
+  <div class="hud-row" id="hud-date"><i class="fa-regular fa-calendar"></i> <span id="hud-date-text">Loading date…</span></div>
+  <div class="hud-row" id="hud-time"><i class="fa-regular fa-clock"></i> <span id="hud-time-text">--:--:--</span></div>
+  <div class="hud-row" id="hud-loc"><i class="fa-solid fa-location-dot"></i> <span id="hud-city">Toronto</span></div>
+  <div class="hud-row" id="hud-coords"><i class="fa-solid fa-crosshairs"></i> Coords: <span id="hud-coords-text">—</span></div>
+  <div class="hud-row" id="hud-weather"><i class="fa-solid fa-cloud-sun"></i> <span id="hud-weather-text">—</span></div>
+</div>
+<main id="main">
+  <div class="container">
+    <div class="leftCol" aria-hidden="false">
+      <div class="headerTitle" id="headerToggleTerminal">>: ["Hello World..."]</div>
+      <div id="navWho" class="navItem" role="button" tabindex="0" aria-controls="whoPanel">Whoami</div>
+      <div id="navRef" class="navItem" role="button" tabindex="0" aria-controls="refPanel">Reflection</div>
+      <div id="navProd" class="navItem" role="button" tabindex="0" aria-controls="prodPanel">Productions</div>
+      <div id="navRes" class="navItem" role="button" tabindex="0" aria-controls="resPanel">Resources</div>
+      <div id="navContact" class="navItem" role="button" tabindex="0" aria-controls="contactPanel">Contact</div>
+    </div>
+    <div class="rightCol">
+      <section id="whoPanel" class="panel" role="region" aria-labelledby="navWho">
+        <h2>Whoami</h2>
+        <p><strong>/BrandonSmart</strong><br />:-$ Teachable: ComputerTechnology</p>
+        <button class="backBtn" onclick="closePanel('whoPanel')">← Back</button>
+      </section>
+      <section id="refPanel" class="panel" role="region" aria-labelledby="navRef">
+        <h2>Reflection</h2>
+        <div id="reflectionText" aria-live="polite"></div><span class="cursor" id="reflectionCursor" aria-hidden="true"></span>
+        <button class="backBtn" onclick="closePanel('refPanel')">← Back</button>
+      </section>
+      <section id="prodPanel" class="panel" role="region" aria-labelledby="navProd">
+        <h2 class="glitchText" data-text="Productions">Productions</h2>
+        <div class="productionsGrid" id="productionsGrid">
+          <!-- production cards -->
+          <div class="prodCard" data-index="0"><h3>Production 1: Power up</h3><p>View Content</p></div>
+          <div class="prodCard" data-index="1"><h3>Production 2: New Literacies Reflection</h3><p>Placeholder</p></div>
+          <div class="prodCard" data-index="2"><h3>Production 3: Critical Algorithmic Literacies and AI</h3><p>Placeholder</p></div>
+          <div class="prodCard" data-index="3"><h3>Production 4: Graphic Novel</h3><p>Placeholder</p></div>
+          <div class="prodCard" data-index="4"><h3>Production 5: On the Way to Video Inquiry</h3><p>Placeholder</p></div>
+          <div class="prodCard" data-index="5"><h3>Production 6: Video Works</h3><p>Placeholder</p></div>
+          <div class="prodCard" data-index="6"><h3>Production 7: Learning Principles</h3><p>Placeholder</p></div>
+          <div class="prodCard" data-index="7"><h3>Production 8: World Building</h3><p>Placeholder</p></div>
+          <div class="prodCard" data-index="8"><h3>Production 9: Twine</h3><p>Placeholder</p></div>
+        </div>
+        <button class="backBtn" onclick="closePanel('prodPanel')">← Back</button>
+      </section>
+      <section id="prod2Panel" class="panel" role="region" aria-labelledby="navProd">
+        <h2>Production 2: New Literacies Reflection</h2>
+        <div id="prod2ReflectionText" aria-live="polite" aria-atomic="true" style="white-space: pre-wrap; font-size: 14px; color: rgba(0,229,255,0.95);"></div><span class="cursor" id="prod2ReflectionCursor" aria-hidden="true"></span>
+        <button class="backBtn" onclick="closePanel('prod2Panel')">← Back</button>
+      </section>
+      <section id="resPanel" class="panel" role="region" aria-labelledby="navRes">
+        <h2>Resources</h2>
+        <p><a href="https://youtube.com" target="_blank" rel="noopener">YouTube</a></p>
+        <p><a href="https://google.ca" target="_blank" rel="noopener">Google</a></p>
+        <p><a href="https://github.com" target="_blank" rel="noopener">GitHub</a></p>
+        <button class="backBtn" onclick="closePanel('resPanel')">← Back</button>
+      </section>
+      <section id="contactPanel" class="panel" role="region" aria-labelledby="navContact">
+        <h2>Contact</h2>
+        <div class="contact-row">
+          <div class="mail"><i class="fa-solid fa-envelope"></i>&nbsp; <a href="mailto:bsmart@my.yorku.ca">bsmart@my.yorku.ca</a></div>
+        </div>
+        <button class="backBtn" onclick="closePanel('contactPanel')">← Back</button>
+      </section>
+    </div>
+  </div>
+  <div id="quote" class="quoteBox">Loading inspiration…</div>
+</main>
+<div id="terminalContainer" role="region" aria-label="Terminal interface">
+  <div id="terminalContent" aria-live="polite" aria-atomic="false"></div>
+  <div id="terminalInputContainer">
+    <div id="terminalPrompt">&gt;&nbsp;</div>
+    <input id="terminalInput" type="text" placeholder="Type command here..." autocomplete="off" aria-label="Terminal command input" />
+  </div>
+</div>
+<div id="lightbox" role="dialog" aria-hidden="true" style="display:none">
+  <img id="lbImage" src="" alt="Screenshot" />
+  <div class="lbControls">
+    <button id="lbPrev">Prev</button>
+    <button id="lbNext">Next</button>
+    <button id="lbClose">Close</button>
+  </div>
+</div>
+<div id="wrongGifOverlay" style="display:none; position:fixed; inset:0; justify-content:center; align-items:center; background:rgba(0,0,0,0.85); z-index:1500;">
+  <img src="images/computer missing GIF.gif" alt="Wrong Password GIF" style="width:100%; height:100%; object-fit:cover;" />
+</div>
+<audio id="loginAudioCorrect" src="sounds/robotintro.mp3" preload="auto"></audio>
+<audio id="loginAudioWrong" src="sounds/Hacked computer- Sound Effect.mp3" preload="auto"></audio>
 <script>
-  const loginOverlay = document.getElementById('loginOverlay');
-  const loginForm = document.getElementById('loginForm');
-  const loginPassInput = document.getElementById('loginPassInput');
-
-  loginForm.addEventListener('submit', e => {
-    e.preventDefault();
-    const psw = loginPassInput.value.trim();
-    if (psw === 'mrsmart') {
-      loginOverlay.style.display = 'none';
-      // Initialize terminal, hud, weather, etc. here or call your function
-      // example: startApp();
+const OWM_API_KEY = '5043108521e5dc1feccf33701c3221bf';
+const PROD1_IMAGES = [
+  "images/Screenshot 2025-09-10 130926.png",
+  "images/Screenshot 2025-09-10 123717.png",
+  "images/Screenshot 2025-09-10 115645.png",
+  "images/Screenshot 2025-09-10 114858.png",
+  "images/Screenshot 2025-09-10 114832.png"
+];
+const productionImagesMap = { 0: PROD1_IMAGES };
+let currImages = [], currIndex = 0;
+const lb = document.getElementById('lightbox');
+const lbImg = document.getElementById('lbImage');
+document.querySelectorAll('.prodCard').forEach(card => {
+  card.addEventListener('click', () => {
+    const idx = parseInt(card.dataset.index);
+    // Special case: Production 2 opens its own reflection panel
+    if (idx === 1) {
+      openPanel("prod2Panel");
+      document.getElementById("prod2ReflectionText").textContent = `Reading Brayboy and Maughan’s (2008) Indigenous Knowledges and the Story of the Bean made me reconsider the very essence of knowledge and learning. They describe Indigenous Knowledges not as fixed content to be memorized, but as lived, reciprocal practices vital to cultural survival. The line that deeply resonated with me was, “Knowledge is what we put to use. Knowledge can never be divorced from human action and experience” (p. 21). This framing of knowledge as a verb, something active and relational, challenges the Western approach I have mostly experienced, where knowledge is often treated as a noun, a static possession stored in textbooks or tests. It pushed me to think of learning as something dynamic, happening between people, land, and community, rather than isolated fragments of information.`;
+      return;
+    }
+    currImages = productionImagesMap[idx] || [];
+    if (!currImages.length) return;
+    currIndex = 0;
+    lbImg.style.opacity = '0';
+    setTimeout(() => {
+      lbImg.src = currImages[currIndex];
+      setTimeout(() => { lbImg.style.opacity = '1'; }, 60);
+    }, 100);
+    lb.style.display = 'flex';
+    setTimeout(() => lb.classList.add('show'), 12);
+  });
+});
+function updateLbImage() {
+  lbImg.style.opacity = '0';
+  setTimeout(() => {
+    lbImg.src = currImages[currIndex];
+    setTimeout(() => { lbImg.style.opacity = '1'; }, 60);
+  }, 120);
+}
+document.getElementById('lbPrev').addEventListener('click', () => {
+  if (!currImages.length) return;
+  currIndex = (currIndex - 1 + currImages.length) % currImages.length;
+  updateLbImage();
+});
+document.getElementById('lbNext').addEventListener('click', () => {
+  if (!currImages.length) return;
+  currIndex = (currIndex + 1) % currImages.length;
+  updateLbImage();
+});
+document.getElementById('lbClose').addEventListener('click', () => {
+  lb.classList.remove('show');
+  setTimeout(() => { lb.style.display = 'none'; }, 350);
+});
+const loginOverlay = document.getElementById('loginOverlay');
+const loginBtn = document.getElementById('loginBtn');
+const loginPass = document.getElementById('loginPass');
+const wrongGif = document.getElementById('wrongGifOverlay');
+const loginAudioCorrect = document.getElementById('loginAudioCorrect');
+const loginAudioWrong = document.getElementById('loginAudioWrong');
+loginPass.addEventListener('keydown', e => { if(e.key==='Enter') loginBtn.click(); });
+loginBtn.addEventListener('click', () => {
+  const v = (loginPass.value || '').trim();
+  if (v === 'mrsmart') {
+    loginOverlay.style.display = 'none';
+    document.getElementById('cornerGlobe').style.display = 'block';
+    const hud = document.getElementById('hud');
+    hud.style.opacity = '1';
+    hud.style.visibility = 'visible';
+    startHud();
+    rotateQuotes();
+    updateLocationWeather();
+    loginAudioCorrect.muted = false;
+    loginAudioCorrect.volume = 0.7;
+    loginAudioCorrect.pause();
+    loginAudioCorrect.currentTime = 0;
+    loginAudioCorrect.play().catch(err => console.error('Audio failed:', err));
+  } else {
+    loginPass.value = '';
+    loginPass.placeholder = 'Incorrect — try again';
+    loginPass.focus();
+    loginOverlay.animate([
+      { transform: 'translateX(-2px)' },
+      { transform: 'translateX(2px)' },
+      { transform: 'translateX(0)' }
+    ], { duration: 120, iterations: 3 });
+    wrongGif.style.display = 'flex';
+    loginAudioWrong.muted = false;
+    loginAudioWrong.volume = 0.7;
+    loginAudioWrong.pause();
+    loginAudioWrong.currentTime = 0;
+    loginAudioWrong.play().catch(err => console.error('Audio failed:', err));
+    setTimeout(() => {
+      wrongGif.style.display = 'none';
+      loginAudioWrong.pause();
+      loginAudioWrong.currentTime = 0;
+    }, 2200);
+  }
+});
+function startHud(){
+  const timeEl = document.getElementById('hud-time-text');
+  const dateEl = document.getElementById('hud-date-text');
+  function updateHud(){
+    const now = new Date();
+    timeEl.textContent = now.toLocaleTimeString();
+    dateEl.textContent = now.toDateString();
+  }
+  updateHud();
+  setInterval(updateHud,1000);
+}
+function updateLocationWeather(){
+  const cityEl = document.getElementById('hud-city');
+  const coordsEl = document.getElementById('hud-coords-text');
+  const weatherEl = document.getElementById('hud-weather-text');
+  if(!navigator.geolocation){ coordsEl.textContent='Unavailable'; weatherEl.textContent='Unavailable'; return; }
+  navigator.geolocation.getCurrentPosition(async pos => {
+    const {latitude, longitude} = pos.coords;
+    coordsEl.textContent = `${latitude.toFixed(4)}, ${longitude.toFixed(4)}`;
+    try{
+      const res = await fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=${OWM_API_KEY}&units=metric`);
+      const data = await res.json();
+      cityEl.textContent = data.name || 'Unknown';
+      let desc = data.weather[0].description;
+      desc = desc.charAt(0).toUpperCase() + desc.slice(1);
+      weatherEl.textContent = `${desc}, ${data.main.temp.toFixed(1)}°C`;
+    } catch(e){
+      weatherEl.textContent='Weather unavailable';
+      console.error(e);
+    }
+  }, err => {
+    coordsEl.textContent='Denied';
+    weatherEl.textContent='Weather unavailable';
+    console.error(err);
+  });
+}
+function openPanel(id){
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('show'));
+  document.getElementById(id).classList.add('show');
+}
+function closePanel(id){
+  const panel = document.getElementById(id);
+  panel.classList.remove('show');
+  if(id === 'refPanel'){
+    if(window.typingTimer) clearInterval(window.typingTimer);
+    window.typingTimer = null;
+    window.speechSynthesis.cancel();
+  }
+  if(id === 'prod2Panel'){
+    if(window.typingTimer) clearInterval(window.typingTimer);
+    window.typingTimer = null;
+    window.speechSynthesis.cancel();
+  }
+}
+document.querySelectorAll('.navItem').forEach(el => {
+  el.addEventListener('click', e => {
+    const panel = el.getAttribute('aria-controls');
+    openPanel(panel);
+    if(panel === 'refPanel'){
+      speakAndType(reflections[0]);
+    } else if(panel === 'prodPanel'){
+      speakAndType("Currently, this panel contains productions and placeholders.");
+    } else if(panel === 'prod2Panel'){
+      // display the text (non-speech) when clicked
+      document.getElementById("prod2ReflectionText").textContent = prod2Reflection;
+      openPanel("prod2Panel");
     } else {
-      loginPassInput.value = '';
-      loginPassInput.placeholder = 'Incorrect — try again';
-      loginPassInput.focus();
-      loginOverlay.animate([
-        { transform: 'translateX(-3px)' },
-        { transform: 'translateX(3px)' },
-        { transform: 'translateX(0)' }
-      ], { duration: 120, iterations: 3 });
-      // Show error sound or gif if you have
+      const panelSpeechTexts = {
+        whoPanel: "I am Mr. Smart",
+        resPanel: "Here are my resources",
+        contactPanel: "Please send me an email if you have any further inquiries"
+      };
+      if(panelSpeechTexts[panel]) speakAndType(panelSpeechTexts[panel]);
     }
   });
+});
 </script>
-
-<!-- Rest of your page content here -->
+<script>
+const reflectionEl = document.getElementById('reflectionText');
+const reflections = [
+  `Building my portfolio site was a mix of applying familiar design and coding skills while also facing new challenges as a learner. Choosing GitHub Pages instead of drag-and-drop builders like Wix allowed me to work closely with the code and design, which suits my style of hands-on exploration.
+An important feature I wanted was a weather widget, so I had to obtain an API key from OpenWeatherMap. This allowed me to access real-time weather data that updates automatically. I also came up with the idea to request the user's location with a prompt notification, respecting privacy concerns since some people might not want their location visible or shared. This made the experience more user-friendly and transparent.
+Throughout the process, I encountered issues like broken layouts from small typos, inconsistent styling, and menus not linking correctly. These challenges required careful troubleshooting and multiple revisions. At times, it was frustrating when a single missing bracket caused the page to break, but solving these problems brought a rewarding sense of accomplishment.
+AI tools like ChatGPT supported me by offering suggestions and helping refine my ideas. Rather than handing me answers, the AI guided me to consider alternative solutions—like having a resourceful brainstorming partner along the way. This was particularly useful when quick fresh ideas were needed.
+I also relied heavily on community resources such as GitHub documentation, Stack Overflow, and conversations with classmates. Collaborating this way added a welcome social dimension, contrasting with the more independent work I usually do.
+Emotionally, the process moved from curiosity and excitement to moments of irritation during debugging, and finally to satisfaction as the site came together to reflect my vision. This experience felt similar to how I approach new projects—through trial, error, and reflection—more than following a strict step-by-step formula.
+Ultimately, this project reinforced that being an effective learner means staying patient, open-minded, and willing to work through challenges independently, regardless of prior experience.`
+];
+const prod2Reflection = `Reading Brayboy and Maughan’s (2008) Indigenous Knowledges and the Story of the Bean made me reconsider the very essence of knowledge and learning. They describe Indigenous Knowledges not as fixed content to be memorized, but as lived, reciprocal practices vital to cultural survival. The line that deeply resonated with me was, “Knowledge is what we put to use. Knowledge can never be divorced from human action and experience” (p. 21). This framing of knowledge as a verb, something active and relational, challenges the Western approach I have mostly experienced, where knowledge is often treated as a noun, a static possession stored in textbooks or tests. It pushed me to think of learning as something dynamic, happening between people, land, and community, rather than isolated fragments of information.`;
+</script>
 
 </body>
 </html>
