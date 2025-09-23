@@ -239,16 +239,17 @@ h1, h2, .headerTitle, .navItem, #reflectionText, .hud-row, .quoteBox {
   color: rgba(0,229,255,0.95);
 }
 #prod2ReflectionText {
-  font-family: Georgia, "Times New Roman", serif;
-  font-size: 16px;
-  line-height: 1.6;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 15px;
+  line-height: 1.7;
   color: var(--neon);
-  text-indent: 2em;
-  margin-bottom: 2em;
   white-space: normal;
   max-width: 800px;
+  padding: 10px 16px;
+  background: rgba(0, 229, 255, 0.1);
+  border-radius: 10px;
+  margin-bottom: 2em;
 }
-
 #resSubNav {
   margin-top: 12px;
   font-size: 14px;
@@ -266,14 +267,13 @@ h1, h2, .headerTitle, .navItem, #reflectionText, .hud-row, .quoteBox {
   overflow: hidden;
   transition: max-height 0.44s ease;
   color: var(--neon);
-  font-family: Georgia, "Times New Roman", serif;
+  font-family: 'Share Tech Mono', monospace;
   font-size: 14px;
   line-height: 1.6;
 }
 #prod2Resources.show {
   max-height: 1000px;
 }
-
 .cursor {
   display: inline-block;
   width: 10px;
@@ -594,25 +594,302 @@ h1, h2, .headerTitle, .navItem, #reflectionText, .hud-row, .quoteBox {
 <audio id="loginAudioCorrect" src="sounds/robotintro.mp3" preload="auto"></audio>
 <audio id="loginAudioWrong" src="sounds/Hacked computer- Sound Effect.mp3" preload="auto"></audio>
 <script>
-  const OWM_API_KEY = '5043108521e5dc1feccf33701c3221bf';
-  const PROD1_IMAGES = [
-    "images/Screenshot 2025-09-10 130926.png",
-    "images/Screenshot 2025-09-10 123717.png",
-    "images/Screenshot 2025-09-10 115645.png",
-    "images/Screenshot 2025-09-10 114858.png",
-    "images/Screenshot 2025-09-10 114832.png"
-  ];
-  const productionImagesMap = { 0: PROD1_IMAGES };
-  let currImages = [], currIndex = 0;
-  const lb = document.getElementById('lightbox');
-  const lbImg = document.getElementById('lbImage');
-  document.querySelectorAll('.prodCard').forEach(card => {
-    card.addEventListener('click', () => {
-      const idx = parseInt(card.dataset.index);
+const OWM_API_KEY = '5043108521e5dc1feccf33701c3221bf';
+const PROD1_IMAGES = [
+  "images/Screenshot 2025-09-10 130926.png",
+  "images/Screenshot 2025-09-10 123717.png",
+  "images/Screenshot 2025-09-10 115645.png",
+  "images/Screenshot 2025-09-10 114858.png",
+  "images/Screenshot 2025-09-10 114832.png"
+];
+const productionImagesMap = { 0: PROD1_IMAGES };
+let currImages = [], currIndex = 0;
+const lb = document.getElementById('lightbox');
+const lbImg = document.getElementById('lbImage');
+document.querySelectorAll('.prodCard').forEach(card => {
+  card.addEventListener('click', () => {
+    const idx = parseInt(card.dataset.index);
 
-      // Production 2 opens reflection panel with formatted HTML
-      if (idx === 1) {
-        openPanel("prod2Panel");
+    // Production 2 opens reflection panel with formatted HTML
+    if (idx === 1) {
+      openPanel("prod2Panel");
+      document.getElementById("prod2ReflectionText").innerHTML = `
+        <p>Brayboy and Maughan’s (2008) <em>Indigenous Knowledges and the Story of the Bean</em> challenges dominant educational paradigms by showing how Knowledges are lived, reciprocal, and vital to cultural survival. In Indigenous contexts, Knowledges are inseparable from responsibility and survival, while Western schooling often reduces learning to abstract, fragmented facts. Knowledge is not a possession but a practice enacted through relationships and ethical commitments.</p>
+        <p>The Story of the Bean illustrates that learning is tied to cosmology, land, and collective responsibility. Teachers are not distant authorities but accountable community members. This may involve co-teaching with Elders, leading projects rooted in local ecosystems, or grounding lessons in community histories. Education flourishes through responsibility and care—not detachment.</p>
+        <p>Reframing curriculum and assessment through this lens emphasizes reflection, engagement, and accountability rather than memorization. Outdoor learning—survival skills, canoe journeys, or traditional navigation—deepens relationships with the land and community. Success is measured less by standardized testing than by stewardship, skill, and reciprocal responsibility. Standardized assessments often undermine these goals by prioritizing individual achievement over relational approaches.</p>
+        <p>Relationality also extends into digital environments. Initiatives like <em>He Ao Hou: A New World</em> (Kanaeokana, 2020) and Indigenous-led VR projects (CBC, 2018) immerse learners in ancestral languages and stories while respecting cultural protocols. For example, one Hawaiian project requires ceremony before accessing digital content, ensuring technology mediates rather than flattens relationships. Similarly, language apps and community archives show how digital tools sustain kinship networks and collective memory. Innovation here matters less for novelty than for reinforcing cultural survival and continuity.</p>
+        <p>Such approaches open new horizons in technology education. Indigenous learners are designing VR storytelling platforms, language apps, and 3D-printed cultural artifacts. Some communities use 3D printing to recreate lost treasures, reconnecting youth with tradition while teaching design and engineering. Even beyond community contexts, these tools remain grounded in protocol, showing that technical skill and cultural preservation are inseparable.</p>
+        <p>Barriers, however, are significant. Indigenous Knowledges are plural and diverse, not reducible to a single story (Levac et al., 2018; ABC Life Literacy Canada, 2024). Yet systemic underfunding, standardized testing, limited Indigenous leadership, and restricted digital access continue to marginalize them (People for Education, 2016; Sosyalarastirmalar, 2025). These are not neutral oversights but institutional decisions about which Knowledges count.</p>
+        <p>A path forward requires epistemic pluralism—valuing multiple knowledge systems as equal rather than hierarchical. This involves investing in Indigenous-led programs, expanding digital infrastructure in remote communities, and grounding curricula in community and land. The First Nations Technology Council in British Columbia provides one model by integrating coding workshops with Indigenous governance. Mentorship by Indigenous professionals, alongside teacher preparation in culturally sustaining pedagogy, builds the trust needed to make education accountable to community. Sustained funding and Indigenous leadership are essential.</p>
+        <p>Brayboy and Maughan (2008) remind us that Indigenous Knowledges are ethical and political, rooted in survival and sovereignty. Supporting them affirms Indigenous identities and reorients education toward reciprocity, accountability, and justice. For educators, this means centering responsibility to community. For policymakers, it means resourcing Indigenous leadership and ensuring equitable access to technology. Ultimately, Indigenous Knowledges do not simply add content to existing systems—they transform education by reshaping relationships among learners, communities, and the land. When embraced as plural, sovereign, and relational, they reveal knowledge as a living practice vital to sustaining just and culturally rooted futures.</p>
+      `;
+      return;
+    }
+
+    // Default: open lightbox for images
+    currImages = productionImagesMap[idx] || [];
+    if (!currImages.length) return;
+    currIndex = 0;
+    lbImg.style.opacity = '0';
+    setTimeout(() => {
+      lbImg.src = currImages[currIndex];
+      setTimeout(() => { lbImg.style.opacity = '1'; }, 60);
+    }, 100);
+    lb.style.display = 'flex';
+    setTimeout(() => lb.classList.add('show'), 12);
+  });
+});
+function updateLbImage() {
+  lbImg.style.opacity = '0';
+  setTimeout(() => {
+    lbImg.src = currImages[currIndex];
+    setTimeout(() => { lbImg.style.opacity = '1'; }, 60);
+  }, 120);
+}
+document.getElementById('lbPrev').addEventListener('click', () => {
+  if (!currImages.length) return;
+  currIndex = (currIndex - 1 + currImages.length) % currImages.length;
+  updateLbImage();
+});
+document.getElementById('lbNext').addEventListener('click', () => {
+  if (!currImages.length) return;
+  currIndex = (currIndex + 1) % currImages.length;
+  updateLbImage();
+});
+document.getElementById('lbClose').addEventListener('click', () => {
+  lb.classList.remove('show');
+  setTimeout(() => { lb.style.display = 'none'; }, 350);
+});
+const loginOverlay = document.getElementById('loginOverlay');
+const loginBtn = document.getElementById('loginBtn');
+const loginPass = document.getElementById('loginPass');
+const wrongGif = document.getElementById('wrongGifOverlay');
+const loginAudioCorrect = document.getElementById('loginAudioCorrect');
+const loginAudioWrong = document.getElementById('loginAudioWrong');
+loginPass.addEventListener('keydown', e => { if(e.key==='Enter') loginBtn.click(); });
+loginBtn.addEventListener('click', () => {
+  const v = (loginPass.value || '').trim();
+  if (v === 'mrsmart') {
+    loginOverlay.style.display = 'none';
+    document.getElementById('cornerGlobe').style.display = 'block';
+    const hud = document.getElementById('hud');
+    hud.style.opacity = '1';
+    hud.style.visibility = 'visible';
+    startHud();
+    rotateQuotes();
+    updateLocationWeather();
+    loginAudioCorrect.muted = false;
+    loginAudioCorrect.volume = 0.7;
+    loginAudioCorrect.pause();
+    loginAudioCorrect.currentTime = 0;
+    loginAudioCorrect.play().catch(err => console.error('Audio failed:', err));
+  } else {
+    loginPass.value = '';
+    loginPass.placeholder = 'Incorrect — try again';
+    loginPass.focus();
+    loginOverlay.animate([
+      { transform: 'translateX(-2px)' },
+      { transform: 'translateX(2px)' },
+      { transform: 'translateX(0)' }
+    ], { duration: 120, iterations: 3 });
+    wrongGif.style.display = 'flex';
+    loginAudioWrong.muted = false;
+    loginAudioWrong.volume = 0.7;
+    loginAudioWrong.pause();
+    loginAudioWrong.currentTime = 0;
+    loginAudioWrong.play().catch(err => console.error('Audio failed:', err));
+    setTimeout(() => {
+      wrongGif.style.display = 'none';
+      loginAudioWrong.pause();
+      loginAudioWrong.currentTime = 0;
+    }, 2200);
+  }
+});
+function startHud(){
+  const timeEl = document.getElementById('hud-time-text');
+  const dateEl = document.getElementById('hud-date-text');
+  function updateHud(){
+    const now = new Date();
+    timeEl.textContent = now.toLocaleTimeString();
+    dateEl.textContent = now.toDateString();
+  }
+  updateHud();
+  setInterval(updateHud,1000);
+}
+function updateLocationWeather(){
+  const cityEl = document.getElementById('hud-city');
+  const coordsEl = document.getElementById('hud-coords-text');
+  const weatherEl = document.getElementById('hud-weather-text');
+  if(!navigator.geolocation){ coordsEl.textContent='Unavailable'; weatherEl.textContent='Unavailable'; return; }
+  navigator.geolocation.getCurrentPosition(async pos => {
+    const {latitude, longitude} = pos.coords;
+    coordsEl.textContent = `${latitude.toFixed(4)}, ${longitude.toFixed(4)}`;
+    try{
+      const res = await fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=${OWM_API_KEY}&units=metric`);
+      const data = await res.json();
+      cityEl.textContent = data.name || 'Unknown';
+      let desc = data.weather[0].description;
+      desc = desc.charAt(0).toUpperCase() + desc.slice(1);
+      weatherEl.textContent = `${desc}, ${data.main.temp.toFixed(1)}°C`;
+    } catch(e){
+      weatherEl.textContent='Weather unavailable';
+      console.error(e);
+    }
+  }, err => {
+    coordsEl.textContent='Denied';
+    weatherEl.textContent='Weather unavailable';
+    console.error(err);
+  });
+}
+function openPanel(id){
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('show'));
+  document.getElementById(id).classList.add('show');
+}
+function closePanel(id){
+  const panel = document.getElementById(id);
+  panel.classList.remove('show');
+  if(id === 'refPanel'){
+    if(window.typingTimer) clearInterval(window.typingTimer);
+    window.typingTimer = null;
+    window.speechSynthesis.cancel();
+  }
+}
+document.querySelectorAll('.navItem').forEach(el => {
+  el.addEventListener('click', e => {
+    const panel = el.getAttribute('aria-controls');
+    openPanel(panel);
+    if(panel === 'refPanel'){
+      speakAndType(reflections[0]);
+    } else if(panel === 'prodPanel'){
+      speakAndType("Currently, this panel contains productions and placeholders.");
+    } else {
+      const panelSpeechTexts = {
+        whoPanel: "I am Mr. Smart",
+        resPanel: "Here are my resources",
+        contactPanel: "Please send me an email if you have any further inquiries"
+      };
+      if(panelSpeechTexts[panel]) speakAndType(panelSpeechTexts[panel]);
+    }
+  });
+});
+const reflectionEl = document.getElementById('reflectionText');
+const reflections = [
+  `Building my portfolio site was a mix of applying familiar design and coding skills while also facing new challenges as a learner. Choosing GitHub Pages instead of drag-and-drop builders like Wix allowed me to work closely with the code and design, which suits my style of hands-on exploration.
+An important feature I wanted was a weather widget, so I had to obtain an API key from OpenWeatherMap. This allowed me to access real-time weather data that updates automatically. I also came up with the idea to request the user's location with a prompt notification, respecting privacy concerns since some people might not want their location visible or shared. This made the experience more user-friendly and transparent.
+Throughout the process, I encountered issues like broken layouts from small typos, inconsistent styling, and menus not linking correctly. These challenges required careful troubleshooting and multiple revisions. At times, it was frustrating when a single missing bracket caused the page to break, but solving these problems brought a rewarding sense of accomplishment.
+AI tools like ChatGPT supported me by offering suggestions and helping refine my ideas. Rather than handing me answers, the AI guided me to consider alternative solutions—like having a resourceful brainstorming partner along the way. This was particularly useful when quick fresh ideas were needed.
+I also relied heavily on community resources such as GitHub documentation, Stack Overflow, and conversations with classmates. Collaborating this way added a welcome social dimension, contrasting with the more independent work I usually do.
+Emotionally, the process moved from curiosity and excitement to moments of irritation during debugging, and finally to satisfaction as the site came together to reflect my vision. This experience felt similar to how I approach new projects—through trial, error, and reflection—more than following a strict step-by-step formula.
+Ultimately, this project reinforced that being an effective learner means staying patient, open-minded, and willing to work through challenges independently, regardless of prior experience.`
+];
+function getBestFemaleVoice(){
+  const voices = window.speechSynthesis.getVoices();
+  const patterns = [/female/i,/woman/i,/zira/i,/susan/i,/eva/i,/samantha/i,/linda/i,/lisa/i,/amy/i,/emma/i,/victoria/i,/joanna/i,/julie/i];
+  for(let pat of patterns){
+    const v = voices.find(voice => voice.lang && voice.lang.startsWith('en') && pat.test(voice.name));
+    if(v) return v;
+  }
+  const femaleEn = voices.find(v => v.lang && v.lang.startsWith('en') && v.gender === 'female');
+  if(femaleEn) return femaleEn;
+  const anyEn = voices.find(v=>v.lang && v.lang.startsWith('en'));
+  if(anyEn) return anyEn;
+  return voices[0] || null;
+}
+function speakAndType(text){
+  if(window.typingTimer) clearInterval(window.typingTimer);
+  window.speechSynthesis.cancel();
+  reflectionEl.textContent = '';
+  function reallySpeakAndType(){
+    const voice = getBestFemaleVoice();
+    if(voice){
+      const utter = new SpeechSynthesisUtterance(text);
+      utter.voice = voice;
+      utter.rate = 1.1;
+      window.speechSynthesis.speak(utter);
+    }
+    let i=0;
+    window.typingTimer = setInterval(()=>{
+      if(i < text.length){
+        reflectionEl.textContent += text[i];
+        i++;
+      } else {
+        clearInterval(window.typingTimer);
+        window.typingTimer = null;
+      }
+    }, 30);
+  }
+  if(!window.speechSynthesis.getVoices().length){
+    window.speechSynthesis.onvoiceschanged = reallySpeakAndType;
+    window.speechSynthesis.getVoices();
+  } else {
+    reallySpeakAndType();
+  }
+}
+// Toggle Production 2 resources visibility on click
+document.getElementById('toggleProd2Resources').addEventListener('click', () => {
+  const prod2Res = document.getElementById('prod2Resources');
+  const toggleLink = document.getElementById('toggleProd2Resources');
+  const isShown = prod2Res.classList.toggle('show');
+  prod2Res.setAttribute('aria-hidden', !isShown);
+  toggleLink.setAttribute('aria-expanded', isShown);
+  toggleLink.textContent = `Production 2 resources ${isShown ? '▾' : '▸'}`;
+});
+// Terminal toggle on Hello World click
+const headerToggleTerminal = document.getElementById('headerToggleTerminal');
+const terminalContainer = document.getElementById('terminalContainer');
+const terminalInput = document.getElementById('terminalInput');
+headerToggleTerminal.addEventListener('click', () => {
+  if(terminalContainer.style.display === 'flex'){
+    terminalContainer.style.display = 'none';
+  } else {
+    terminalContainer.style.display = 'flex';
+    terminalInput.focus();
+  }
+});
+terminalInput.addEventListener('keydown', e => {
+  if(e.key === 'Enter'){
+    const cmd = terminalInput.value;
+    appendTerminalOutput(`> ${cmd}`);
+    executeCommand(cmd);
+    terminalInput.value = '';
+  }
+});
+const panelIds = ['whoPanel','refPanel','prodPanel','resPanel','contactPanel', 'prod2Panel'];
+const panelNames = {
+  'whoami': 'whoPanel',
+  'reflection': 'refPanel',
+  'productions': 'prodPanel',
+  'resources': 'resPanel',
+  'contact': 'contactPanel',
+  'production2': 'prod2Panel',
+  'back': 'back'
+};
+function appendTerminalOutput(text){
+  const terminalContent = document.getElementById('terminalContent');
+  terminalContent.textContent += text + "\n";
+  terminalContent.scrollTop = terminalContent.scrollHeight;
+}
+function executeCommand(cmd) {
+  const lowerCmd = cmd.toLowerCase().trim();
+  if(lowerCmd === 'back') {
+    panelIds.forEach(id => closePanel(id));
+    appendTerminalOutput("Closed all panels.");
+  } else if(lowerCmd === 'exit') {
+    appendTerminalOutput("Closing tab...");
+    setTimeout(() => window.close(), 100);
+  } else if(panelNames.hasOwnProperty(lowerCmd)) {
+    const panelId = panelNames[lowerCmd];
+    if(panelId !== 'back'){
+      openPanel(panelId);
+      appendTerminalOutput(`Opened panel: ${lowerCmd}`);
+      if(lowerCmd === 'reflection'){
+        speakAndType(reflections[0]);
+      } else if(lowerCmd === 'productions'){
+        speakAndType("Currently, this panel contains productions and placeholders.");
+      } else if(lowerCmd === 'production2') {
+        // Display Production 2 reflection text without voice
+        const prod2PanelEl = document.getElementById('prod2Panel');
+        openPanel('prod2Panel');
         document.getElementById("prod2ReflectionText").innerHTML = `
           <p>Brayboy and Maughan’s (2008) <em>Indigenous Knowledges and the Story of the Bean</em> challenges dominant educational paradigms by showing how Knowledges are lived, reciprocal, and vital to cultural survival. In Indigenous contexts, Knowledges are inseparable from responsibility and survival, while Western schooling often reduces learning to abstract, fragmented facts. Knowledge is not a possession but a practice enacted through relationships and ethical commitments.</p>
           <p>The Story of the Bean illustrates that learning is tied to cosmology, land, and collective responsibility. Teachers are not distant authorities but accountable community members. This may involve co-teaching with Elders, leading projects rooted in local ecosystems, or grounding lessons in community histories. Education flourishes through responsibility and care—not detachment.</p>
@@ -623,217 +900,21 @@ h1, h2, .headerTitle, .navItem, #reflectionText, .hud-row, .quoteBox {
           <p>A path forward requires epistemic pluralism—valuing multiple knowledge systems as equal rather than hierarchical. This involves investing in Indigenous-led programs, expanding digital infrastructure in remote communities, and grounding curricula in community and land. The First Nations Technology Council in British Columbia provides one model by integrating coding workshops with Indigenous governance. Mentorship by Indigenous professionals, alongside teacher preparation in culturally sustaining pedagogy, builds the trust needed to make education accountable to community. Sustained funding and Indigenous leadership are essential.</p>
           <p>Brayboy and Maughan (2008) remind us that Indigenous Knowledges are ethical and political, rooted in survival and sovereignty. Supporting them affirms Indigenous identities and reorients education toward reciprocity, accountability, and justice. For educators, this means centering responsibility to community. For policymakers, it means resourcing Indigenous leadership and ensuring equitable access to technology. Ultimately, Indigenous Knowledges do not simply add content to existing systems—they transform education by reshaping relationships among learners, communities, and the land. When embraced as plural, sovereign, and relational, they reveal knowledge as a living practice vital to sustaining just and culturally rooted futures.</p>
         `;
-        return;
-      }
-
-      // Default: open lightbox for images
-      currImages = productionImagesMap[idx] || [];
-      if (!currImages.length) return;
-      currIndex = 0;
-      lbImg.style.opacity = '0';
-      setTimeout(() => {
-        lbImg.src = currImages[currIndex];
-        setTimeout(() => { lbImg.style.opacity = '1'; }, 60);
-      }, 100);
-      lb.style.display = 'flex';
-      setTimeout(() => lb.classList.add('show'), 12);
-    });
-  });
-  function updateLbImage() {
-    lbImg.style.opacity = '0';
-    setTimeout(() => {
-      lbImg.src = currImages[currIndex];
-      setTimeout(() => { lbImg.style.opacity = '1'; }, 60);
-    }, 120);
-  }
-  document.getElementById('lbPrev').addEventListener('click', () => {
-    if (!currImages.length) return;
-    currIndex = (currIndex - 1 + currImages.length) % currImages.length;
-    updateLbImage();
-  });
-  document.getElementById('lbNext').addEventListener('click', () => {
-    if (!currImages.length) return;
-    currIndex = (currIndex + 1) % currImages.length;
-    updateLbImage();
-  });
-  document.getElementById('lbClose').addEventListener('click', () => {
-    lb.classList.remove('show');
-    setTimeout(() => { lb.style.display = 'none'; }, 350);
-  });
-  const loginOverlay = document.getElementById('loginOverlay');
-  const loginBtn = document.getElementById('loginBtn');
-  const loginPass = document.getElementById('loginPass');
-  const wrongGif = document.getElementById('wrongGifOverlay');
-  const loginAudioCorrect = document.getElementById('loginAudioCorrect');
-  const loginAudioWrong = document.getElementById('loginAudioWrong');
-  loginPass.addEventListener('keydown', e => { if(e.key==='Enter') loginBtn.click(); });
-  loginBtn.addEventListener('click', () => {
-    const v = (loginPass.value || '').trim();
-    if (v === 'mrsmart') {
-      loginOverlay.style.display = 'none';
-      document.getElementById('cornerGlobe').style.display = 'block';
-      const hud = document.getElementById('hud');
-      hud.style.opacity = '1';
-      hud.style.visibility = 'visible';
-      startHud();
-      rotateQuotes();
-      updateLocationWeather();
-      loginAudioCorrect.muted = false;
-      loginAudioCorrect.volume = 0.7;
-      loginAudioCorrect.pause();
-      loginAudioCorrect.currentTime = 0;
-      loginAudioCorrect.play().catch(err => console.error('Audio failed:', err));
-    } else {
-      loginPass.value = '';
-      loginPass.placeholder = 'Incorrect — try again';
-      loginPass.focus();
-      loginOverlay.animate([
-        { transform: 'translateX(-2px)' },
-        { transform: 'translateX(2px)' },
-        { transform: 'translateX(0)' }
-      ], { duration: 120, iterations: 3 });
-      wrongGif.style.display = 'flex';
-      loginAudioWrong.muted = false;
-      loginAudioWrong.volume = 0.7;
-      loginAudioWrong.pause();
-      loginAudioWrong.currentTime = 0;
-      loginAudioWrong.play().catch(err => console.error('Audio failed:', err));
-      setTimeout(() => {
-        wrongGif.style.display = 'none';
-        loginAudioWrong.pause();
-        loginAudioWrong.currentTime = 0;
-      }, 2200);
-    }
-  });
-  function startHud(){
-    const timeEl = document.getElementById('hud-time-text');
-    const dateEl = document.getElementById('hud-date-text');
-    function updateHud(){
-      const now = new Date();
-      timeEl.textContent = now.toLocaleTimeString();
-      dateEl.textContent = now.toDateString();
-    }
-    updateHud();
-    setInterval(updateHud,1000);
-  }
-  function updateLocationWeather(){
-    const cityEl = document.getElementById('hud-city');
-    const coordsEl = document.getElementById('hud-coords-text');
-    const weatherEl = document.getElementById('hud-weather-text');
-    if(!navigator.geolocation){ coordsEl.textContent='Unavailable'; weatherEl.textContent='Unavailable'; return; }
-    navigator.geolocation.getCurrentPosition(async pos => {
-      const {latitude, longitude} = pos.coords;
-      coordsEl.textContent = `${latitude.toFixed(4)}, ${longitude.toFixed(4)}`;
-      try{
-        const res = await fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=${OWM_API_KEY}&units=metric`);
-        const data = await res.json();
-        cityEl.textContent = data.name || 'Unknown';
-        let desc = data.weather[0].description;
-        desc = desc.charAt(0).toUpperCase() + desc.slice(1);
-        weatherEl.textContent = `${desc}, ${data.main.temp.toFixed(1)}°C`;
-      } catch(e){
-        weatherEl.textContent='Weather unavailable';
-        console.error(e);
-      }
-    }, err => {
-      coordsEl.textContent='Denied';
-      weatherEl.textContent='Weather unavailable';
-      console.error(err);
-    });
-  }
-  function openPanel(id){
-    document.querySelectorAll('.panel').forEach(p => p.classList.remove('show'));
-    document.getElementById(id).classList.add('show');
-  }
-  function closePanel(id){
-    const panel = document.getElementById(id);
-    panel.classList.remove('show');
-    if(id === 'refPanel'){
-      if(window.typingTimer) clearInterval(window.typingTimer);
-      window.typingTimer = null;
-      window.speechSynthesis.cancel();
-    }
-  }
-  document.querySelectorAll('.navItem').forEach(el => {
-    el.addEventListener('click', e => {
-      const panel = el.getAttribute('aria-controls');
-      openPanel(panel);
-      if(panel === 'refPanel'){
-        speakAndType(reflections[0]);
-      } else if(panel === 'prodPanel'){
-        speakAndType("Currently, this panel contains productions and placeholders.");
       } else {
-        const panelSpeechTexts = {
-          whoPanel: "I am Mr. Smart",
-          resPanel: "Here are my resources",
-          contactPanel: "Please send me an email if you have any further inquiries"
+        const terminalSpeechTexts = {
+          whoami: "I am Mr. Smart",
+          resources: "Here are my resources",
+          contact: "Please send me an email if you have any further inquiries"
         };
-        if(panelSpeechTexts[panel]) speakAndType(panelSpeechTexts[panel]);
+        if(terminalSpeechTexts[lowerCmd]) speakAndType(terminalSpeechTexts[lowerCmd]);
       }
-    });
-  });
-  const reflectionEl = document.getElementById('reflectionText');
-  const reflections = [
-    `Building my portfolio site was a mix of applying familiar design and coding skills while also facing new challenges as a learner. Choosing GitHub Pages instead of drag-and-drop builders like Wix allowed me to work closely with the code and design, which suits my style of hands-on exploration.
-An important feature I wanted was a weather widget, so I had to obtain an API key from OpenWeatherMap. This allowed me to access real-time weather data that updates automatically. I also came up with the idea to request the user's location with a prompt notification, respecting privacy concerns since some people might not want their location visible or shared. This made the experience more user-friendly and transparent.
-Throughout the process, I encountered issues like broken layouts from small typos, inconsistent styling, and menus not linking correctly. These challenges required careful troubleshooting and multiple revisions. At times, it was frustrating when a single missing bracket caused the page to break, but solving these problems brought a rewarding sense of accomplishment.
-AI tools like ChatGPT supported me by offering suggestions and helping refine my ideas. Rather than handing me answers, the AI guided me to consider alternative solutions—like having a resourceful brainstorming partner along the way. This was particularly useful when quick fresh ideas were needed.
-I also relied heavily on community resources such as GitHub documentation, Stack Overflow, and conversations with classmates. Collaborating this way added a welcome social dimension, contrasting with the more independent work I usually do.
-Emotionally, the process moved from curiosity and excitement to moments of irritation during debugging, and finally to satisfaction as the site came together to reflect my vision. This experience felt similar to how I approach new projects—through trial, error, and reflection—more than following a strict step-by-step formula.
-Ultimately, this project reinforced that being an effective learner means staying patient, open-minded, and willing to work through challenges independently, regardless of prior experience.`
-  ];
-  function getBestFemaleVoice(){
-    const voices = window.speechSynthesis.getVoices();
-    const patterns = [/female/i,/woman/i,/zira/i,/susan/i,/eva/i,/samantha/i,/linda/i,/lisa/i,/amy/i,/emma/i,/victoria/i,/joanna/i,/julie/i];
-    for(let pat of patterns){
-      const v = voices.find(voice => voice.lang && voice.lang.startsWith('en') && pat.test(voice.name));
-      if(v) return v;
     }
-    const femaleEn = voices.find(v => v.lang && v.lang.startsWith('en') && v.gender === 'female');
-    if(femaleEn) return femaleEn;
-    const anyEn = voices.find(v=>v.lang && v.lang.startsWith('en'));
-    if(anyEn) return anyEn;
-    return voices[0] || null;
+  } else if(lowerCmd.length === 0) {
+    return;
+  } else {
+    appendTerminalOutput(`Command not recognized: ${cmd}`);
   }
-  function speakAndType(text){
-    if(window.typingTimer) clearInterval(window.typingTimer);
-    window.speechSynthesis.cancel();
-    reflectionEl.textContent = '';
-    function reallySpeakAndType(){
-      const voice = getBestFemaleVoice();
-      if(voice){
-        const utter = new SpeechSynthesisUtterance(text);
-        utter.voice = voice;
-        utter.rate = 1.1;
-        window.speechSynthesis.speak(utter);
-      }
-      let i=0;
-      window.typingTimer = setInterval(()=>{
-        if(i < text.length){
-          reflectionEl.textContent += text[i];
-          i++;
-        } else {
-          clearInterval(window.typingTimer);
-          window.typingTimer = null;
-        }
-      }, 30);
-    }
-    if(!window.speechSynthesis.getVoices().length){
-      window.speechSynthesis.onvoiceschanged = reallySpeakAndType;
-      window.speechSynthesis.getVoices();
-    } else {
-      reallySpeakAndType();
-    }
-  }
-  // Toggle Production 2 resources visibility on click
-  document.getElementById('toggleProd2Resources').addEventListener('click', () => {
-    const prod2Res = document.getElementById('prod2Resources');
-    const toggleLink = document.getElementById('toggleProd2Resources');
-    const isShown = prod2Res.classList.toggle('show');
-    prod2Res.setAttribute('aria-hidden', !isShown);
-    toggleLink.setAttribute('aria-expanded', isShown);
-    toggleLink.textContent = `Production 2 resources ${isShown ? '▾' : '▸'}`;
-  });
+}
 </script>
 <img src="images/right_icon1.gif" id="cornerGlobe" alt="Globe Glow" style="display:none; border-radius:50%;">
 </body>
