@@ -50,7 +50,91 @@ a:hover {
   );
   opacity: 0.12;
 }
-/* (rest of CSS unchanged) */
+@keyframes hudPulse {
+  0%, 100% {
+    text-shadow: 0 0 4px var(--neon), 0 0 8px var(--neon);
+    opacity: 1;
+  }
+  50% {
+    text-shadow: 0 0 2px var(--hover), 0 0 5px var(--hover);
+    opacity: 0.96;
+  }
+}
+h1, h2, .headerTitle, .navItem, #reflectionText, .hud-row, .quoteBox {
+  animation: hudPulse 3.5s infinite alternate;
+}
+#cornerGlobe {
+  display: none;
+  position: fixed;
+  top: 12px;
+  right: 12px;
+  width: 120px;
+  height: auto;
+  z-index: 2000;
+  pointer-events: none;
+  -webkit-mask-image: radial-gradient(circle, rgba(0,0,0,1) 85%, rgba(0,0,0,0) 100%);
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  -webkit-mask-size: cover;
+  mask-image: radial-gradient(circle, rgba(0,0,0,1) 85%, rgba(0,0,0,0) 100%);
+  mask-repeat: no-repeat;
+  mask-position: center;
+  mask-size: cover;
+}
+#loginOverlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1200;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(180deg, rgba(0,0,0,0.98), rgba(0,0,0,0.98));
+}
+.login-card {
+  width: 380px;
+  padding: 28px;
+  border-radius: 14px;
+  background: linear-gradient(135deg, rgba(0,229,255,0.04), rgba(0,102,153,0.03));
+  border: 1px solid rgba(0,229,255,0.12);
+  box-shadow: 0 18px 60px rgba(0,0,0,0.7), inset 0 0 14px rgba(0,229,255,0.02);
+  text-align: center;
+}
+.login-card h1 {
+  margin: 0 0 12px;
+  font-size: 20px;
+  color: var(--neon);
+}
+.login-input {
+  width: 100%;
+  padding: 12px 14px;
+  border-radius: 999px;
+  border: 1px solid rgba(0,229,255,0.12);
+  background: rgba(0,0,0,0.45);
+  color: var(--neon);
+  outline: none;
+  font-size: 14px;
+}
+.login-actions {
+  margin-top: 14px;
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+}
+.btn-primary {
+  padding: 10px 20px;
+  border-radius: 999px;
+  border: none;
+  cursor: pointer;
+  background: linear-gradient(135deg, var(--neon), #00bfff);
+  color: #081018;
+  font-weight: 700;
+}
+.login-sub {
+  margin-top: 10px;
+  font-size: 13px;
+  color: rgba(0,229,255,0.7);
+}
+/* ... CSS continues as in your original code ... */
 </style>
 </head>
 <body>
@@ -60,7 +144,9 @@ a:hover {
   <div class="login-card" role="document">
     <h1>Login</h1>
     <input id="loginPass" class="login-input" type="password" placeholder="Enter password" aria-label="Password" />
-    <div class="login-actions"><button id="loginBtn" class="btn-primary" aria-label="Enter">Enter</button></div>
+    <div class="login-actions">
+      <button id="loginBtn" class="btn-primary" aria-label="Enter">Enter</button>
+    </div>
     <div class="login-sub">Enter the terminal</div>
   </div>
 </div>
@@ -167,12 +253,14 @@ document.querySelectorAll('.prodCard').forEach(card => {
   card.addEventListener('click', () => {
     const idx = parseInt(card.dataset.index);
 
+    // Special case: Production 2 opens its own reflection panel
     if (idx === 1) {
       openPanel("prod2Panel");
       document.getElementById("prod2ReflectionText").innerHTML = prod2Reflection;
       return;
     }
 
+    // Default: open lightbox for images
     currImages = productionImagesMap[idx] || [];
     if (!currImages.length) return;
     currIndex = 0;
@@ -381,6 +469,7 @@ function speakAndType(text){
     reallySpeakAndType();
   }
 }
+// Terminal Implementation
 const panelIds = ['whoPanel','refPanel','prodPanel','resPanel','contactPanel', 'prod2Panel'];
 const panelNames = {
   'whoami': 'whoPanel',
