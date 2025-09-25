@@ -632,7 +632,10 @@ const loginAudioWrong = document.getElementById('loginAudioWrong');
 loginPass.addEventListener('keydown', e => { if(e.key==='Enter') loginBtn.click(); });
 loginBtn.addEventListener('click', () => {
   const v = (loginPass.value || '').trim();
+  console.log("Login attempt with password:", v); // Debugging log
+
   if (v === 'mrsmart') {
+    console.log("Password correct");
     loginOverlay.style.display = 'none';
     document.getElementById('cornerGlobe').style.display = 'block';
     const hud = document.getElementById('hud');
@@ -641,26 +644,32 @@ loginBtn.addEventListener('click', () => {
     startHud();
     rotateQuotes();
     updateLocationWeather();
+
     loginAudioCorrect.muted = false;
     loginAudioCorrect.volume = 0.7;
     loginAudioCorrect.pause();
     loginAudioCorrect.currentTime = 0;
     loginAudioCorrect.play().catch(err => console.error('Audio failed:', err));
   } else {
+    console.log("Password incorrect");
     loginPass.value = '';
     loginPass.placeholder = 'Incorrect — try again';
     loginPass.focus();
+
     loginOverlay.animate([
       { transform: 'translateX(-2px)' },
       { transform: 'translateX(2px)' },
       { transform: 'translateX(0)' }
     ], { duration: 120, iterations: 3 });
+
     wrongGif.style.display = 'flex';
+
     loginAudioWrong.muted = false;
     loginAudioWrong.volume = 0.7;
     loginAudioWrong.pause();
     loginAudioWrong.currentTime = 0;
     loginAudioWrong.play().catch(err => console.error('Audio failed:', err));
+
     setTimeout(() => {
       wrongGif.style.display = 'none';
       loginAudioWrong.pause();
